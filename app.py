@@ -11,7 +11,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # --- 2. 데이터베이스 설정 ---
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chatbot.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/chatbot.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -84,23 +84,15 @@ PREDEFINED_ANSWERS = {
 
 # --- 7. 외부 오픈 API 호출 함수 ---
 def get_external_data(user_query):
-    """
-    사용자의 질문에 따라 적절한 외부 API를 호출하고 정보를 반환하는 함수
-    이 함수를 확장하여 다양한 API를 연동할 수 있음
-    """
-    # 사용자가 '날씨'에 대해 물어보면 날씨 API를 호출하는 예시
     if "날씨" in user_query:
-        # 실제 API 키는 보안을 위해 .env 파일에 저장하고 os.getenv()로 불러와야함
         API_KEY = os.getenv("OPENWEATHER_API_KEY")
         if not API_KEY:
             return "날씨 API 키가 설정되지 않았습니다."
-
         BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
         params = {'q': 'Busan', 'appid': API_KEY, 'lang': 'kr', 'units': 'metric'}
-
         try:
             response = requests.get(BASE_URL, params=params)
-            response.raise_for_status()  # HTTP 오류가 발생하면 예외를 일으킴
+            response.raise_for_status()
             data = response.json()
             description = data['weather'][0]['description']
             temp = data['main']['temp']
@@ -108,12 +100,7 @@ def get_external_data(user_query):
         except requests.exceptions.RequestException as e:
             print(f"날씨 API 호출 오류: {e}")
             return "날씨 정보를 가져오는 데 실패했습니다."
-
-    # 나중에 여기에 '부산 청년 일자리 API' 등을 추가할 수 있음
-    # if "일자리" in user_query:
-    #     return get_busan_job_postings()
-
-    return None  # 해당하는 키워드가 없으면 None을 반환
+    return None
 
 
 # --- 8. API 엔드포인트 정의 ---
@@ -227,8 +214,35 @@ def chat():
         return jsonify({"error": "답변 생성 중 오류 발생"}), 500
 
 
+# 채팅 삭제 API 엔드포인트 추가
+@app.route("/api/chat/<chat_id>", methods=["DELETE"])
+def delete_chat_from_db(chat_id):
+    try:
+        # 전달받은 ID로 채팅 세션을 찾습니다.
+        chat_session = Chat.query.filter_by(id=chat_id).first()
+
+        if chat_session:
+            # 해당 채팅 세션을 DB에서 삭제
+            # cascade 설정 덕분에 관련된 메시지들도 함께 삭제
+            db.session.delete(chat_session)
+            db.session.commit()
+            return jsonify({"message": "채팅이 성공적으로 삭제되었습니다."}), 200
+        else:
+            return jsonify({"error": "삭제할 채팅을 찾을 수 없습니다."}), 404
+
+    except Exception as e:
+        print(f"DB 삭제 오류: {e}")
+        db.session.rollback()  # 오류 발생 시 롤백
+        return jsonify({"error": "채팅 삭제 중 오류가 발생했습니다."}), 500
+
+
 # --- 9. 서버 실행 ---
 if __name__ == "__main__":
+    # Ensure the instance folder exists
+    instance_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instance')
+    if not os.path.exists(instance_path):
+        os.makedirs(instance_path)
+
     with app.app_context():
         db.create_all()
     app.run(host='0.0.0.0', port=5001, debug=True)
