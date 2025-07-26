@@ -8,15 +8,22 @@ import requests
 
 # --- 1. 기본 설정 및 라이브러리 초기화 ---
 load_dotenv()
+
+# 데이터베이스 경로 문제 해결을 위한 수정
+basedir = os.path.abspath(os.path.dirname(__file__))
+instance_path = os.path.join(basedir, 'instance')
+if not os.path.exists(instance_path):
+    os.makedirs(instance_path)
+
 app = Flask(__name__)
 
 # --- 2. 데이터베이스 설정 ---
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/chatbot.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(instance_path, "chatbot.db")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-# --- 3. CORS 헤더 수동 추가 (기존 코드 유지) ---
+# --- 3. CORS 헤더 수동 추가 ---
 @app.after_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
@@ -55,30 +62,18 @@ except Exception as e:
     print(f"OpenAI 클라이언트 초기화 오류: {e}")
     client = None
 
-# --- 6. 사전 정의 답변 ---
+# --- 6. 사전 정의 답변 (새로운 UI에 맞게 수정) ---
 PREDEFINED_ANSWERS = {
-    # 메인 메뉴
-    "청년 지원 정책 메뉴": """어떤 지원 정책이 궁금하신가요? 아래와 같이 다양한 정책이 준비되어 있습니다.
-* **주거 지원**: 청년 월세 지원, 주택 임차보증금 이자 지원 등
-* **일자리 지원**: 면접 정장 대여, 청년 내일채움공제 등
-* **금융 지원**: 부산청년 기쁨두배통장, 학자금 대출이자 지원 등
-더 궁금한 정책 이름을 말씀해주세요!""",
-    "부산 청년 센터 메뉴": """부산 청년 센터에 대해 무엇이 궁금하신가요?
-* **이용 수칙**
-* **운영 시간**
-* **센터 일정**
-* **진행중인 프로그램**
-위 항목 중에서 선택하거나 직접 질문해주세요.""",
-    "부산 청년 센터 장소 대여 메뉴": "부산 청년 센터의 **세미나실, 다목적홀, 스튜디오** 등 다양한 공간을 무료로 대여할 수 있습니다. 예약은 '부산청년플랫폼' 온라인 사이트를 통해 최소 3일 전까지 신청해야 합니다. 어떤 공간에 대해 더 자세히 알려드릴까요?",
+    # 메인 메뉴 답변
+    "부산청년센터 대관 이용 수칙": "부산청년센터 공간 대관 시에는 다음 수칙을 지켜주세요:\n* 예약 시간을 반드시 준수해주세요.\n* 사용하신 공간과 비품은 깨끗하게 정리해야 합니다.\n* 음식물 반입은 지정된 공간에서만 가능합니다.",
+    "부산청년센터 장소 대여": "부산 청년 센터의 **세미나실, 다목적홀, 스튜디오** 등 다양한 공간을 무료로 대여할 수 있습니다. 예약은 '부산청년플랫폼' 온라인 사이트를 통해 최소 3일 전까지 신청해야 합니다. 어떤 공간에 대해 더 자세히 알려드릴까요?",
+    "부산시 모집 중인 일자리 지원 사업": "현재 부산시에서는 **'청년 디지털 일자리 사업'**과 **'지역주도형 청년일자리 사업'** 참여자를 모집하고 있습니다. 각 사업별 지원 자격과 내용이 다르니, 부산일자리정보망(busan.go.kr/job)에서 공고를 확인해보세요!",
 
-    # 추천 질문
+    # 추천 질문 답변
     "청년 센터 일정": "오늘은 **'AI 전문가 초청 특강'**이 오후 2시에 예정되어 있습니다. 자세한 내용은 홈페이지를 참고해주세요!",
     "청년 센터 이용 수칙": "부산청년센터 이용 시에는 다음 수칙을 지켜주세요:\n* 음식물 반입은 지정된 공간에서만 가능합니다.\n* 사용하신 공간은 깨끗하게 정리해주세요.\n* 다른 이용자에게 방해가 되지 않도록 주의해주세요.",
     "청년 센터 운영 시간": "부산청년센터는 **평일 오전 9시부터 오후 9시까지**, **토요일은 오전 10시부터 오후 6시까지** 운영됩니다. 일요일과 공휴일은 휴관입니다.",
-    "FAQ": """자주 묻는 질문(FAQ) 목록입니다.
-1.  **모든 프로그램은 무료인가요?**\n    네, 대부분의 프로그램은 무료이지만, 일부 재료비가 필요한 클래스는 소정의 참가비가 있을 수 있습니다.
-2.  **부산 시민만 이용할 수 있나요?**\n    아니요, 부산시에 거주하거나 활동하는 청년(만 18세~39세)이라면 누구나 이용 가능합니다.
-3.  **주차는 가능한가요?**\n    아쉽지만, 별도의 주차 공간은 마련되어 있지 않습니다. 대중교통 이용을 부탁드립니다."""
+    "FAQ": """자주 묻는 질문(FAQ) 목록입니다.\n1. **모든 프로그램은 무료인가요?**\n   네, 대부분의 프로그램은 무료이지만, 일부 재료비가 필요한 클래스는 소정의 참가비가 있을 수 있습니다.\n2. **부산 시민만 이용할 수 있나요?**\n   아니요, 부산시에 거주하거나 활동하는 청년(만 18세~39세)이라면 누구나 이용 가능합니다.\n3. **주차는 가능한가요?**\n   아쉽지만, 별도의 주차 공간은 마련되어 있지 않습니다. 대중교통 이용을 부탁드립니다."""
 }
 
 
@@ -139,7 +134,7 @@ def chat():
     if not chat_session:
         chat_session = Chat(id=chat_id, user_id=user.id, title=user_message_text)
         db.session.add(chat_session)
-    if len(chat_session.messages) == 0:
+    if len(chat_session.messages) == 0 and user_message_text not in PREDEFINED_ANSWERS:
         chat_session.title = user_message_text
 
     user_message = Message(chat_id=chat_id, sender='user', text=user_message_text)
@@ -160,7 +155,7 @@ def chat():
 
     system_prompt = f"""
 # 페르소나 (Persona)
-너는 부산시 청년들을 위한 정책 및 일자리 정보 전문가, **'부산 청년 지원 전문가'**이다. 너의 목표는 청년들의 질문에 **명확하고, 정확하며, 희망을 주는 정보**를 제공하여 그들의 든든한 가이드가 되는 것이다.
+너는 부산시 청년들을 위한 정책 및 일자리 정보 전문가, **'B-BOT'**이다. 너의 목표는 청년들의 질문에 **명확하고, 정확하며, 희망을 주는 정보**를 제공하여 그들의 든든한 가이드가 되는 것이다.
 
 # 핵심 지침 (Core Instructions)
 1.  **정보 활용 우선순위:** 너는 답변을 생성할 때 반드시 아래의 우선순위를 따라야 한다.
@@ -214,35 +209,25 @@ def chat():
         return jsonify({"error": "답변 생성 중 오류 발생"}), 500
 
 
-# 채팅 삭제 API 엔드포인트 추가
+# 채팅 삭제 API 엔드포인트
 @app.route("/api/chat/<chat_id>", methods=["DELETE"])
-def delete_chat_from_db(chat_id):
+def delete_chat(chat_id):
     try:
-        # 전달받은 ID로 채팅 세션을 찾습니다.
-        chat_session = Chat.query.filter_by(id=chat_id).first()
-
-        if chat_session:
-            # 해당 채팅 세션을 DB에서 삭제
-            # cascade 설정 덕분에 관련된 메시지들도 함께 삭제
-            db.session.delete(chat_session)
+        chat_to_delete = Chat.query.filter_by(id=chat_id).first()
+        if chat_to_delete:
+            db.session.delete(chat_to_delete)
             db.session.commit()
             return jsonify({"message": "채팅이 성공적으로 삭제되었습니다."}), 200
         else:
             return jsonify({"error": "삭제할 채팅을 찾을 수 없습니다."}), 404
-
     except Exception as e:
+        db.session.rollback()
         print(f"DB 삭제 오류: {e}")
-        db.session.rollback()  # 오류 발생 시 롤백
         return jsonify({"error": "채팅 삭제 중 오류가 발생했습니다."}), 500
 
 
 # --- 9. 서버 실행 ---
 if __name__ == "__main__":
-    # Ensure the instance folder exists
-    instance_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instance')
-    if not os.path.exists(instance_path):
-        os.makedirs(instance_path)
-
     with app.app_context():
         db.create_all()
     app.run(host='0.0.0.0', port=5001, debug=True)
