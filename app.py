@@ -29,6 +29,13 @@ db = SQLAlchemy(app)
 # --- 3. CORS 헤더 수동 추가 ---
 @app.after_request
 def after_request(response):
+    allowed_origins = [
+        'http://localhost:5173',
+        'https://llouis0622.github.io'
+    ]
+    origin = request.headers.get('Origin')
+    if origin in allowed_origins:
+        response.headers.add('Access-Control-Allow-Origin', origin)
     response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
