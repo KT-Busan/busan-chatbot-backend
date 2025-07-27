@@ -19,7 +19,7 @@ if not os.path.exists(instance_path):
 app = Flask(__name__)
 
 # --- 2. 데이터베이스 설정 ---
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(db_folder, "chatbot.db")}'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(instance_path, "chatbot.db")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
