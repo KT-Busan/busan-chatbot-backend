@@ -7,6 +7,8 @@ from datetime import datetime, date
 import requests
 import re
 
+DB_PATH = os.path.join('/data', 'chatbot.db')
+
 # --- 1. 기본 설정 및 라이브러리 초기화 ---
 load_dotenv()
 
@@ -19,7 +21,7 @@ if not os.path.exists(instance_path):
 app = Flask(__name__)
 
 # --- 2. 데이터베이스 설정 ---
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(instance_path, "chatbot.db")}'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
