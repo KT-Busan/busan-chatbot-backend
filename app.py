@@ -5,12 +5,15 @@ import openai
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 import requests
+import pandas as pd
 import re
 
 # --- 1. 기본 설정 및 라이브러리 초기화 ---
 load_dotenv()
 
-db_folder = '/data' if os.path.exists('/data') else os.path.join(os.path.abspath(os.path.dirname(__file__)), 'instance')
+basedir = os.path.abspath(os.path.dirname(__file__))
+# Render의 Disk는 '/data' 경로에 마운트
+db_folder = '/data' if os.path.exists('/data') else os.path.join(basedir, 'instance')
 if not os.path.exists(db_folder):
     os.makedirs(db_folder)
 
@@ -76,9 +79,62 @@ class JobPosting(db.Model):
     end_date = db.Column(db.Date)
 
 
-# --- 5. DB 테이블 생성 ---
-with app.app_context():
-    db.create_all()
+def parse_date(date_str):
+    if not isinstance(date_str, str): return None
+    match = re.search(r'(\d{4})[.-]?\s*(\d{1,2})[.-]?\s*(\d{1,2})', date_str)
+    if match:
+        try:
+            year, month, day = map(int, match.groups())
+            return date(year, month, day)
+        except ValueError:
+            return None
+    return None
+
+
+def initialize_database():
+    with app.app_context():
+        db.create_all()
+
+        if not JobPosting.query.first():
+            print("일자리 정보가 비어있어 CSV 파일로부터 데이터를 가져옵니다...")
+            try:
+                filepath = '부산_청년지원사업.csv'
+                df = pd.read_csv(filepath, header=19, encoding='utf-8-sig')
+                df.columns = df.columns.str.strip()
+
+                new_postings = []
+                today = date.today()
+
+                for index, row in df.iterrows():
+                    if row.get('모집 여부') == '모집중':
+                        period = str(row.get('신청기간', ''))
+                        end_date_str = period.split('~')[-1].strip()
+                        end_date = parse_date(end_date_str)
+
+                        if end_date and end_date >= today:
+                            new_postings.append(JobPosting(
+                                status=row.get('모집 여부'),
+                                title=row.get('제목'),
+                                period=period,
+                                organization=row.get('담당기관'),
+                                schedule=row.get('진행일정'),
+                                phone=row.get('문의 전화'),
+                                email=row.get('문의 이메일'),
+                                target=row.get('지원대상'),
+                                details=row.get('상세정보'),
+                                link=row.get('URL'),
+                                end_date=end_date
+                            ))
+
+                if new_postings:
+                    db.session.bulk_save_objects(new_postings)
+                    db.session.commit()
+                    print(f"총 {len(new_postings)}개의 일자리 데이터를 DB에 추가했습니다.")
+            except Exception as e:
+                print(f"DB 초기화 중 오류 발생: {e}")
+
+
+initialize_database()
 
 # --- 6. OpenAI 클라이언트 초기화 ---
 try:
