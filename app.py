@@ -7,21 +7,17 @@ from datetime import datetime, date
 import requests
 import re
 
-DB_PATH = os.path.join('/data', 'chatbot.db')
-
 # --- 1. 기본 설정 및 라이브러리 초기화 ---
 load_dotenv()
 
-# 데이터베이스 경로 문제 해결을 위한 수정
-basedir = os.path.abspath(os.path.dirname(__file__))
-instance_path = os.path.join(basedir, 'instance')
-if not os.path.exists(instance_path):
-    os.makedirs(instance_path)
+db_folder = '/data' if os.path.exists('/data') else os.path.join(os.path.abspath(os.path.dirname(__file__)), 'instance')
+if not os.path.exists(db_folder):
+    os.makedirs(db_folder)
 
 app = Flask(__name__)
 
 # --- 2. 데이터베이스 설정 ---
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(db_folder, "chatbot.db")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -31,12 +27,12 @@ db = SQLAlchemy(app)
 def after_request(response):
     allowed_origins = [
         'http://localhost:5173',
-        'https://llouis0622.github.io'
+        'https://kt-busan.github.io'
     ]
     origin = request.headers.get('Origin')
     if origin in allowed_origins:
         response.headers.add('Access-Control-Allow-Origin', origin)
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
@@ -80,14 +76,18 @@ class JobPosting(db.Model):
     end_date = db.Column(db.Date)
 
 
-# --- 5. OpenAI 클라이언트 초기화 ---
+# --- 5. DB 테이블 생성 ---
+with app.app_context():
+    db.create_all()
+
+# --- 6. OpenAI 클라이언트 초기화 ---
 try:
     client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 except Exception as e:
     print(f"OpenAI 클라이언트 초기화 오류: {e}")
     client = None
 
-# --- 6. 사전 정의 답변 (새로운 UI에 맞게 수정) ---
+# --- 7. 사전 정의 답변 (새로운 UI에 맞게 수정) ---
 PREDEFINED_ANSWERS = {
     # 메인 메뉴 답변
     "부산청년센터 대관 이용 수칙": (
@@ -128,7 +128,7 @@ PREDEFINED_ANSWERS = {
 }
 
 
-# --- 7. DB에서 일자리 정보를 조회하는 함수 ---
+# --- 8. DB에서 일자리 정보를 조회하는 함수 ---
 def get_job_postings_from_db():
     with app.app_context():
         today = date.today()
@@ -153,7 +153,7 @@ def get_job_postings_from_db():
         return result_text
 
 
-# --- 8. 외부 오픈 API 호출 함수 ---
+# --- 9. 외부 오픈 API 호출 함수 ---
 def get_external_data(user_query):
     if "날씨" in user_query:
         API_KEY = os.getenv("OPENWEATHER_API_KEY")
@@ -174,7 +174,7 @@ def get_external_data(user_query):
     return None
 
 
-# --- 9. API 엔드포인트 정의 ---
+# --- 10. API 엔드포인트 정의 ---
 @app.route("/api/history/<anonymous_id>", methods=["GET"])
 def get_history(anonymous_id):
     user = User.query.filter_by(anonymous_id=anonymous_id).first()
@@ -335,8 +335,6 @@ def delete_chat(chat_id):
         return jsonify({"error": "채팅 삭제 중 오류가 발생했습니다."}), 500
 
 
-# --- 9. 서버 실행 ---
+# --- 11. 서버 실행 ---
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(host='0.0.0.0', port=5001, debug=True)
