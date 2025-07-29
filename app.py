@@ -29,8 +29,11 @@ db.init_app(app)
 @app.after_request
 def after_request(response):
     allowed_origins = [
-        'http://localhost:5173',
-        'https://kt-busan.github.io'
+        'http://localhost:5173',  # Vite 개발 서버
+        'http://localhost:3000',  # Create React App 개발 서버
+        'http://127.0.0.1:5173',  # 로컬 IP
+        'http://127.0.0.1:3000',  # 로컬 IP
+        'https://kt-busan.github.io'  # 프로덕션 배포
     ]
     origin = request.headers.get('Origin')
     if origin in allowed_origins:
