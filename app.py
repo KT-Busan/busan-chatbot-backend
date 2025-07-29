@@ -137,17 +137,14 @@ def generate_bot_response(user_message_text, chat_id, client):
     if user_message_text == "현재 모집 중인 일자리 지원 사업":
         return get_job_postings_from_db()
 
-    # 2. 'Busan Jobs' 또는 채용정보 관련 요청 시
-    elif user_message_text in ["Busan Jobs", "최신 채용정보", "부산잡 채용정보", "채용공고"] or \
-            any(keyword in user_message_text.lower() for keyword in ["최신", "채용", "구인", "일자리", "부산잡"]):
-        if user_message_text == "Busan Jobs" or user_message_text in PREDEFINED_ANSWERS:
-            return get_busanjob_latest_jobs()
-        elif any(keyword in user_message_text.lower() for keyword in ["최신", "채용", "구인"]):
-            return get_busanjob_latest_jobs()
-
-    # 3. 다른 사전 정의된 질문 클릭 시
-    elif user_message_text in PREDEFINED_ANSWERS:
+    # 2. 사전 정의된 질문 클릭 시 (이 부분을 2번으로 올려야 함!)
+    if user_message_text in PREDEFINED_ANSWERS:
         return PREDEFINED_ANSWERS[user_message_text]
+
+    # 3. 'Busan Jobs' 스크래핑 요청 시 (순서 변경 및 조건 수정)
+    if user_message_text in ["최신 채용정보", "부산잡 채용정보", "채용공고"] or \
+            any(keyword in user_message_text.lower() for keyword in ["최신", "채용", "구인"]):
+        return get_busanjob_latest_jobs()
 
     # 4. DB에서 특정 사업명 검색
     all_postings = JobPosting.query.all()
