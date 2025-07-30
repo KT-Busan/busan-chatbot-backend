@@ -6,6 +6,8 @@ from datetime import datetime
 
 from database.models import db, User, Chat, Message, JobPosting, initialize_database
 from services.scraper_service import get_busanjob_latest_jobs
+from services.youth_program_scraper import get_youth_programs  # 새로운 크롤링 서비스 추가
+from services.regional_job_scraper import get_regional_jobs, get_overseas_jobs  # 지역별/해외 채용 크롤링 서비스 추가
 from services.data_service import get_job_postings_from_db, get_external_data
 from config.predefined_answers import PREDEFINED_ANSWERS
 
@@ -137,16 +139,33 @@ def generate_bot_response(user_message_text, chat_id, client):
     if user_message_text == "현재 모집 중인 일자리 지원 사업":
         return get_job_postings_from_db()
 
-    # 2. 사전 정의된 질문 클릭 시 (이 부분을 2번으로 올려야 함!)
+    # 2. '청년 프로그램' 버튼 클릭 시 - 실시간 크롤링 추가
+    if user_message_text == "청년 프로그램":
+        return get_youth_programs()
+
+    # 3. 지역별 채용정보 처리 (기업/공공)
+    if "_기업" in user_message_text or "_공공" in user_message_text:
+        parts = user_message_text.split("_")
+        if len(parts) == 2:
+            region = parts[0]
+            job_type = parts[1]
+            return get_regional_jobs(region, job_type)
+
+    # 4. 해외 채용정보 처리
+    if user_message_text.startswith("해외_"):
+        country = user_message_text[3:]  # "해외_" 제거
+        return get_overseas_jobs(country)
+
+    # 5. 사전 정의된 질문 클릭 시
     if user_message_text in PREDEFINED_ANSWERS:
         return PREDEFINED_ANSWERS[user_message_text]
 
-    # 3. 'Busan Jobs' 스크래핑 요청 시 (순서 변경 및 조건 수정)
+    # 6. 'Busan Jobs' 스크래핑 요청 시
     if user_message_text in ["최신 채용정보", "부산잡 채용정보", "채용공고"] or \
             any(keyword in user_message_text.lower() for keyword in ["최신", "채용", "구인"]):
         return get_busanjob_latest_jobs()
 
-    # 4. DB에서 특정 사업명 검색
+    # 7. DB에서 특정 사업명 검색
     all_postings = JobPosting.query.all()
     found_post = None
     for post in all_postings:
@@ -168,7 +187,7 @@ def generate_bot_response(user_message_text, chat_id, client):
             bot_reply += f"\n[**🔗 더 자세한 내용 보러가기**]({link})"
         return bot_reply
 
-    # 5. OpenAI 호출
+    # 8. OpenAI 호출
     try:
         # 이전 대화 맥락 가져오기
         previous_messages = Message.query.filter_by(chat_id=chat_id).order_by(Message.created_at.asc()).all()
@@ -238,7 +257,6 @@ def generate_bot_response(user_message_text, chat_id, client):
         return "죄송합니다, 답변 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
 
 
-# --- 6. 서버 실행 ---
 if __name__ == "__main__":
     initialize_database(app)
     app.run(host='0.0.0.0', port=5001, debug=True)
