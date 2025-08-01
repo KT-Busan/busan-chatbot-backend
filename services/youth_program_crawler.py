@@ -178,12 +178,44 @@ class BusanYouthProgramCrawler:
         return all_programs
 
 
+def parse_deadline_date(application_period):
+    """신청기간에서 마감일 추출 및 파싱"""
+    try:
+        if not application_period:
+            return None
+
+        # "2024.12.01 ~ 2024.12.31" 형태에서 마감일 추출
+        import re
+        date_pattern = r'(\d{4})[.-](\d{1,2})[.-](\d{1,2})'
+        dates = re.findall(date_pattern, application_period)
+
+        if len(dates) >= 2:
+            # 마감일 (두 번째 날짜)
+            year, month, day = dates[1]
+            return datetime(int(year), int(month), int(day))
+        elif len(dates) == 1:
+            # 날짜가 하나만 있는 경우
+            year, month, day = dates[0]
+            return datetime(int(year), int(month), int(day))
+
+        return None
+    except:
+        return None
+
+
 def get_youth_programs_data():
     """청년 프로그램 데이터 가져오기"""
     import os
     from datetime import datetime, timedelta
 
-    cache_file = 'youth_programs_cache.json'
+    # 프로젝트 루트의 instance 폴더 경로 설정
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    project_root = os.path.dirname(basedir)  # services의 상위 폴더 (프로젝트 루트)
+    instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
+    if not os.path.exists(instance_path):
+        os.makedirs(instance_path)
+
+    cache_file = os.path.join(instance_path, 'youth_programs_cache.json')
     cache_duration = timedelta(hours=6)  # 6시간 캐시 (프로그램은 더 자주 업데이트)
 
     # 캐시 파일 확인
@@ -196,8 +228,8 @@ def get_youth_programs_data():
             if datetime.now() - cache_time < cache_duration:
                 print("캐시된 프로그램 데이터 사용")
                 return cached_data['data']
-        except:
-            pass
+        except Exception as e:
+            print(f"캐시 읽기 오류: {e}")
 
     # 새로 크롤링
     print("🔄 새로운 프로그램 데이터 크롤링 중...")
@@ -214,19 +246,92 @@ def get_youth_programs_data():
         with open(cache_file, 'w', encoding='utf-8') as f:
             json.dump(cache_data, f, ensure_ascii=False, indent=2)
         print("프로그램 캐시 저장 완료")
-    except:
-        pass
+    except Exception as e:
+        print(f"캐시 저장 오류: {e}")
 
     return programs
 
 
+def get_region_from_location(location, spaces_data=None):
+    """장소명으로부터 지역 추출"""
+    if not location:
+        return ""
+
+    # 청년공간 데이터에서 매칭 시도
+    if spaces_data:
+        for space in spaces_data:
+            space_name = space.get('name', '')
+            if location.strip() in space_name or space_name in location.strip():
+                return space.get('region', '')
+
+    # 장소명에서 직접 지역 추출 시도 (JSON 데이터 기반으로 확장)
+    location_mappings = {
+        # 금정구
+        '꿈터': '금정구',
+        '청년창조발전소   꿈터+': '금정구',
+        '청년창조발전소 꿈터': '금정구',
+        '금정': '금정구',
+
+        # 해운대구
+        '해운대': '해운대구',
+        '해운대 청년채움공간': '해운대구',
+        '해운대 청년JOB카페': '해운대구',
+
+        # 남구
+        '고고씽': '남구',
+        '청년창조발전소  고고씽 Job': '남구',
+        '청년창조발전소 고고씽': '남구',
+        '남구': '남구',
+
+        # 동래구
+        '동래': '동래구',
+        '동래구 청년어울림센터': '동래구',
+
+        # 중구 (추정)
+        '청년작당소': '중구',
+        '청년문화교류공간': '중구',
+        '청년문화교류공간 \'청년작당소\'': '중구',
+
+        # 지역 미확정 (장소명으로 추정)
+        '공간숲': '부산진구',  # 동네 청년공간 공간숲
+        '동네 청년공간 공간숲': '부산진구',
+
+        # 기타 지역 키워드
+        '부산진': '부산진구',
+        '북구': '북구',
+        '서구': '서구',
+        '동구': '동구',
+        '영도': '영도구',
+        '사하': '사하구',
+        '강서': '강서구',
+        '연제': '연제구',
+        '수영': '수영구',
+        '사상': '사상구',
+        '기장': '기장군'
+    }
+
+    # 완전 일치 우선 확인
+    if location.strip() in location_mappings:
+        return location_mappings[location.strip()]
+
+    # 부분 일치 확인
+    for keyword, region in location_mappings.items():
+        if keyword in location:
+            return region
+
+    return ""
+
+
 def search_programs_by_region(region):
-    """지역별 청년 프로그램 검색"""
+    """지역별 청년 프로그램 검색 (마감일 임박 순)"""
+    from services.youth_space_crawler import get_youth_spaces_data
+
     programs = get_youth_programs_data()
+    spaces_data = get_youth_spaces_data()  # 청년공간 데이터도 가져오기
+
     if not programs:
         return "현재 청년 프로그램 정보를 가져올 수 없습니다."
 
-    # 지역명 정규화 (구 제거)
     region_normalized = region.replace('구', '') if region.endswith('구') else region
 
     filtered_programs = []
@@ -235,21 +340,58 @@ def search_programs_by_region(region):
         program_location = program.get('location', '')
         program_title = program.get('title', '')
 
-        if (region_normalized in program_region or
-                region_normalized in program_location or
-                region_normalized in program_title):
+        # 1. 제목에서 지역 확인
+        title_region_match = False
+        if region_normalized in program_title or f"[{region}]" in program_title:
+            title_region_match = True
+
+        # 2. region 필드에서 지역 확인
+        region_field_match = region_normalized in program_region
+
+        # 3. location에서 지역 추출하여 확인
+        location_region = get_region_from_location(program_location, spaces_data)
+        location_region_match = region_normalized in location_region
+
+        # 하나라도 매칭되면 포함
+        if title_region_match or region_field_match or location_region_match:
+            # 마감일 파싱 추가
+            deadline = parse_deadline_date(program.get('application_period', ''))
+            program['deadline_date'] = deadline
+
+            # location에서 추출한 지역 정보가 있으면 업데이트
+            if location_region and not program_region:
+                program['region'] = location_region
+
             filtered_programs.append(program)
 
     if not filtered_programs:
-        return f"**{region}**에서 현재 모집중인 청년 프로그램을 찾을 수 없습니다.\n\n다른 지역을 검색해보세요!"
+        return f"**{region}**에서 현재 모집중인 청년 공간 프로그램을 찾을 수 없습니다."
 
-    result = f"**{region} 청년 프로그램** ({len(filtered_programs)}개 모집중)\n\n"
+    # 마감일 임박 순으로 정렬 (마감일이 없는 것은 뒤로)
+    today = datetime.now()
+    filtered_programs.sort(key=lambda x: (
+        x['deadline_date'] is None,  # None인 것들을 뒤로
+        x['deadline_date'] if x['deadline_date'] else datetime.max  # 마감일 임박 순
+    ))
 
-    for program in filtered_programs[:8]:  # 최대 8개 표시
-        result += format_program_info(program) + "\n"
+    result = f"**{region} 청년 공간 프로그램** ({len(filtered_programs)}개 모집중)\n"
+    result += "📅 *마감일 임박 순으로 정렬되었습니다*\n\n"
 
-    if len(filtered_programs) > 8:
-        result += f"\n... 외 {len(filtered_programs) - 8}개 프로그램 더 있음"
+    for program in filtered_programs[:8]:
+        # 마감일까지 남은 일수 계산
+        deadline_info = ""
+        if program.get('deadline_date'):
+            days_left = (program['deadline_date'] - today).days
+            if days_left < 0:
+                deadline_info = " ⚠️ 마감"
+            elif days_left <= 3:
+                deadline_info = f" 🔥 D-{days_left}"
+            elif days_left <= 7:
+                deadline_info = f" ⏰ D-{days_left}"
+            else:
+                deadline_info = f" 📅 D-{days_left}"
+
+        result += format_program_info(program, deadline_info) + "\n"
 
     return result
 
@@ -283,9 +425,9 @@ def search_programs_by_keyword(keyword):
     return result
 
 
-def format_program_info(program):
+def format_program_info(program, deadline_info=""):
     """프로그램 정보 포맷팅"""
-    result = f"**{program['title']}**\n"
+    result = f"**{program['title']}**{deadline_info}\n"
 
     if program.get('status'):
         status_emoji = "🟢" if program['status'] == '모집중' else "🔴"
@@ -392,19 +534,3 @@ def get_programs_by_category():
             result += "\n"
 
     return result
-
-
-# 테스트 함수
-if __name__ == "__main__":
-    # 크롤링 테스트
-    crawler = BusanYouthProgramCrawler()
-    programs = crawler.crawl_all_programs()
-
-    print(f"\n총 {len(programs)}개 모집중인 프로그램 수집:")
-    for i, program in enumerate(programs[:5], 1):
-        print(f"\n{i}. {program['title']}")
-        print(f"   상태: {program['status']}")
-        print(f"   신청기간: {program['application_period']}")
-        print(f"   장소: {program['location']}")
-        if program['link']:
-            print(f"   링크: {program['link']}")

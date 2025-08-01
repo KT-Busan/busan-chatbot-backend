@@ -196,7 +196,14 @@ def get_youth_spaces_data():
     import os
     from datetime import datetime, timedelta
 
-    cache_file = 'youth_spaces_cache.json'
+    # 프로젝트 루트의 instance 폴더 경로 설정
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    project_root = os.path.dirname(basedir)  # services의 상위 폴더 (프로젝트 루트)
+    instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
+    if not os.path.exists(instance_path):
+        os.makedirs(instance_path)
+
+    cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
     cache_duration = timedelta(hours=24)  # 24시간 캐시
 
     # 캐시 파일 확인
@@ -207,13 +214,13 @@ def get_youth_spaces_data():
 
             cache_time = datetime.fromisoformat(cached_data['cached_at'])
             if datetime.now() - cache_time < cache_duration:
-                print("캐시된 데이터 사용")
+                print("캐시된 청년공간 데이터 사용")
                 return cached_data['data']
-        except:
-            pass
+        except Exception as e:
+            print(f"캐시 읽기 오류: {e}")
 
     # 새로 크롤링
-    print("🔄 새로운 데이터 크롤링 중...")
+    print("🔄 새로운 청년공간 데이터 크롤링 중...")
     crawler = BusanYouthSpaceCrawler()
     spaces = crawler.crawl_all_spaces()
 
@@ -226,9 +233,9 @@ def get_youth_spaces_data():
     try:
         with open(cache_file, 'w', encoding='utf-8') as f:
             json.dump(cache_data, f, ensure_ascii=False, indent=2)
-        print("캐시 저장 완료")
-    except:
-        pass
+        print("청년공간 캐시 저장 완료")
+    except Exception as e:
+        print(f"캐시 저장 오류: {e}")
 
     return spaces
 
