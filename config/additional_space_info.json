@@ -1,0 +1,1169 @@
+{
+  "additional_space_info": {
+    "수영구플러스행복센터": {
+      "facility_details": [
+        {
+          "name": "커뮤니티룸",
+          "capacity": "명시되지 않음",
+          "type": "회의실/다목적실/커뮤니티룸",
+          "equipment": "블루투스 스피커, 빔프로젝터, 노트북, 대형스크린, 넷플릭스",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "공유주방",
+          "capacity": "명시되지 않음",
+          "type": "공유주방",
+          "equipment": "에어프라이어, 커피머신, 밥솥, 믹서기, 토스터기, 와플기, 그릇",
+          "price": "없음",
+          "notice": "없음"
+        }
+      ],
+      "target_users": "수영구민, 1인 가구 커뮤니티활동 및 자기개발 활동에 공간이 필요한 자, 1인 가구 대상 커뮤니티 프로그램 운영자(단체), 그 외 센터 운영목적에 기반하여 지역사회보장협의체 사무국과 협의된 자(단체)",
+      "keywords": [
+        "대관자",
+        "1인 가구",
+        "커뮤니티활동",
+        "자기개발"
+      ],
+      "additional_crawl_url": "http://syplus.or.kr/happy/sub02.php",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "없음"
+    },
+    "연제청년창업나래센터": {
+      "facility_details": [],
+      "target_users": "창업 대상 입주기업",
+      "keywords": [
+        "창업",
+        "입주기업"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "창업 대상 입주기업 관련 센터"
+    },
+    "청년창업지원센터": {
+      "facility_details": [
+        {
+          "name": "열린공간",
+          "capacity": "명시되지 않음",
+          "type": "라운지",
+          "equipment": "책상, 의자",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "청신호 열린공간",
+          "capacity": "명시되지 않음",
+          "type": "라운지",
+          "equipment": "책상, 의자",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "청신호 공유카페",
+          "capacity": "명시되지 않음",
+          "type": "라운지",
+          "equipment": "정수기, 커피머신, 전자렌지, 냉장고",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "청신호 미팅룸 1",
+          "capacity": "3~6인",
+          "type": "회의실",
+          "equipment": "책상, 의자",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "청신호 미팅룸 2",
+          "capacity": "3~6인",
+          "type": "회의실",
+          "equipment": "전자칠판",
+          "price": "없음",
+          "notice": "없음"
+        }
+      ],
+      "target_users": "청년 누구나 이용 가능",
+      "keywords": [
+        "청년",
+        "창업",
+        "취업",
+        "정보교류",
+        "소통"
+      ],
+      "additional_crawl_url": "https://www.saha.go.kr/startup/bbs/view.do?mId=0503000000&bIdx=147483&ptIdx=682",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "없음"
+    },
+    "해운대 청년채움공간": {
+      "facility_details": [
+        {
+          "name": "강의실 (A동)",
+          "capacity": "20-25명 정도",
+          "type": "강의실/다목적실",
+          "equipment": "책상, 의자, 노트북, 65인치 TV, 빔프로젝터, 음향시설, 냉/난방기 등",
+          "price": "1시간 기준 12,500원 (부가세 별도)",
+          "notice": "없음"
+        },
+        {
+          "name": "공유주방 (B동 내)",
+          "capacity": "6명 정도",
+          "type": "공용주방",
+          "equipment": "냉장고, 오븐기, 인덕션, 밥솥, 전자레인지, 블렌더, 토스터기, 식기건조기 등 주방기구 일체",
+          "price": "1시간 기준 12,500원 (부가세 별도)",
+          "notice": "운영사무국과 사전 협의 후 대관 신청 가능"
+        },
+        {
+          "name": "공유오피스 (C동 내)",
+          "capacity": "8명 정도",
+          "type": "공유오피스/다목적실/커뮤니티실",
+          "equipment": "TV, Wifi",
+          "price": "무료",
+          "notice": "4시간 무료 (1일 최대 4시간 사용가능)"
+        },
+        {
+          "name": "공유(화상) 회의실 (D동 내)",
+          "capacity": "6명 정도",
+          "type": "회의실",
+          "equipment": "TV, 컴퓨터, 고화질웹캠, 마이크, 온라인화상회의시스템, 냉/난방기 등",
+          "price": "무료",
+          "notice": "4시간 무료 (1일 최대 4시간 사용가능)"
+        }
+      ],
+      "target_users": "만15 ~ 39세 청년 누구나 이용가능",
+      "keywords": [
+        "청년",
+        "채움",
+        "내일을 만들어가는"
+      ],
+      "additional_crawl_url": "http://해운대청년채움공간.kr/facility.do",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "없음"
+    },
+    "구포청년센터 감동": {
+      "facility_details": [
+        {
+          "name": "B1 구포청년 스튜디오 (댄스연습실)",
+          "capacity": "10~20명 (11명부터 인원추가요금)",
+          "type": "댄스연습실",
+          "equipment": "전면/측면 거울, 냉난방기, Wifi, 남/여 탈의실, 라커, 소형 블루투스 스피커, 삼각대",
+          "price": "평일 10시이전: 3,900원, 평일 1시간: 5,000원, 주말 1시간: 6,900원",
+          "notice": "없음"
+        },
+        {
+          "name": "2F 교육장 & 세미나실",
+          "capacity": "20~30명",
+          "type": "강의실/세미나실",
+          "equipment": "냉난방기, 빔프로젝터, 스피커, 칠판, 책상, 의자",
+          "price": "4시간: 100,000원",
+          "notice": "없음"
+        }
+      ],
+      "target_users": "명시되지 않음",
+      "keywords": [
+        "청년",
+        "스튜디오",
+        "댄스",
+        "세미나",
+        "교육"
+      ],
+      "additional_crawl_url": "https://map.naver.com/p/entry/place/1902797221",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "공유주방, 공유오피스도 있으나 예약버튼 없음"
+    },
+    "청년아트스테이션": {
+      "facility_details": [
+        {
+          "name": "숨 (2층공간) - 유튜브 방송국",
+          "capacity": "최대 20명",
+          "type": "유튜브 방송국/다목적실",
+          "equipment": "컴퓨터, 프린터, 캠코더, 마이크",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "숨 - 활동공간",
+          "capacity": "최대 20명",
+          "type": "활동공간/다목적실",
+          "equipment": "회의 테이블, 의자, 빔프로젝터, TV",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "숨 - 창업공간",
+          "capacity": "최대 20명",
+          "type": "창업공간/다목적실",
+          "equipment": "사무테이블, 의자",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "딴 - 공유공간",
+          "capacity": "최대 10명",
+          "type": "다목적실",
+          "equipment": "회의 테이블, 의자, TV",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "딴 - 체험공간",
+          "capacity": "최대 10명",
+          "type": "다목적실",
+          "equipment": "회의 테이블, 의자, TV",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "딴 - 창업공간",
+          "capacity": "최대 10명",
+          "type": "다목적실",
+          "equipment": "사무테이블, 의자",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "새물갤러리",
+          "capacity": "명시되지 않음",
+          "type": "갤러리/미술관",
+          "equipment": "명시되지 않음",
+          "price": "없음",
+          "notice": "없음"
+        }
+      ],
+      "target_users": "청년 예술인",
+      "keywords": [
+        "청년",
+        "예술",
+        "갤러리",
+        "창업",
+        "활동"
+      ],
+      "additional_crawl_url": "https://groobuk.com/31",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "없음"
+    },
+    "동네 청년공간 공간숲": {
+      "facility_details": [
+        {
+          "name": "공간숲 회의실",
+          "capacity": "최대 7명",
+          "type": "회의실",
+          "equipment": "책상, 의자",
+          "price": "무료",
+          "notice": "최대 3시간 이용가능"
+        },
+        {
+          "name": "공유주방",
+          "capacity": "4~10명",
+          "type": "공유주방",
+          "equipment": "가스버너, 각종 집기류(팬, 그릇, 수저), 냉장고, 전자레인지, 기본 양념(설탕, 후추, 소금 등)",
+          "price": "무료",
+          "notice": "최대 3시간 이용 가능"
+        }
+      ],
+      "target_users": "부산 청년 대상 무료 대여",
+      "keywords": [
+        "동네",
+        "청년",
+        "무료",
+        "관계망",
+        "공동체"
+      ],
+      "additional_crawl_url": "https://map.naver.com/p/entry/place/1008279055",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "없음"
+    },
+    "부산진구 청년마루": {
+      "facility_details": [],
+      "target_users": "청년",
+      "keywords": [
+        "청년",
+        "관계망",
+        "공동체",
+        "자유공간"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "공간대여 기능 없음"
+    },
+    "와글와글플랫폼": {
+      "facility_details": [],
+      "target_users": "청년과 지역주민",
+      "keywords": [
+        "와글와글",
+        "즐거움",
+        "교류의 장"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "모든 신청을 인스타그램에서 진행, 플랫폼 내 공간 정보 없음"
+    },
+    "부산진구청년플랫폼 청년 FLEX": {
+      "facility_details": [
+        {
+          "name": "메인 공간",
+          "capacity": "약 20명",
+          "type": "다목적실",
+          "equipment": "프린터, 노트북, 65인치TV(노트북 연결)",
+          "price": "없음",
+          "notice": "없음"
+        }
+      ],
+      "target_users": "청년",
+      "keywords": [
+        "핫플",
+        "전포역",
+        "신상",
+        "청년시설"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "https://form.naver.com/response/xdvUZ994BMjuL8R_BR6VqA",
+      "notice": "없음"
+    },
+    "청년희망플랫폼 다:이룸": {
+      "facility_details": [
+        {
+          "name": "휴게 공간",
+          "capacity": "명시되지 않음",
+          "type": "휴게실",
+          "equipment": "차, 간식, 음료수 등",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "다목적실",
+          "capacity": "명시되지 않음",
+          "type": "다목적실",
+          "equipment": "팩스, 프린터기, 노트북, 멀티탭",
+          "price": "없음",
+          "notice": "없음"
+        }
+      ],
+      "target_users": "청년",
+      "keywords": [
+        "청년",
+        "꿈",
+        "이루어지는",
+        "활동공간"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "없음"
+    },
+    "이바구컴퍼니": {
+      "facility_details": [],
+      "target_users": "청년",
+      "keywords": [
+        "청년",
+        "네트워크",
+        "문화체험",
+        "오프라인"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "시설 정보 없음"
+    },
+    "무튼304": {
+      "facility_details": [
+        {
+          "name": "무튼_통째",
+          "capacity": "10명 이상",
+          "type": "회의실 포함 전체",
+          "equipment": "명시되지 않음",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "무튼_반만",
+          "capacity": "6명 이상",
+          "type": "회의실",
+          "equipment": "명시되지 않음",
+          "price": "없음",
+          "notice": "없음"
+        }
+      ],
+      "target_users": "서구 문화활동 이용자",
+      "keywords": [
+        "서구",
+        "문화활동",
+        "공간제공"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "https://booking.naver.com/booking/10/bizes/1467132",
+      "rental_form": "없음",
+      "notice": "없음"
+    },
+    "중구 청년센터 청년마루": {
+      "facility_details": [
+        {
+          "name": "휴게공간",
+          "capacity": "명시되지 않음",
+          "type": "휴게",
+          "equipment": "명시되지 않음",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "청년오픈카페",
+          "capacity": "명시되지 않음",
+          "type": "라운지",
+          "equipment": "도서",
+          "price": "무료",
+          "notice": "자유 이용"
+        },
+        {
+          "name": "스마트 워크스테이션",
+          "capacity": "명시되지 않음",
+          "type": "워크스테이션",
+          "equipment": "명시되지 않음",
+          "price": "무료",
+          "notice": "자유 이용, 자유롭게 업무와 학습이 가능"
+        },
+        {
+          "name": "공유주방",
+          "capacity": "명시되지 않음",
+          "type": "공유주방",
+          "equipment": "주방시설",
+          "price": "없음",
+          "notice": "대관 불가, 클래스 운영 목적"
+        },
+        {
+          "name": "스터디룸",
+          "capacity": "1~7명",
+          "type": "스터디룸",
+          "equipment": "PC",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "미디어실",
+          "capacity": "1~4명",
+          "type": "미디어실",
+          "equipment": "PC, 웹캠, 마이크, 스피커",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "세미나룸",
+          "capacity": "최대 20명",
+          "type": "세미나실",
+          "equipment": "빔 프로젝터",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "청년 창업오피스",
+          "capacity": "명시되지 않음",
+          "type": "창업오피스",
+          "equipment": "명시되지 않음",
+          "price": "없음",
+          "notice": "현재 대관 불가"
+        }
+      ],
+      "target_users": "중구 청년",
+      "keywords": [
+        "중구청",
+        "청년센터",
+        "청년마루"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "https://www.eshare.go.kr/UserPortal/Upv/UprResrcFacl/index.do?rsrc_no=EE09M0153094",
+      "rental_form": "없음",
+      "notice": "없음"
+    },
+    "오름라운지": {
+      "facility_details": [
+        {
+          "name": "서점",
+          "capacity": "0~14명",
+          "type": "다목적실",
+          "equipment": "와이파이, 화이트 보드",
+          "price": "없음",
+          "notice": "예약 불필요"
+        },
+        {
+          "name": "창작소",
+          "capacity": "2~6명",
+          "type": "회의실",
+          "equipment": "와이파이, 화이트 보드",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "회의실 2",
+          "capacity": "2~10명",
+          "type": "회의실",
+          "equipment": "와이파이, 화이트 보드, 스마트 TV",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "회의실 3",
+          "capacity": "2~10명",
+          "type": "회의실",
+          "equipment": "와이파이, 화이트 보드, 스마트 TV",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "자율공간",
+          "capacity": "5~30명",
+          "type": "다목적실",
+          "equipment": "와이파이, 빔 프로젝터, 마이크",
+          "price": "없음",
+          "notice": "행사, 강연 등 넓은 공간이 필요한 행사에 적합"
+        }
+      ],
+      "target_users": "청년 누구나 이용 가능",
+      "keywords": [
+        "청년",
+        "누구나",
+        "열린공간",
+        "오름"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "없음"
+    },
+    "부산청년센터": {
+      "facility_details": [
+        {
+          "name": "만날마루",
+          "capacity": "20~50명",
+          "type": "다목적실",
+          "equipment": "와이파이, 마이크, 프로젝터, 대형TV",
+          "price": "없음",
+          "notice": "대형 행사 진행, 카페 형태의 개방형 공간"
+        },
+        {
+          "name": "모락마루",
+          "capacity": "1~15명",
+          "type": "공유 주방",
+          "equipment": "와이파이, 대형TV, 핫플레이트(인덕션 2구) 3개, 싱크대 5개, 전기밥솥 2개, 전자레인지 1개, 소형 에어프라이어 2개, 오븐 1개, 프라이팬 12개, 냄비 10개, 대형 냄비 1개, 토스트기 1개, 전자저울 2개, 채 4개, 강판 5개, 플라스틱 절구 4개, 도마 6개, 칼, 접시, 냄비, 수저 등 식기류",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "우당탕 다목적실",
+          "capacity": "10~40명",
+          "type": "다목적실",
+          "equipment": "와이파이, 음향장비(마이크), 영상장비(빔프로젝터)",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "이야기마루1",
+          "capacity": "1~10명",
+          "type": "회의실",
+          "equipment": "와이파이",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "이야기마루2",
+          "capacity": "1~10명",
+          "type": "회의실",
+          "equipment": "와이파이",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "이야기마루3",
+          "capacity": "1~10명",
+          "type": "회의실",
+          "equipment": "와이파이, 영상장비(빔프로젝터)",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "함께마루1",
+          "capacity": "1~2명",
+          "type": "회의실",
+          "equipment": "와이파이, 화이트보드",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "함께마루2",
+          "capacity": "1~6명",
+          "type": "회의실",
+          "equipment": "와이파이",
+          "price": "없음",
+          "notice": "없음"
+        }
+      ],
+      "target_users": "청년",
+      "keywords": [
+        "지역거점",
+        "청년지원센터",
+        "다양한",
+        "청년활동"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "없음"
+    },
+    "청년문화교류공간 '청년작당소'": {
+      "facility_details": [
+        {
+          "name": "클라이맥스",
+          "capacity": "1~50인 (테이블 배치에 따라 수용 인원 변동 가능)",
+          "type": "전시/강연/공연/모임/독서",
+          "equipment": "각종 도서, 빔프로젝터, 엠프, 마이크",
+          "price": "없음",
+          "notice": "메인공간으로 자유롭게 활용가능한 라운지"
+        },
+        {
+          "name": "영상 도서관",
+          "capacity": "1~2인 (최대 1팀)",
+          "type": "영상(영화)관람",
+          "equipment": "기재되지 않음",
+          "price": "없음",
+          "notice": "청년전용 영상 관람 공간"
+        },
+        {
+          "name": "리허설 룸",
+          "capacity": "3~12인",
+          "type": "회의/스터디/클래스/동아리",
+          "equipment": "빔 프로젝터, 화이트보드, TV",
+          "price": "없음",
+          "notice": "소규모 프로그램 및 모임 등으로 이용가능한 공간"
+        }
+      ],
+      "target_users": "청년",
+      "keywords": [
+        "청년전용",
+        "커뮤니티",
+        "소규모모임",
+        "공연",
+        "공유라운지",
+        "창작실"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "https://www.jakdangso.kr/reservation",
+      "rental_form": "없음",
+      "notice": "청년들이 자유롭게 모이고 소통하며 창작할 수 있는 복합 문화 공간"
+    },
+    "청년두드림센터": {
+      "facility_details": [
+        {
+          "name": "대회의실",
+          "capacity": "20~40인",
+          "type": "강연/이벤트",
+          "equipment": "기재되지 않음",
+          "price": "없음",
+          "notice": "이벤트, 강연에 적합한 공간"
+        },
+        {
+          "name": "휴식공간",
+          "capacity": "최대 10인",
+          "type": "휴식공간",
+          "equipment": "소파",
+          "price": "없음",
+          "notice": "쉬어가는 공간"
+        },
+        {
+          "name": "소회의실",
+          "capacity": "5~10인",
+          "type": "스터디/회의",
+          "equipment": "기재되지 않음",
+          "price": "없음",
+          "notice": "소모임에 적합한 공간"
+        },
+        {
+          "name": "상담실",
+          "capacity": "1인",
+          "type": "취업컨설팅/진로컨설팅/일자리 정보제공/구인구직 상담",
+          "equipment": "기재되지 않음",
+          "price": "없음",
+          "notice": "1대1 맞춤 컨설팅 공간"
+        }
+      ],
+      "target_users": "청년",
+      "keywords": [
+        "진로상담",
+        "취업상담",
+        "소모임",
+        "복합공간",
+        "회의",
+        "강연",
+        "상담전용"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "https://busanjob.net/08_wyou/wyou10_3_2.asp",
+      "rental_form": "없음",
+      "notice": "청년의 진로·취업 상담부터 모임·강연까지 지원하는 복합 활동 공간"
+    },
+    "청년창조발전소  고고씽 Job": {
+      "facility_details": [
+        {
+          "name": "화상회의실(지하1층)",
+          "capacity": "최대 8명",
+          "type": "화상회의",
+          "equipment": "화상회의 장비, 대형 모니터, PC 및 프린터, 테이블, 의자",
+          "price": "무료(4시간)",
+          "notice": "화상회의가 가능한 공간"
+        },
+        {
+          "name": "오픈 스터디룸1(지하1층)",
+          "capacity": "최대 8명",
+          "type": "스터디룸",
+          "equipment": "전자칠판(65형), 회의테이블, 의자",
+          "price": "무료(최대 4시간)",
+          "notice": "전자칠판을 보유한 스터디 공간"
+        },
+        {
+          "name": "오픈 스터디룸2(지하1층)",
+          "capacity": "최대 8명",
+          "type": "스터디룸",
+          "equipment": "화이트보드, 회의테이블, 의자",
+          "price": "무료(최대 4시간)",
+          "notice": "화이트보드를 보유한 스터디 공간"
+        },
+        {
+          "name": "멀티룸(2층)",
+          "capacity": "최대 10명",
+          "type": "보드게임/게임",
+          "equipment": "보드 게임, 플레이스테이션 5",
+          "price": "무료(2시간), 이용자 없을 시 1회 연장 가능",
+          "notice": "공부 목적이 아닌 보드 게임을 하는 공간"
+        },
+        {
+          "name": "공연장(3층)",
+          "capacity": "기재되지 않음",
+          "type": "공연장/행사장",
+          "equipment": "빔 프로젝터, 스크린, 무선마이크, 유선마이크, 공연조명, 그랜드피아노, 극장좌석(52석)",
+          "price": "평일(15,000원/1H)/토요일(20,000원/1H), 냉.난방료(10,000원/1H), 무대조명(10,000원/1H), 피아노 사용료(30,000원/1회)",
+          "notice": "온라인예약불가"
+        },
+        {
+          "name": "미디어 교육장(4층)",
+          "capacity": "기재되지 않음",
+          "type": "PC실",
+          "equipment": "빔 프로젝터, 스크린, 유선마이크, 데스크탑 PC(20석)",
+          "price": "평일(10,000원/1H)/토요일(15,000원/1H), 냉.난방료(10,000원/1H)",
+          "notice": "온라인예약불가"
+        }
+      ],
+      "target_users": "청년",
+      "keywords": [
+        "PC교육",
+        "공연",
+        "청년전용",
+        "디지털기반",
+        "복합커뮤니티"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "https://www.bsnamgu.go.kr/index.namgu?menuCd=DOM_000003002002000000&category1=01",
+      "rental_form": "없음",
+      "notice": "청년의 학습, 회의, 문화활동까지 지원하는 디지털 기반 복합 공간"
+    },
+    "청년창조발전소   꿈터+": {
+      "facility_details": [
+        {
+          "name": "미팅룸(3층)",
+          "capacity": "최대 6명",
+          "type": "회의/미팅",
+          "equipment": "스마트보드",
+          "price": "대관료(5,000원/1H), 1일 최대(40,000원), 냉난방료(1,000원/1H),1일최대(10,000원)",
+          "notice": "스마트보드를 보유한 공간"
+        },
+        {
+          "name": "북카페(3층)",
+          "capacity": "최대 20명",
+          "type": "미팅",
+          "equipment": "스마트보드, 의자",
+          "price": "대관료(10,000원/1H),1일 최대(80,000원), 냉난방료(1,000원/1H),1일최대(10,000원)",
+          "notice": "강연이 가능한 공간"
+        },
+        {
+          "name": "미팅룸(4층)",
+          "capacity": "최대 8명",
+          "type": "회의/미팅",
+          "equipment": "기재되지 않음",
+          "price": "대관료(5,000원/1H), 1일 최대(40,000원), 냉난방료(1,000원/1H),1일최대(10,000원)",
+          "notice": "회의를 할 수 있는 공간"
+        },
+        {
+          "name": "영상편집실(4층)",
+          "capacity": "2명",
+          "type": "영상편집",
+          "equipment": "컴퓨터(영상편집프로그램 포함)",
+          "price": "대관료(5,000원/1H), 1일 최대(30,000원), 냉난방료(1,000원/1H),1일최대(10,000원)",
+          "notice": "스마트보드를 보유한 공간"
+        },
+        {
+          "name": "미팅룸(5층)",
+          "capacity": "최대 8명",
+          "type": "회의/미팅",
+          "equipment": "기재되지 않음",
+          "price": "대관료(5,000원/1H), 1일 최대(40,000원), 냉난방료(1,000원/1H),1일최대(10,000원)",
+          "notice": "회의를 할 수 있는 공간"
+        },
+        {
+          "name": "다목적강당(5층)",
+          "capacity": "스쿨식 48명/극장식70명",
+          "type": "회의/미팅/강연",
+          "equipment": "빔프로젝터, 유/무선마이크",
+          "price": "대관료(25,000원/1H), 1일 최대(200,000원), 냉난방료(2,000원/1H),1일최대(20,000원)",
+          "notice": "여러명이 수용 가능한 공간"
+        }
+      ],
+      "target_users": "청년",
+      "keywords": [
+        "회의",
+        "강연",
+        "영상편집",
+        "창작협업",
+        "소규모회의",
+        "다목적강당"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "http://www.꿈터.kr/board/bbs/board.php?bo_table=room",
+      "rental_form": "없음",
+      "notice": "청년의 회의, 강연, 영상편집 등 다양한 활동을 지원하는 창작·협업 공간, 대관 신청은 네이버에서 가능"
+    },
+    "청년창조발전소 디자인스프링": {
+      "facility_details": [
+        {
+          "name": "세미나실(지하 1층)",
+          "capacity": "20~50인",
+          "type": "회의/강연",
+          "equipment": "빔프로젝터, 유/무선 마이크, 조명장비, 음향기기, 탕비",
+          "price": "없음",
+          "notice": "다수의 인원이 회의가 가능한 공간"
+        },
+        {
+          "name": "소회의실(지하 1층)",
+          "capacity": "4~6인",
+          "type": "회의",
+          "equipment": "화이트보드, 대형TV",
+          "price": "없음",
+          "notice": "소수인원의 회의 가능 공간"
+        },
+        {
+          "name": "진카페 (1층)",
+          "capacity": "최대 15명",
+          "type": "카페",
+          "equipment": "테이블 소파7개, 테이블 5개, 테이블 의자 6개",
+          "price": "없음",
+          "notice": "카페"
+        },
+        {
+          "name": "디자인스토어(1층)",
+          "capacity": "최대 6명",
+          "type": "전시장",
+          "equipment": "회의용 탁자 1개, 회의용 의자 8개, 전시 진열대, 작품 전시대",
+          "price": "없음",
+          "notice": "전시 판매장"
+        },
+        {
+          "name": "디자인 라이브러리1(2층)",
+          "capacity": "최대 10명",
+          "type": "도서관",
+          "equipment": "전자 간판, 디자인 서적 2,000여 권",
+          "price": "없음",
+          "notice": "디자인 관련 도서관"
+        },
+        {
+          "name": "디자인 라이브러리2(2층)",
+          "capacity": "최대 15명",
+          "type": "도서관",
+          "equipment": "스크린 설치가능",
+          "price": "없음",
+          "notice": "디자인 관련 도서관"
+        },
+        {
+          "name": "디자인 라이브러리3(2층)",
+          "capacity": "최대 4명",
+          "type": "도서관",
+          "equipment": "아이맥 4대",
+          "price": "없음",
+          "notice": "디자인 관련 도서관"
+        },
+        {
+          "name": "토론의 탕(2층)",
+          "capacity": "10~15인",
+          "type": "회의/토론",
+          "equipment": "빈백(소파) 2개",
+          "price": "없음",
+          "notice": "토론을 할수 있는 공간"
+        },
+        {
+          "name": "3D 공작소(3층)",
+          "capacity": "10~15인",
+          "type": "3D 프린터",
+          "equipment": "3D 프린터 스트라타시스 1대, 3D 프린터 델타 3대, 3D 프린터 큐비콘 3대, 3D스캐너 1대, 커팅기(레이저 조각기) 1대",
+          "price": "없음",
+          "notice": "3D프린터가 가능한 공간"
+        },
+        {
+          "name": "3D 후가공실(3층)",
+          "capacity": "최대 5인",
+          "type": "가공실/작업실",
+          "equipment": "훈증기 1대, 후가공 도색 SET, 도장실 1",
+          "price": "없음",
+          "notice": "인쇄한 3D프린터 물품을 가공하는 공간"
+        },
+        {
+          "name": "교육실 1(3층)",
+          "capacity": "15~20인",
+          "type": "컴퓨터 교육",
+          "equipment": "데스크탑",
+          "price": "없음",
+          "notice": "컴퓨터 프로그램 교육 공간"
+        },
+        {
+          "name": "교육실 2(3층)",
+          "capacity": "최대 5명",
+          "type": "가공실",
+          "equipment": "A2 프린터, 실루엣 카메오(커팅기), 화이트보드, 코팅기",
+          "price": "없음",
+          "notice": "가공 공간"
+        },
+        {
+          "name": "입주 사무실(4층)",
+          "capacity": "12~15인",
+          "type": "사무실",
+          "equipment": "사무기기(복합기)",
+          "price": "없음",
+          "notice": "사무실"
+        },
+        {
+          "name": "입주 사무실 휴식공간 및 탕비실(4층)",
+          "capacity": "4~5인",
+          "type": "휴게실/탕비실/회의실",
+          "equipment": "빈백(소파)4개, 대형 TV, 화장실, 샤워실, 탕비실",
+          "price": "없음",
+          "notice": "입주기업 간 회의 및 모임 공간"
+        }
+      ],
+      "target_users": "청년창업자",
+      "keywords": [
+        "디자인",
+        "창작",
+        "제조",
+        "전시",
+        "창업복합",
+        "3D장비",
+        "창업거점",
+        "종합창업생태계"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "https://blog.naver.com/design_spring/223401868662",
+      "rental_form": "없음",
+      "notice": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간"
+    },
+    "사상인디스테이션": {
+      "facility_details": [
+        {
+          "name": "사상인디스테이션",
+          "capacity": "최대200명",
+          "type": "문화시설/공연/다목적홀",
+          "equipment": "기재되지 않음",
+          "price": "기본요금(100,000원) 평일(오전 : 100,000원, 오후 : 120,000원, 야간 : 150,000원), 토,일,공휴일(오전,오후,야간 : 180,000원)",
+          "notice": "전시, 야외무대, 공연연습이 가능한 공간"
+        }
+      ],
+      "target_users": "청년",
+      "keywords": [
+        "청년문화예술",
+        "복합공연",
+        "전시",
+        "야외무대",
+        "다목적문화플랫폼",
+        "200인규모",
+        "예술공간"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "https://www.bscf.or.kr/portal/contents.do?mId=0304000000",
+      "rental_form": "없음",
+      "notice": "청년의 전시·공연·문화활동을 지원하는 200인 규모의 다목적 문화예술 공간"
+    },
+    "민락인디트레이닝센터": {
+      "facility_details": [],
+      "target_users": "청년인디문화 관련 입주단체",
+      "keywords": [
+        "청년인디문화",
+        "입주단체",
+        "트레이닝",
+        "역량강화"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "홈페이지 접속 불가"
+    },
+    "이바구 플랫폼": {
+      "facility_details": [],
+      "target_users": "청년",
+      "keywords": [
+        "도시재생",
+        "청년창업",
+        "활동공간"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "공간대여가 아닌 청년들이 만든 프로그램 신청이 목적"
+    },
+    "사상청년브릿지": {
+      "facility_details": [
+        {
+          "name": "소모임 공간",
+          "capacity": "1~12명",
+          "type": "회의실",
+          "equipment": "프로젝터, 프린트(용지는 개별지참)",
+          "price": "무료",
+          "notice": "없음"
+        }
+      ],
+      "target_users": "청년",
+      "keywords": [
+        "청년프로그램",
+        "공간대여",
+        "소모임"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "https://www.spacecloud.kr/space/70707",
+      "rental_form": "없음",
+      "notice": "없음"
+    },
+    "해운대 청년JOB카페": {
+      "facility_details": [],
+      "target_users": "미취업 청년",
+      "keywords": [
+        "미취업청년",
+        "취업지원",
+        "잡카페"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "취업지원을 위한 잡(JOB)카페"
+    },
+    "광안 엑스투지(X to Z) 청년 커뮤니티센터": {
+      "facility_details": [
+        {
+          "name": "컨벤션홀",
+          "capacity": "명시되지 않음",
+          "type": "컨벤션홀",
+          "equipment": "명시되지 않음",
+          "price": "1시간 5,000원, 1일 50,000원",
+          "notice": "없음"
+        },
+        {
+          "name": "회의실",
+          "capacity": "1~10명",
+          "type": "회의실",
+          "equipment": "TV, 복사기",
+          "price": "없음",
+          "notice": "없음"
+        },
+        {
+          "name": "프로그램실",
+          "capacity": "1~15명",
+          "type": "강의실",
+          "equipment": "86인치 스마트 전자칠판",
+          "price": "4시간 10,000원, 1일 20,000원",
+          "notice": "없음"
+        }
+      ],
+      "target_users": "청년",
+      "keywords": [
+        "청년",
+        "꿈",
+        "활동거점"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "2025년 9월 1일부터 시설예약 가능"
+    },
+    "청년 복합문화 창작공간 SPACE 119": {
+      "facility_details": [],
+      "target_users": "청년 예술인",
+      "keywords": [
+        "청년예술인",
+        "창작",
+        "활동공간",
+        "창작실",
+        "오픈스튜디오"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "1년단위 입주자 계약"
+    },
+    "청년마음건강센터 청춘소설": {
+      "facility_details": [],
+      "target_users": "부산 청년",
+      "keywords": [
+        "청년",
+        "마음건강상담",
+        "프로그램"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "부산 청년대상으로 마음건강상담 및 프로그램 제공"
+    },
+    "부산청년잡(JOB) 성장카페": {
+      "facility_details": [],
+      "target_users": "청년 구직자",
+      "keywords": [
+        "초기상담",
+        "맞춤형프로그램",
+        "기업발굴",
+        "매칭",
+        "일자리미스매치해소"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "초기상담과 맞춤형 프로그램, 기업발굴과 매칭을 통한 기업-청년 일자리 미스매치 해소"
+    },
+    "동래구 청년어울림센터": {
+      "facility_details": [],
+      "target_users": "꿈꾸는 청년",
+      "keywords": [
+        "꿈꾸는청년",
+        "성장지원",
+        "네트워크"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "https://xn--2e0by6evucvyfm6cfzq0shp6bcyxf4k.kr/roomSelect.do",
+      "rental_form": "없음",
+      "notice": "꿈꾸는 청년들을 위한 성장지원 네트워크"
+    },
+    "사하청년공간 청신호": {
+      "facility_details": [],
+      "target_users": "청년",
+      "keywords": [
+        "청년",
+        "더나은미래",
+        "청신호",
+        "문화놀이터"
+      ],
+      "additional_crawl_url": "없음",
+      "booking_url": "없음",
+      "rental_form": "없음",
+      "notice": "청년들의 더 나은 미래의 청신호를 밝혀주는 문화 놀이터"
+    }
+  }
+}

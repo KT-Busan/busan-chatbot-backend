@@ -165,6 +165,33 @@ def crawl_spaces_now():
     return jsonify(result)
 
 
+# === 청년공간 예약 관련 API (새로 추가) ===
+@app.route('/api/spaces/filter-options', methods=['GET'])
+def get_space_filter_options():
+    """청년공간 검색 필터 옵션들 반환 (인원수, 구비물품, 구분)"""
+    result = space_handler.get_filter_options()
+    return jsonify(result)
+
+
+@app.route('/api/spaces/reservation/search', methods=['POST'])
+def search_spaces_for_reservation():
+    """조건에 맞는 청년공간 검색 (예약용)"""
+    data = request.get_json()
+    capacity = data.get('capacity')
+    equipment = data.get('equipment', [])
+    space_type = data.get('type')
+
+    result = space_handler.search_spaces_for_reservation(capacity, equipment, space_type)
+    return jsonify(result)
+
+
+@app.route('/api/spaces/detail/<space_name>', methods=['GET'])
+def get_space_detail_api(space_name):
+    """특정 공간의 상세 정보"""
+    result = space_handler.get_space_detail(space_name)
+    return jsonify(result)
+
+
 # === 헬스체크 ===
 @app.route('/health', methods=['GET'])
 def health_check():

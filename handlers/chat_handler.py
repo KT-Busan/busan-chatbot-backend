@@ -78,7 +78,16 @@ class ChatHandler:
             return {"error": "채팅 삭제 중 오류가 발생했습니다."}, 500
 
     def generate_bot_response(self, user_message_text, chat_id):
-        """봇 응답 생성 로직 (기존 로직 100% 보존)"""
+        """봇 응답 생성 로직 (기존 로직 100% 보존 + 청년 공간 예약 추가)"""
+
+        # 0. 청년 공간 예약 처리 (새로 추가)
+        if user_message_text == "청년 공간 예약":
+            return """🏢 **청년 공간 예약**
+
+부산시에는 다양한 청년을 위한 공간이 존재합니다!
+목적에 맞게 다음 조건을 선택하여, 청년 공간을 대여해보세요!
+
+아래에서 조건을 선택하신 후 검색해보세요! 👇"""
 
         # 1. 사전 정의된 질문 처리
         if user_message_text in PREDEFINED_ANSWERS:
