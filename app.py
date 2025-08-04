@@ -1,4 +1,3 @@
-# app.py - 메인 실행 파일 (라우팅 전용)
 import os
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv

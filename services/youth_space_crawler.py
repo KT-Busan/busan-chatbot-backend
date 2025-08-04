@@ -246,12 +246,18 @@ def search_spaces_by_region(region):
     if not spaces:
         return "현재 청년공간 정보를 가져올 수 없습니다."
 
-    filtered_spaces = [s for s in spaces if region.lower() in s.get('region', '').lower()]
+    # 정확한 지역 매칭 (부분 매칭 → 정확 매칭으로 변경)
+    filtered_spaces = []
+    for space in spaces:
+        space_region = space.get('region', '').strip()
+        if space_region == region:  # 정확히 일치하는 경우만
+            filtered_spaces.append(space)
 
     if not filtered_spaces:
         return f"**{region}**에서 청년공간을 찾을 수 없습니다.\n\n다른 지역을 검색해보세요!"
 
-    result = f"**{region} 청년공간** ({len(filtered_spaces)}개)\n\n"
+    # 포맷 수정: 줄바꿈 제거
+    result = f"**{region} 청년공간({len(filtered_spaces)}개)**\n\n"
 
     for space in filtered_spaces[:5]:  # 최대 5개만 표시
         result += format_space_info(space) + "\n"
@@ -286,8 +292,9 @@ def search_spaces_by_keyword(keyword):
 
 
 def format_space_info(space):
-    """공간 정보 포맷팅"""
-    result = f"**{space['name']}** [{space.get('region', '')}]\n"
+    """공간 정보 포맷팅 - 줄바꿈 제거"""
+    # 포맷 수정: [지역]을 공간명 바로 뒤에 붙이기
+    result = f"**{space['name']}[{space.get('region', '')}]**\n"
 
     if space.get('address'):
         result += f"📍 {space['address']}\n"
