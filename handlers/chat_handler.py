@@ -1,4 +1,5 @@
 import os
+import json
 import openai
 from datetime import datetime
 
@@ -16,6 +17,94 @@ class ChatHandler:
         except Exception as e:
             print(f"OpenAI 클라이언트 초기화 오류: {e}")
             self.client = None
+
+        # 청년 공간 JSON 데이터 로드
+        self.spaces_data = self.load_spaces_data()
+
+    def load_spaces_data(self):
+        """청년 공간 JSON 데이터 로드"""
+        try:
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            project_root = os.path.dirname(basedir)
+            config_path = os.path.join(project_root, 'config')
+            spaces_file = os.path.join(config_path, 'spaces_busan_youth.json')
+
+            if os.path.exists(spaces_file):
+                with open(spaces_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    return data.get('spaces_busan_youth', [])
+            else:
+                print("spaces_busan_youth.json 파일을 찾을 수 없습니다.")
+                return []
+        except Exception as e:
+            print(f"청년 공간 데이터 로드 오류: {e}")
+            return []
+
+    def search_spaces_by_keyword_json(self, keyword):
+        """JSON 데이터에서 키워드로 공간 검색"""
+        try:
+            if not self.spaces_data:
+                return f"청년 공간 데이터를 불러올 수 없습니다."
+
+            # 키워드 매핑 (프론트엔드 버튼과 일치)
+            keyword_mapping = {
+                "스터디/회의": "📝 스터디/회의",
+                "교육/강연": "🏫 교육/강연",
+                "모임/커뮤니티": "👥 모임/커뮤니티",
+                "진로/창업": "🚀 진로/창업",
+                "문화/창작": "🎨 문화/창작",
+                "작업/창작실": "💻 작업/창작실",
+                "휴식/놀이": "🌿 휴식/놀이",
+                "행사/이벤트": "🎬 행사/이벤트"
+            }
+
+            # 키워드 정규화
+            search_keyword = keyword_mapping.get(keyword, keyword)
+
+            filtered_spaces = []
+            for space in self.spaces_data:
+                # keywords 배열에서 검색
+                if space.get('keywords'):
+                    for space_keyword in space['keywords']:
+                        if search_keyword in space_keyword or keyword in space_keyword:
+                            filtered_spaces.append(space)
+                            break
+
+            if not filtered_spaces:
+                return f"**{keyword}** 관련 청년공간을 찾을 수 없습니다.\n\n다른 키워드로 검색해보세요!"
+
+            # 결과 포맷팅
+            result = f"**{keyword}**로 찾은 공간입니다!\n\n"
+
+            for i, space in enumerate(filtered_spaces[:10], 1):  # 최대 10개
+                # 공간명 - 시설명 [지역] 형태
+                result += f"{i}️⃣ **{space['space_name']}** - {space['parent_facility']} [{space['location']}]\n"
+
+                # 추가 정보
+                if space.get('capacity_min') and space.get('capacity_max'):
+                    result += f"   👥 인원: {space['capacity_min']}~{space['capacity_max']}명\n"
+                elif space.get('capacity_max'):
+                    result += f"   👥 인원: 최대 {space['capacity_max']}명\n"
+
+                if space.get('features'):
+                    # features에서 가격 정보 추출
+                    features = space['features']
+                    if '무료' in features:
+                        result += f"   💰 무료\n"
+                    elif '유료' in features:
+                        result += f"   💰 유료\n"
+
+                result += "\n"
+
+            result += "📌 **공간 상세 내용은**\n"
+            result += "👉 \"청년 공간 상세\" 버튼을 눌러 확인하거나,\n"
+            result += "👉 공간명을 입력해서 직접 확인해보세요!"
+
+            return result
+
+        except Exception as e:
+            print(f"키워드 검색 오류: {e}")
+            return "청년공간 검색 중 오류가 발생했습니다."
 
     def process_chat_message(self, user_message_text, anonymous_id, chat_id):
         """채팅 메시지 처리 (기존 로직 완벽 보존)"""
@@ -111,7 +200,7 @@ class ChatHandler:
                    '금정구', '북구', '사상구', '사하구', '강서구', '남구', '해운대구', '수영구', '기장군']
 
         for region in regions:
-            if region in user_message_text:
+            if user_message_text.strip() == region:  # 정확한 매칭으로 변경
                 # 프로그램 맥락 확인
                 program_context_keywords = ['프로그램 확인', 'PROGRAM_REGIONS', '프로그램이 있는지']
                 has_program_context = any(keyword in recent_context for keyword in program_context_keywords)
@@ -125,7 +214,14 @@ class ChatHandler:
                 else:
                     return search_spaces_by_region(region)
 
-        # 4. 프로그램 관련 키워드 검색
+        # 4. 키워드 검색 처리 (JSON 데이터 사용으로 변경)
+        keyword_list = ['스터디/회의', '교육/강연', '모임/커뮤니티', '진로/창업', '문화/창작', '작업/창작실', '휴식/놀이', '행사/이벤트']
+
+        for keyword in keyword_list:
+            if user_message_text.strip() == keyword:
+                return self.search_spaces_by_keyword_json(keyword)
+
+        # 5. 프로그램 관련 키워드 검색
         program_keywords = ['프로그램', '교육', '강의', '과정', '모집', '신청', '바리스타', '취업', '컨설팅']
         if any(keyword in user_message_text for keyword in program_keywords):
             try:
@@ -146,11 +242,11 @@ class ChatHandler:
             except Exception as e:
                 print(f"프로그램 검색 오류: {e}")
 
-        # 5. 키워드 검색 처리
+        # 6. 기타 키워드 검색 처리 (기존 크롤링 데이터 사용)
         if any(keyword in user_message_text for keyword in ['스터디', '창업', '회의', '카페', '라운지', '센터']):
             return search_spaces_by_keyword(user_message_text)
 
-        # 6. OpenAI 호출
+        # 7. OpenAI 호출
         try:
             all_previous_messages = Message.query.filter_by(chat_id=chat_id).order_by(Message.created_at.asc()).all()
             conversation_context = "\n".join(

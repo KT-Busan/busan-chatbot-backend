@@ -211,8 +211,12 @@ class SpaceHandler:
             basic_spaces = get_youth_spaces_data()
             merged_spaces = self.merge_space_data(basic_spaces)
 
-            # 해당 지역 공간 필터링
-            filtered_spaces = [s for s in merged_spaces if region.lower() in s.get('region', '').lower()]
+            # 정확한 지역 매칭으로 변경
+            filtered_spaces = []
+            for space in merged_spaces:
+                space_region = space.get('region', '').strip()
+                if space_region == region:  # 정확히 일치하는 경우만
+                    filtered_spaces.append(space)
 
             if not filtered_spaces:
                 return {
@@ -220,11 +224,12 @@ class SpaceHandler:
                     'message': f'**{region}**에서 청년공간을 찾을 수 없습니다.\n\n다른 지역을 검색해보세요!'
                 }
 
-            # 결과 메시지 생성
-            result = f"**📍 {region} 청년공간** ({len(filtered_spaces)}개)\n\n"
+            # 포맷 수정: 줄바꿈 제거
+            result = f"**{region} 청년공간({len(filtered_spaces)}개)**\n\n"
 
             for space in filtered_spaces[:5]:  # 최대 5개만 표시
-                result += f"**{space['name']}**\n"
+                # 공간명 포맷 수정
+                result += f"**{space['name']}[{space.get('region', '')}]**\n"
                 if space.get('address'):
                     result += f"📍 {space['address']}\n"
                 if space.get('facility_details'):

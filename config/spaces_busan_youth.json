@@ -1,0 +1,1199 @@
+{
+  "spaces_busan_youth": [
+    {
+      "space_name": "와글와글플랫폼",
+      "parent_facility": "와글와글플랫폼",
+      "location": "부산진구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "👥모임/커뮤니티",
+        "🧘휴식/놀이"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "공부, 스터디, 친목에 적합 | 기본 회의 장비, PC/디지털 기기 구비, 프레젠테이션 장비, 소품/기타 | 무료",
+      "link": "https://www.instagram.com/waffle_jingu/"
+    },
+    {
+      "space_name": "청년 FLEX",
+      "parent_facility": "부산진구청년플랫폼 청년 FLEX",
+      "location": "부산진구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "👥모임/커뮤니티",
+        "🧘휴식/놀이"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 20,
+      "features": "공부, 스터디, 친목에 적합  | 기본 회의 장비, PC/디지털 기기 구비 | 무료",
+      "link": "https://www.instagram.com/youngwithjingu"
+    },
+    {
+      "space_name": "다:이룸 휴게 공간",
+      "parent_facility": "청년희망플랫폼 다:이룸",
+      "location": "영도구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "👥모임/커뮤니티",
+        "🧘휴식/놀이"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "공부, 스터디, 친목에 적합 | 기본 회의 장비, PC/디지털 기기 구비, 소품/기타 | 무료",
+      "link": "https://www.instagram.com/youngdo_youngman4661/"
+    },
+    {
+      "space_name": "다:이룸 다목적실",
+      "parent_facility": "청년희망플랫폼 다:이룸",
+      "location": "영도구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "👥모임/커뮤니티",
+        "🧘휴식/놀이"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "공부, 스터디, 친목에 적합 | 기본 회의 장비, PC/디지털 기기 구비 | 무료",
+      "link": "https://www.instagram.com/youngdo_youngman4661/"
+    },
+    {
+      "space_name": "이바구컴퍼니",
+      "parent_facility": "이바구컴퍼니",
+      "location": "동구",
+      "eligibility": "만18세~39세 미취업 동구 청년",
+      "keywords": [
+        "👥모임/커뮤니티",
+        "🧘휴식/놀이",
+        "🏫교육/강연"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "교육, 문화/창작, 친목에 적합 | 현재는 모집 중이 아닙니다.",
+      "link": null
+    },
+    {
+      "space_name": "무튼_통째",
+      "parent_facility": "무튼304",
+      "location": "서구",
+      "eligibility": "만18세~39세 미취업 동구 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "👥모임/커뮤니티",
+        "🧘휴식/놀이",
+        "🏫교육/강연"
+      ],
+      "capacity_min": 10,
+      "capacity_max": null,
+      "features": "공부, 스터디, 친목에 적합 | 기본 회의 장비, PC/디지털 기기 구비 | 무료",
+      "link": "https://www.instagram.com/muten_304/"
+    },
+    {
+      "space_name": "무튼_반만",
+      "parent_facility": "무튼304",
+      "location": "서구",
+      "eligibility": "만18세~39세 미취업 동구 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "👥모임/커뮤니티",
+        "🧘휴식/놀이",
+        "🏫교육/강연"
+      ],
+      "capacity_min": 6,
+      "capacity_max": null,
+      "features": "공부, 스터디, 친목에 적합 | 기본 회의 장비, PC/디지털 기기 구비 | 무료",
+      "link": "https://www.instagram.com/muten_304/"
+    },
+    {
+      "space_name": "휴게 공간",
+      "parent_facility": "중구 청년센터 청년마루",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "👥모임/커뮤니티",
+        "🧘휴식/놀이"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "공부, 스터디, 휴식에 적합 |  | 무료",
+      "link": [
+        "https://www.bsjunggu.go.kr/yeyak/index.junggu?menuCd=DOM_000001002006000000",
+        "https://www.eshare.go.kr/UserPortal/Upv/UprResrcFacl/index.do?rsrc_no=EE09M0153094"
+      ]
+    },
+    {
+      "space_name": "청년 오픈 카페",
+      "parent_facility": "중구 청년센터 청년마루",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "👥모임/커뮤니티",
+        "🧘휴식/놀이"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "공부, 스터디, 친목에 적합 | 도서 구비 | 무료",
+      "link": [
+        "https://www.bsjunggu.go.kr/yeyak/index.junggu?menuCd=DOM_000001002006000000",
+        "https://www.eshare.go.kr/UserPortal/Upv/UprResrcFacl/index.do?rsrc_no=EE09M0153094"
+      ]
+    },
+    {
+      "space_name": "스마트 워크스테이션",
+      "parent_facility": "중구 청년센터 청년마루",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "👥모임/커뮤니티",
+        "🧘휴식/놀이",
+        "💻작업/창작실"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "공부, 스터디, 작업에 적합 | PC/디지털 기기 구비 | 무료",
+      "link": [
+        "https://www.bsjunggu.go.kr/yeyak/index.junggu?menuCd=DOM_000001002006000000",
+        "https://www.eshare.go.kr/UserPortal/Upv/UprResrcFacl/index.do?rsrc_no=EE09M0153094"
+      ]
+    },
+    {
+      "space_name": "공유 주방",
+      "parent_facility": "중구 청년센터 청년마루",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "🏫교육/강연"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "클래스에 적합 | 조리기기 구비 | 대관 불가",
+      "link": [
+        "https://www.bsjunggu.go.kr/yeyak/index.junggu?menuCd=DOM_000001002006000000",
+        "https://www.eshare.go.kr/UserPortal/Upv/UprResrcFacl/index.do?rsrc_no=EE09M0153094"
+      ]
+    },
+    {
+      "space_name": "스터디룸",
+      "parent_facility": "중구 청년센터 청년마루",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 7,
+      "features": "스터디에 적합 | PC/디지털 기기 구비 | 무료",
+      "link": [
+        "https://www.bsjunggu.go.kr/yeyak/index.junggu?menuCd=DOM_000001002006000000",
+        "https://www.eshare.go.kr/UserPortal/Upv/UprResrcFacl/index.do?rsrc_no=EE09M0153094"
+      ]
+    },
+    {
+      "space_name": "미디어실",
+      "parent_facility": "중구 청년센터 청년마루",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "💻작업/창작실"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 4,
+      "features": "스터디, 작업에 적합 | PC/디지털 기기, 음향/영상 장비 구비 | 무료",
+      "link": [
+        "https://www.bsjunggu.go.kr/yeyak/index.junggu?menuCd=DOM_000001002006000000",
+        "https://www.eshare.go.kr/UserPortal/Upv/UprResrcFacl/index.do?rsrc_no=EE09M0153094"
+      ]
+    },
+    {
+      "space_name": "세미나룸",
+      "parent_facility": "중구 청년센터 청년마루",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "💻작업/창작실"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 20,
+      "features": "강연, 강의, 클래스에 적합 | 프레젠테이션 장비 구비 | 무료",
+      "link": [
+        "https://www.bsjunggu.go.kr/yeyak/index.junggu?menuCd=DOM_000001002006000000",
+        "https://www.eshare.go.kr/UserPortal/Upv/UprResrcFacl/index.do?rsrc_no=EE09M0153094"
+      ]
+    },
+    {
+      "space_name": "청년 창업오피스",
+      "parent_facility": "중구 청년센터 청년마루",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "💻작업/창작실"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "현재 대관 불가",
+      "link": [
+        "https://www.bsjunggu.go.kr/yeyak/index.junggu?menuCd=DOM_000001002006000000",
+        "https://www.eshare.go.kr/UserPortal/Upv/UprResrcFacl/index.do?rsrc_no=EE09M0153094"
+      ]
+    },
+    {
+      "space_name": "서점",
+      "parent_facility": "오름라운지",
+      "location": "중구",
+      "eligibility": "만18세~만39세 부산 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "🧘휴식/놀이"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 14,
+      "features": "스터디, 작업에 적합 | 기본 회의 장비 구비 | 무료",
+      "link": [
+        "https://blog.naver.com/ylab2021",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "창작소",
+      "parent_facility": "오름라운지",
+      "location": "중구",
+      "eligibility": "만18세~만39세 부산 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "💻작업/창작실"
+      ],
+      "capacity_min": 2,
+      "capacity_max": 6,
+      "features": "스터디, 회의, 작업, 모임에 적합 | 기본 회의 장비 구비 | 무료",
+      "link": [
+        "https://blog.naver.com/ylab2021",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "회의실 2",
+      "parent_facility": "오름라운지",
+      "location": "중구",
+      "eligibility": "만18세~만39세 부산 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "💻작업/창작실",
+        "👥모임/커뮤니티"
+      ],
+      "capacity_min": 2,
+      "capacity_max": 10,
+      "features": "스터디, 회의, 작업, 모임에 적합 | 기본 회의 장비, 프레젠테이션 장비 구비 | 무료",
+      "link": [
+        "https://blog.naver.com/ylab2021",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "회의실 3",
+      "parent_facility": "오름라운지",
+      "location": "중구",
+      "eligibility": "만18세~만39세 부산 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "💻작업/창작실",
+        "👥모임/커뮤니티"
+      ],
+      "capacity_min": 2,
+      "capacity_max": 10,
+      "features": "스터디, 회의, 작업, 모임에 적합 | 기본 회의 장비, 프레젠테이션 장비 구비 | 무료",
+      "link": [
+        "https://blog.naver.com/ylab2021",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "자율공간",
+      "parent_facility": "오름라운지",
+      "location": "중구",
+      "eligibility": "만18세~만39세 부산 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "🏫교육/강연"
+      ],
+      "capacity_min": 5,
+      "capacity_max": 30,
+      "features": "행사, 강연, 강의에 적합 | 기본 회의 장비, 프레젠테이션 장비, 음향/영상 장비 구비 | 무료",
+      "link": [
+        "https://blog.naver.com/ylab2021",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "만날마루",
+      "parent_facility": "부산청년센터",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "🏫교육/강연"
+      ],
+      "capacity_min": 20,
+      "capacity_max": 50,
+      "features": "행사, 강연, 강의에 적합 | 기본 회의 장비, 프레젠테이션 장비, 음향/영상 장비 구비 | 무료",
+      "link": [
+        "https://young.busan.go.kr/bycenter/index.nm",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "모락마루",
+      "parent_facility": "부산청년센터",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "🏫교육/강연"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 15,
+      "features": "클래스, 소모임에 적합 | 조리기기 구비 | 무료",
+      "link": [
+        "https://young.busan.go.kr/bycenter/index.nm",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "우당탕 다목적실",
+      "parent_facility": "부산청년센터",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "🏫교육/강연"
+      ],
+      "capacity_min": 10,
+      "capacity_max": 40,
+      "features": "행사, 강연, 강의에 적합 | 기본 회의 장비, 프레젠테이션 장비, 음향/영상 장비 구비 | 무료",
+      "link": [
+        "https://young.busan.go.kr/bycenter/index.nm",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "이야기마루1",
+      "parent_facility": "부산청년센터",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "💻작업/창작실",
+        "👥모임/커뮤니티"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 10,
+      "features": "소모임, 회의에 적합 | 기본 회의 장비 구비 | 무료",
+      "link": [
+        "https://young.busan.go.kr/bycenter/index.nm",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "이야기마루2",
+      "parent_facility": "부산청년센터",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "💻작업/창작실",
+        "👥모임/커뮤니티"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 10,
+      "features": "소모임, 회의에 적합 | 기본 회의 장비 구비 | 무료",
+      "link": [
+        "https://young.busan.go.kr/bycenter/index.nm",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "이야기마루3",
+      "parent_facility": "부산청년센터",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "💻작업/창작실",
+        "👥모임/커뮤니티"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 10,
+      "features": "소모임, 회의에 적합 | 기본 회의 장비, 프레젠테이션 장비 구비 | 무료",
+      "link": [
+        "https://young.busan.go.kr/bycenter/index.nm",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "함께마루1",
+      "parent_facility": "부산청년센터",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 2,
+      "features": "스터디에 적합 | 기본 회의 장비 구비 | 무료",
+      "link": [
+        "https://young.busan.go.kr/bycenter/index.nm",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "함께마루2",
+      "parent_facility": "부산청년센터",
+      "location": "중구",
+      "eligibility": "만18세~만39세 청년",
+      "keywords": [
+        "📝스터디/회의"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 6,
+      "features": "스터디에 적합 | 기본 회의 장비 구비 | 무료",
+      "link": [
+        "https://young.busan.go.kr/bycenter/index.nm",
+        "https://young.busan.go.kr/spPlace/list.nm?"
+      ]
+    },
+    {
+      "space_name": "세미나실(지하 1층)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연"
+      ],
+      "capacity_min": 20,
+      "capacity_max": 50,
+      "features": "스터디 및 회의 적합 | 프레젠테이션 장비, 음향/영상 장비 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "소회의실(지하 1층)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "📝 스터디/회의"
+      ],
+      "capacity_min": 4,
+      "capacity_max": 6,
+      "features": "회의 적합 | 기본 회의 장비, 프레젠테이션 장비 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "진카페(1층)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "🌿 휴식/놀이"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 15,
+      "features": "휴게 적합 | 기본 회의 장비, 소품/기타 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "디자인스토어(1층)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "🎨 문화/창작"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 6,
+      "features": "전시 적합 | 소품/기타 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "디자인 라이브러리(2층)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "💻 작업/창작실"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 10,
+      "features": "작업 적합 | 소품/기타 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "디자인 라이브러리(2층/스크린)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "🏫 교육/강연"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 15,
+      "features": "교육 적합 | 프레젠테이션 장비 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "디자인 라이브러리(2층/아이맥)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "💻 작업/창작실"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 4,
+      "features": "작업 적합 | PC/디지털 기기 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "토론의 탕(2층)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "📝 스터디/회의",
+        "👥 모임/커뮤니티"
+      ],
+      "capacity_min": 10,
+      "capacity_max": 15,
+      "features": "회의 및 모임 적합 | 소품/기타 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "3D 공작소(3층)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "💻 작업/창작실",
+        "🚀 진로/창업"
+      ],
+      "capacity_min": 10,
+      "capacity_max": 15,
+      "features": "작업 및 창작 적합 | 소품/기타 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "3D 후가공실(3층)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "💻 작업/창작실"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 5,
+      "features": "작업 적합 | 소품/기타 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "교육실 1(3층)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "🏫 교육/강연",
+        "💻 작업/창작실"
+      ],
+      "capacity_min": 15,
+      "capacity_max": 20,
+      "features": "교육 적합 | PC/디지털 기기 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "교육실 2(3층)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "💻 작업/창작실"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 5,
+      "features": "가공 적합 | 소품/기타 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "입주 사무실(4층)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "🚀 진로/창업"
+      ],
+      "capacity_min": 12,
+      "capacity_max": 15,
+      "features": "창업 적합 | 소품/기타 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "입주사무실 휴식공간 및 탕비실(4층)",
+      "parent_facility": "청년창조발전소 디자인스프링",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "🌿 휴식/놀이",
+        "📝 스터디/회의"
+      ],
+      "capacity_min": 4,
+      "capacity_max": 5,
+      "features": "휴식 및 회의 적합 | 소품/기타, 프레젠테이션 장비 | 무료",
+      "link": "https://blog.naver.com/design_spring/223401868662"
+    },
+    {
+      "space_name": "클라이맥스",
+      "parent_facility": "청년작당소",
+      "location": "동구",
+      "eligibility": "청년",
+      "keywords": [
+        "👥 모임/커뮤니티",
+        "🎨 문화/창작",
+        "🏫 교육/강연"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 50,
+      "features": "모임 및 교육적합 | 프레젠테이션 장비 | 무료",
+      "link": "https://www.jakdangso.kr/reservation"
+    },
+    {
+      "space_name": "영상 도서관",
+      "parent_facility": "청년작당소",
+      "location": "동구",
+      "eligibility": "청년",
+      "keywords": [
+        "🌿 휴식/놀이",
+        "💻 작업/창작실"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 2,
+      "features": "휴식 적합 | 기본 회의 장비, PC/디지털 기기 | 무료 ",
+      "link": "https://www.jakdangso.kr/reservation"
+    },
+    {
+      "space_name": "리허설 룸",
+      "parent_facility": "청년작당소",
+      "location": "동구",
+      "eligibility": "청년",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티"
+      ],
+      "capacity_min": 3,
+      "capacity_max": 12,
+      "features": "회의 및 스터디 적합 | 프레젠테이션 장비 | 무료",
+      "link": "https://www.jakdangso.kr/reservation"
+    },
+    {
+      "space_name": "대회의실",
+      "parent_facility": "청년두드림센터",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "🎬 행사/이벤트",
+        "🏫 교육/강연"
+      ],
+      "capacity_min": 20,
+      "capacity_max": 40,
+      "features": "행사 적합 | 기본 회의 장비 | 무료",
+      "link": "https://busanjob.net/08_wyou/wyou10_3_2.asp"
+    },
+    {
+      "space_name": "휴식공간",
+      "parent_facility": "청년두드림센터",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "🌿 휴식/놀이"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 10,
+      "features": " 휴식 적합 | 소품/기타 | 무료",
+      "link": "https://busanjob.net/08_wyou/wyou10_3_2.asp"
+    },
+    {
+      "space_name": "소회의실",
+      "parent_facility": "청년두드림센터",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "📝 스터디/회의",
+        "👥 모임/커뮤니티"
+      ],
+      "capacity_min": 5,
+      "capacity_max": 10,
+      "features": "스터디 및 회의 적합 | 기본 회의 장비 | 무료",
+      "link": "https://busanjob.net/08_wyou/wyou10_3_2.asp"
+    },
+    {
+      "space_name": "상담실",
+      "parent_facility": "청년두드림센터",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "🚀 진로/창업"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 1,
+      "features": " 상담 적합 | 기본 회의 장비, PC/디지털 기기 | 무료",
+      "link": "https://busanjob.net/08_wyou/wyou10_3_2.asp"
+    },
+    {
+      "space_name": "화상회의실 (지하 1층)",
+      "parent_facility": "청년창조발전소 고고씽 Job",
+      "location": "남구",
+      "eligibility": "청년",
+      "keywords": [
+        "📝 스터디/회의"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 8,
+      "features": " 스터디 및 회의 적합 | 기본 회의 장비, PC/디지털 기기 | 무료 ",
+      "link": "https://www.bsnamgu.go.kr/index.namgu?menuCd=DOM_000003002002000000&category1=01"
+    },
+    {
+      "space_name": "오픈 스터디룸 (전자칠판 보유)",
+      "parent_facility": "청년창조발전소 고고씽 Job",
+      "location": "남구",
+      "eligibility": "청년",
+      "keywords": [
+        "📝 스터디/회의"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 8,
+      "features": " 스터디 적합 | 기본 회의 장비, 프레젠테이션 장비 | 무료",
+      "link": "https://www.bsnamgu.go.kr/index.namgu?menuCd=DOM_000003002002000000&category1=01"
+    },
+    {
+      "space_name": "오픈 스터디룸 (화이트보드 보유)",
+      "parent_facility": "청년창조발전소 고고씽 Job",
+      "location": "남구",
+      "eligibility": "청년",
+      "keywords": [
+        "📝 스터디/회의",
+        "👥모임/커뮤니티"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 8,
+      "features": "모임 및 스터디 적합| 기본 회의 장비 | 무료",
+      "link": "https://www.bsnamgu.go.kr/index.namgu?menuCd=DOM_000003002002000000&category1=01"
+    },
+    {
+      "space_name": "멀티룸 (2층)",
+      "parent_facility": "청년창조발전소 고고씽 Job",
+      "location": "남구",
+      "eligibility": "청년",
+      "keywords": [
+        "🌿 휴식/놀이"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 10,
+      "features": " 휴식 및 놀이에 적합 | 소품/기타 | 무료",
+      "link": "https://www.bsnamgu.go.kr/index.namgu?menuCd=DOM_000003002002000000&category1=01"
+    },
+    {
+      "space_name": "공연장 (3층)",
+      "parent_facility": "청년창조발전소 고고씽 Job",
+      "location": "남구",
+      "eligibility": "청년",
+      "keywords": [
+        "🎬 행사/이벤트",
+        "🎨 문화/창작"
+      ],
+      "capacity_min": null,
+      "capacity_max": 52,
+      "features": "행사 및 이벤트에 적합 | 음향/영상 장비, 프레젠테이션 장비 | 유료",
+      "link": null
+    },
+    {
+      "space_name": "미디어 교육장 (4층)",
+      "parent_facility": "청년창조발전소 고고씽 Job",
+      "location": "남구",
+      "eligibility": "청년",
+      "keywords": [
+        "💻 작업/창작실",
+        "🏫 교육/강연"
+      ],
+      "capacity_min": null,
+      "capacity_max": 20,
+      "features": " 교육 및 강연에 적합 | 음향/영상 장비, PC/디지털 기기 | 유료",
+      "link": null
+    },
+    {
+      "space_name": "미팅룸(3층)",
+      "parent_facility": "청년창조발전소 꿈터+",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "📝 스터디/회의"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 6,
+      "features": " 스터디 및 회의 적합 | 기본 회의 장비 | 유료",
+      "link": "http://www.xn--cw0bn74d.kr/board/bbs/board.php?bo_table=room"
+    },
+    {
+      "space_name": "북카페(3층)",
+      "parent_facility": "청년창조발전소 꿈터+",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 20,
+      "features": "교육 및 강연 적합 | 기본 회의 장비 | 유료",
+      "link": "http://www.xn--cw0bn74d.kr/board/bbs/board.php?bo_table=room"
+    },
+    {
+      "space_name": "미팅룸(4층)",
+      "parent_facility": "청년창조발전소 꿈터+",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "📝 스터디/회의"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 8,
+      "features": "회의 적합 | 기본 회의 장비 | 유료",
+      "link": "http://www.xn--cw0bn74d.kr/board/bbs/board.php?bo_table=room"
+    },
+    {
+      "space_name": "영상편집실(4층)",
+      "parent_facility": "청년창조발전소 꿈터+",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "💻 작업/창작실"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 2,
+      "features": "작업 적합 | PC/디지털 기기 | 유료",
+      "link": "http://www.xn--cw0bn74d.kr/board/bbs/board.php?bo_table=room"
+    },
+    {
+      "space_name": "미팅룸(5층)",
+      "parent_facility": "청년창조발전소 꿈터+",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "📝 스터디/회의"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 8,
+      "features": "회의 적합 | 기본 회의 장비 | 유료",
+      "link": "http://www.xn--cw0bn74d.kr/board/bbs/board.php?bo_table=room"
+    },
+    {
+      "space_name": "다목적강당(5층)",
+      "parent_facility": "청년창조발전소 꿈터+",
+      "location": "부산진구",
+      "eligibility": "청년",
+      "keywords": [
+        "🏫 교육/강연",
+        "📝 스터디/회의",
+        "🎬 행사/이벤트"
+      ],
+      "capacity_min": 48,
+      "capacity_max": 70,
+      "features": "회의 및 강연 적합 | 프레젠테이션 장비, 음향/영상 장비 | 유료",
+      "link": "http://www.xn--cw0bn74d.kr/board/bbs/board.php?bo_table=room"
+    },
+    {
+      "space_name": "사상인디스테이션",
+      "parent_facility": "사상인디스테이션",
+      "location": "사상구",
+      "eligibility": "청년",
+      "keywords": [
+        "🎨 문화/창작",
+        "🎬 행사/이벤트"
+      ],
+      "capacity_min": null,
+      "capacity_max": 200,
+      "features": "행사 및 이벤트 적합 | 소품/기타, 기본 회의 장비 | 유료",
+      "link": "https://www.bscf.or.kr/portal/contents.do?mId=0304000000"
+    },
+    {
+      "space_name": "스페이스 클라우드",
+      "parent_facility": "사상 청년브릿지",
+      "location": "사상구",
+      "eligibility": "누구나",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티",
+        "🚀 진로/창업",
+        "🎨 문화/창작"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 12,
+      "features": "소모임 및 회의 적합 | 기본 회의 장비, 프레젠테이션 장비 | 무료",
+      "link": "https://www.spacecloud.kr/space/70707"
+    },
+    {
+      "space_name": "라운지",
+      "parent_facility": "해운대 청년 JOB카페",
+      "location": "해운대구",
+      "eligibility": "청년(만15~39세) 누구나",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티",
+        "🚀 진로/창업",
+        "🎨 문화/창작",
+        "🌿 휴식/놀이"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "취업상담, 자기계발 적합 | PC/디지털 기기 | 무료",
+      "link": "https://www.haeundae.go.kr/youth/index.do?menuCd=DOM_000001802004001000&&cpath=%2Fyouth"
+    },
+    {
+      "space_name": "라운지",
+      "parent_facility": "광안 엑스투지 청년 커뮤니티 센터",
+      "location": "수영구",
+      "eligibility": "부산거주 청년(만18~39세) 누구나",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티",
+        "🚀 진로/창업",
+        "🌿 휴식/놀이"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "자기계발, 네트워킹에 적합 | 기본 회의 장비 | 무료",
+      "link": "https://www.instagram.com/gwangan_xtoz"
+    },
+    {
+      "space_name": "회의실",
+      "parent_facility": "광안 엑스투지 청년 커뮤니티 센터",
+      "location": "수영구",
+      "eligibility": "부산거주 청년(만18~39세) 누구나",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티",
+        "🚀 진로/창업"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 10,
+      "features": "예비 또는 초기 창업자에 적합 | 기본 회의 장비 | 무료",
+      "link": "https://www.instagram.com/gwangan_xtoz/"
+    },
+    {
+      "space_name": "프로그램실",
+      "parent_facility": "광안 엑스투지 청년 커뮤니티 센터",
+      "location": "수영구",
+      "eligibility": "부산거주 청년(만18~39세) 누구나",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티",
+        "🚀 진로/창업"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 15,
+      "features": "소모임 및 회의 적합 | 기본 회의 장비, 프레젠테이션 장비 | 유료",
+      "link": "https://www.instagram.com/gwangan_xtoz/"
+    },
+    {
+      "space_name": "컨벤션홀",
+      "parent_facility": "광안 엑스투지 청년 커뮤니티 센터",
+      "location": "수영구",
+      "eligibility": "부산거주 청년(만18~39세) 누구나",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티",
+        "🚀 진로/창업",
+        "🎬 행사/이벤트"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "예비 또는 초기 창업자에 적합 | 프레젠테이션 장비, 음향/영상 장비, PC/디지털 기기 | 유료",
+      "link": "https://www.instagram.com/gwangan_xtoz/"
+    },
+    {
+      "space_name": "창작공간",
+      "parent_facility": "청년 복합문화 창작공간 SPACE 119",
+      "location": "북구",
+      "eligibility": "청년(만15~39세) 예술인",
+      "keywords": [
+        "🎨 문화/창작",
+        "💻 작업/창작실"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "창작 스튜디오로 적합 | 소품/기타 | 무료",
+      "link": "https://www.bsbukgu.go.kr/index.bsbukgu?contentsSid=1#n"
+    },
+    {
+      "space_name": "프로그램실1",
+      "parent_facility": "No 29 청년마음건강센터 청춘소설",
+      "location": "부산진구",
+      "eligibility": "기관/단체",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티",
+        "🚀 진로/창업"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 10,
+      "features": "예비 또는 초기 창업자에 적합 | 기본 회의 장비 | 무료",
+      "link": "https://xn--2e0by6evucvyfm6cfzq0shp6bcyxf4k.kr/roomSelect.do#"
+    },
+    {
+      "space_name": "프로그램실2",
+      "parent_facility": "No 29 청년마음건강센터 청춘소설",
+      "location": "부산진구",
+      "eligibility": "기관/단체",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티",
+        "🚀 진로/창업"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 12,
+      "features": "면접공간이 필요한 구직자에 적합 | 음향/영상 장비, PC/디지털 기기 | 무료",
+      "link": "https://www.youngmind.or.kr/sub.php?menukey=46"
+    },
+    {
+      "space_name": "프로그램실3",
+      "parent_facility": "No 29 청년마음건강센터 청춘소설",
+      "location": "부산진구",
+      "eligibility": "기관/단체",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티",
+        "🚀 진로/창업"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 12,
+      "features": "예비 또는 초기 창업자에 적합 | 기본 회의 장비 | 무료",
+      "link": "https://www.youngmind.or.kr/sub.php?menukey=46"
+    },
+    {
+      "space_name": "라운지",
+      "parent_facility": "부산청년잡(JOB) 성장카페",
+      "location": "부산진구",
+      "eligibility": "미취업 청년(만15~39세)",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티",
+        "🚀 진로/창업",
+        "🌿 휴식/놀이"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "취업상담, 자기계발 적합 | PC/디지털 기기 | 무료",
+      "link": "https://www.busanjobcafe.kr/main/rooms"
+    },
+    {
+      "space_name": "1인 사무공간",
+      "parent_facility": "동래구 청년어울림센터",
+      "location": "동래구",
+      "eligibility": "청년(만18~39세) 누구나",
+      "keywords": [
+        "🚀 진로/창업",
+        "💻 작업/창작실"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 1,
+      "features": "예비 또는 초기 창업자에 적합 | 기본 회의 장비 | 무료",
+      "link": "https://xn--2e0by6evucvyfm6cfzq0shp6bcyxf4k.kr/roomSelect.do#"
+    },
+    {
+      "space_name": "AI면접실",
+      "parent_facility": "동래구 청년어울림센터",
+      "location": "동래구",
+      "eligibility": "청년(만18~39세) 누구나",
+      "keywords": [
+        "🚀 진로/창업"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 1,
+      "features": "면접공간이 필요한 구직자에 적합 | 음향/영상 장비, PC/디지털 기기 | 무료",
+      "link": "https://xn--2e0by6evucvyfm6cfzq0shp6bcyxf4k.kr/roomSelect.do#"
+    },
+    {
+      "space_name": "입주 사무공간",
+      "parent_facility": "동래구 청년어울림센터",
+      "location": "동래구",
+      "eligibility": "청년(만18~39세)으로 구성된 기업",
+      "keywords": [
+        "👥 모임/커뮤니티",
+        "🚀 진로/창업",
+        "💻 작업/창작실"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "예비 또는 초기 창업자에 적합 | 기본 회의 장비 | 유료",
+      "link": "https://xn--2e0by6evucvyfm6cfzq0shp6bcyxf4k.kr/programList.do"
+    },
+    {
+      "space_name": "라운지",
+      "parent_facility": "사하청년공간 청신호",
+      "location": "사하구",
+      "eligibility": "청년(만15~39세) 누구나",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티",
+        "🚀 진로/창업",
+        "🌿 휴식/놀이"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "자기계발, 소모임 적합 | PC/디지털 기기 | 무료",
+      "link": "https://www.saha.go.kr/startup/facility/list.do?mId=0103000000"
+    },
+    {
+      "space_name": "미팅룸1",
+      "parent_facility": "사하청년공간 청신호",
+      "location": "사하구",
+      "eligibility": "청년(만15~39세) 누구나",
+      "keywords": [
+        "📝 스터디/회의",
+        "👥 모임/커뮤니티"
+      ],
+      "capacity_min": 3,
+      "capacity_max": 6,
+      "features": "소모임 및 회의 적합 | 기본 회의 장비 | 무료",
+      "link": "https://www.saha.go.kr/startup/facility/list.do?mId=0103000000"
+    },
+    {
+      "space_name": "미팅룸2",
+      "parent_facility": "사하청년공간 청신호",
+      "location": "사하구",
+      "eligibility": "청년(만15~39세) 누구나",
+      "keywords": [
+        "📝 스터디/회의",
+        "🏫 교육/강연",
+        "👥 모임/커뮤니티"
+      ],
+      "capacity_min": 3,
+      "capacity_max": 6,
+      "features": "소모임 및 회의 적합 | 기본 회의 장비, 프레젠테이션 장비 | 무료",
+      "link": "https://www.saha.go.kr/startup/facility/list.do?mId=0103000000"
+    }
+  ]
+}
