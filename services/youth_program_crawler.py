@@ -253,119 +253,196 @@ def get_youth_programs_data():
 
 
 def get_region_from_location(location, spaces_data=None):
-    """장소명으로부터 지역 추출"""
+    """장소명으로부터 지역 추출 - 개선된 버전"""
     if not location:
         return ""
 
-    # 청년공간 데이터에서 매칭 시도
+    print(f"🔍 지역 매칭 시도: '{location}'")
+
+    # 1. 청년공간 데이터에서 정확한 매칭 시도
     if spaces_data:
         for space in spaces_data:
-            space_name = space.get('name', '')
-            if location.strip() in space_name or space_name in location.strip():
-                return space.get('region', '')
+            space_name = space.get('name', '').strip()
 
-    # 장소명에서 직접 지역 추출 시도 (JSON 데이터 기반으로 확장)
+            # 완전 일치 확인
+            if location.strip() == space_name:
+                region = space.get('region', '')
+                print(f"✅ 완전 일치 발견: '{location}' -> '{region}'")
+                return region
+
+            # 부분 일치 확인 (양방향)
+            if (space_name in location or location in space_name) and len(space_name) > 3:
+                region = space.get('region', '')
+                print(f"✅ 부분 일치 발견: '{location}' <-> '{space_name}' -> '{region}'")
+                return region
+
+    # 2. 하드코딩된 매핑 (기존 + 추가)
     location_mappings = {
-        # 금정구
-        '꿈터': '금정구',
-        '청년창조발전소   꿈터+': '금정구',
-        '청년창조발전소 꿈터': '금정구',
-        '금정': '금정구',
-
         # 해운대구
         '해운대': '해운대구',
         '해운대 청년채움공간': '해운대구',
         '해운대 청년JOB카페': '해운대구',
+        '해운대 청년잡카페': '해운대구',
 
         # 남구
         '고고씽': '남구',
-        '청년창조발전소  고고씽 Job': '남구',
+        '청년창조발전소 고고씽 Job': '남구',
+        '청년창조발전소  고고씽 Job': '남구',  # 공백 2개
         '청년창조발전소 고고씽': '남구',
+        '동네 청년공간 공간숲': '남구',
+        '공간숲': '남구',
         '남구': '남구',
 
-        # 동래구
-        '동래': '동래구',
-        '동래구 청년어울림센터': '동래구',
+        # 금정구
+        '꿈터': '금정구',
+        '청년창조발전소 꿈터+': '금정구',
+        '청년창조발전소   꿈터+': '금정구',  # 공백 3개
+        '청년창조발전소 꿈터': '금정구',
+        '금정': '금정구',
+        '금정구': '금정구',
 
-        # 중구 (추정)
+        # 중구
         '청년작당소': '중구',
         '청년문화교류공간': '중구',
         '청년문화교류공간 \'청년작당소\'': '중구',
+        '청년문화교류공간 청년작당소': '중구',
+        '부산청년센터': '중구',
+        '오름라운지': '중구',
+        '중구 청년센터': '중구',
+        '중구': '중구',
 
-        # 지역 미확정 (장소명으로 추정)
-        '공간숲': '부산진구',  # 동네 청년공간 공간숲
-        '동네 청년공간 공간숲': '부산진구',
+        # 부산진구
+        '부산진구': '부산진구',
+        '와글와글플랫폼': '부산진구',
+        '청년 FLEX': '부산진구',
+        '부산진구청년플랫폼': '부산진구',
+        '청년두드림센터': '부산진구',
+        '청년창조발전소 디자인스프링': '부산진구',
+        '디자인스프링': '부산진구',
+        '청년마음건강센터': '부산진구',
+        '부산청년잡': '부산진구',
 
-        # 기타 지역 키워드
-        '부산진': '부산진구',
+        # 동래구
+        '동래': '동래구',
+        '동래구': '동래구',
+        '동래구 청년어울림센터': '동래구',
+
+        # 영도구
+        '영도': '영도구',
+        '영도구': '영도구',
+        '다:이룸': '영도구',
+        '청년희망플랫폼': '영도구',
+
+        # 기타 지역들
         '북구': '북구',
         '서구': '서구',
         '동구': '동구',
-        '영도': '영도구',
         '사하': '사하구',
+        '사하구': '사하구',
         '강서': '강서구',
+        '강서구': '강서구',
         '연제': '연제구',
+        '연제구': '연제구',
         '수영': '수영구',
+        '수영구': '수영구',
         '사상': '사상구',
-        '기장': '기장군'
+        '사상구': '사상구',
+        '기장': '기장군',
+        '기장군': '기장군'
     }
 
-    # 완전 일치 우선 확인
-    if location.strip() in location_mappings:
-        return location_mappings[location.strip()]
+    # 3. 완전 일치 우선 확인
+    location_clean = location.strip()
+    if location_clean in location_mappings:
+        region = location_mappings[location_clean]
+        print(f"✅ 하드코딩 완전 일치: '{location}' -> '{region}'")
+        return region
 
-    # 부분 일치 확인
-    for keyword, region in location_mappings.items():
-        if keyword in location:
+    # 4. 부분 일치 확인 (긴 키워드부터)
+    sorted_mappings = sorted(location_mappings.items(), key=lambda x: len(x[0]), reverse=True)
+    for keyword, region in sorted_mappings:
+        if keyword in location and len(keyword) > 2:  # 최소 3글자 이상만
+            print(f"✅ 하드코딩 부분 일치: '{location}' 포함 '{keyword}' -> '{region}'")
             return region
 
+    print(f"❌ 지역 매칭 실패: '{location}'")
     return ""
 
 
 def search_programs_by_region(region):
-    """지역별 청년 프로그램 검색 (마감일 임박 순)"""
-    from services.youth_space_crawler import get_youth_spaces_data
-
+    """지역별 청년 프로그램 검색 (수정된 버전)"""
     programs = get_youth_programs_data()
-    spaces_data = get_youth_spaces_data()  # 청년공간 데이터도 가져오기
+
+    # 청년공간 데이터도 가져오기 (지역 매칭용)
+    try:
+        from services.youth_space_crawler import get_youth_spaces_data
+        spaces_data = get_youth_spaces_data()
+        print(f"📊 청년공간 데이터 로드: {len(spaces_data)}개")
+    except Exception as e:
+        print(f"청년공간 데이터 로드 실패: {e}")
+        spaces_data = []
 
     if not programs:
         return "현재 청년 프로그램 정보를 가져올 수 없습니다."
 
-    region_normalized = region.replace('구', '') if region.endswith('구') else region
+    print(f"🔍 '{region}' 지역 프로그램 검색 시작")
+    print(f"📊 전체 프로그램: {len(programs)}개")
+
+    # 정규화 로직 수정
+    if region.endswith('구') or region.endswith('군'):
+        region_normalized = region[:-1]  # 마지막 1글자만 제거
+    else:
+        region_normalized = region
+
+    print(f"🎯 정규화된 지역명: '{region_normalized}' (원본: '{region}')")
 
     filtered_programs = []
-    for program in programs:
+    for i, program in enumerate(programs, 1):
         program_region = program.get('region', '')
         program_location = program.get('location', '')
         program_title = program.get('title', '')
 
+        print(f"📋 프로그램 {i}: '{program_title[:50]}...' | 지역: '{program_region}' | 장소: '{program_location}'")
+
+        match_found = False
+        match_reason = ""
+
         # 1. 제목에서 지역 확인
-        title_region_match = False
         if region_normalized in program_title or f"[{region}]" in program_title:
-            title_region_match = True
+            match_found = True
+            match_reason = "제목 매칭"
 
         # 2. region 필드에서 지역 확인
-        region_field_match = region_normalized in program_region
+        elif region in program_region or region_normalized in program_region:
+            match_found = True
+            match_reason = "지역 필드 매칭"
 
-        # 3. location에서 지역 추출하여 확인
-        location_region = get_region_from_location(program_location, spaces_data)
-        location_region_match = region_normalized in location_region
+        # 3. location에서 지역 추출하여 확인 (가장 중요!)
+        else:
+            location_region = get_region_from_location(program_location, spaces_data)
+            if location_region and (region in location_region or region_normalized in location_region):
+                match_found = True
+                match_reason = f"장소 매칭 ({program_location} -> {location_region})"
 
-        # 하나라도 매칭되면 포함
-        if title_region_match or region_field_match or location_region_match:
+                # location에서 추출한 지역 정보로 업데이트
+                if not program_region:
+                    program['region'] = location_region
+                    print(f"  🔄 지역 정보 업데이트: '{location_region}'")
+
+        if match_found:
             # 마감일 파싱 추가
             deadline = parse_deadline_date(program.get('application_period', ''))
             program['deadline_date'] = deadline
 
-            # location에서 추출한 지역 정보가 있으면 업데이트
-            if location_region and not program_region:
-                program['region'] = location_region
-
             filtered_programs.append(program)
+            print(f"  ✅ {match_reason} - 프로그램 추가됨")
+        else:
+            print(f"  ❌ 매칭 실패")
+
+    print(f"🎯 최종 결과: {len(filtered_programs)}개 프로그램")
 
     if not filtered_programs:
-        return f"**{region}**에서 현재 모집중인 청년 공간 프로그램을 찾을 수 없습니다."
+        return f"**{region}**에서 현재 모집중인 청년 공간 프로그램을 찾을 수 없습니다.\n\n다른 지역을 검색해보세요!"
 
     # 마감일 임박 순으로 정렬 (마감일이 없는 것은 뒤로)
     today = datetime.now()
@@ -377,7 +454,7 @@ def search_programs_by_region(region):
     result = f"**{region} 청년 공간 프로그램** ({len(filtered_programs)}개 모집중)\n"
     result += "📅 *마감일 임박 순으로 정렬되었습니다*\n\n"
 
-    for program in filtered_programs[:8]:
+    for program in filtered_programs[:8]:  # 최대 8개만 표시
         # 마감일까지 남은 일수 계산
         deadline_info = ""
         if program.get('deadline_date'):
@@ -392,6 +469,9 @@ def search_programs_by_region(region):
                 deadline_info = f" 📅 D-{days_left}"
 
         result += format_program_info(program, deadline_info) + "\n"
+
+    if len(filtered_programs) > 8:
+        result += f"... 외 {len(filtered_programs) - 8}개 프로그램 더 있음\n"
 
     return result
 
