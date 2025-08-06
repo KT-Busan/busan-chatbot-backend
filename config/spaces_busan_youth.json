@@ -1,9 +1,271 @@
 {
   "spaces_busan_youth": [
     {
+      "space_name": "커뮤니티룸",
+      "parent_facility": "수영구플러스행복센터",
+      "location": "수영구",
+      "introduction": "사람냄새와 온기가 전해지는 도시, 수영구! 수영구플러스행복센터는 주민이 함께 소통하고 참여하는 따뜻한 지역복지를 만들어가는 공간이에요.\uD83D\uDE42",
+      "eligibility": "수영구민 | 1인 가구 커뮤니티활동 또는 자기개발 활동에 공간이 필요한 자 | 1인 가구 대상 커뮤니티 프로그램 운영자(단체) | 지역사회보장협의체 사무국과 협의된 자(단체)",
+      "keywords": [
+        "📝스터디/회의",
+        "🏫교육/강연",
+        "👥모임/커뮤니티",
+        "🚀진로/창업",
+        "🎨문화/창작",
+        "🎬행사/이벤트"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "소모임 및 문화활동 적합 | 기본 회의 장비, 프레젠테이션 장비, 넷플릭스 구비 | 무료",
+      "link": [
+        "https://young.busan.go.kr/space/sooyoung/community",
+        "http://syplus.or.kr/bbs/board.php?bo_table=reserv"
+      ]
+    },
+    {
+      "space_name": "공유주방",
+      "parent_facility": "수영구플러스행복센터",
+      "location": "수영구",
+      "introduction": "사람냄새와 온기가 전해지는 도시, 수영구! 수영구플러스행복센터는 주민이 함께 소통하고 참여하는 따뜻한 지역복지를 만들어가는 공간이에요.\uD83D\uDE42",
+      "eligibility": "수영구민 | 1인 가구 커뮤니티활동 또는 자기개발 활동에 공간이 필요한 자 | 1인 가구 대상 커뮤니티 프로그램 운영자(단체) | 지역사회보장협의체 사무국과 협의된 자(단체)",
+      "keywords": [
+        "🏫교육/강연",
+        "👥모임/커뮤니티",
+        "🎨문화/창작",
+        "🌿휴식/놀이"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "클래스 및 요리활동 적합 | 조리기기 (에어프라이기, 와플기 포함) | 무료",
+      "link": [
+        "https://young.busan.go.kr/space/sooyoung/community",
+        "http://syplus.or.kr/bbs/board.php?bo_table=reserv"
+      ]
+    },
+    {
+      "space_name": "열린공간",
+      "parent_facility": "사하구 청년창업지원센터",
+      "location": "사하구",
+      "introduction": "청년이 행복한 도시, 사하! 청년의 취·창업을 지원하고 청년들이 자유롭게 소통·교류할 수 있는 사하구 청년창업지원센터입니다.\uD83D\uDE42",
+      "eligibility": "청년 누구나 이용 가능",
+      "keywords": [
+        "🌿휴식/놀이"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 15,
+      "features": "라운지 | 책상·의자 구비 | 무료 | 시설 예약 없이 방문 가능",
+      "link": "https://www.saha.go.kr/startup/main.do"
+    },
+    {
+      "space_name": "강의실 (A동)",
+      "parent_facility": "해운대청년채움공간",
+      "location": "해운대구",
+      "introduction": "희망채움, 창의채움, 꿈의 채움의 공간! 해운대 청년채움공간은 청년 창업과 일자리 창출을 통해 지역 청년이 머무르고 성장할 수 있도록 돕는 창업·창직 지원 공간이에요. ",
+      "eligibility": "만 15세 ~ 39세 청년",
+      "keywords": [
+        "🏫교육/강연",
+        "🎬행사/이벤트"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "교육 및 강의 적합 | 프레젠테이션 장비, 음향·영상 장비 구비 | 유료",
+      "link": "http://해운대청년채움공간.kr/facility.do"
+    },
+    {
+      "space_name": "공유주방 (B동 내)",
+      "parent_facility": "해운대청년채움공간",
+      "location": "해운대구",
+      "introduction": "희망채움, 창의채움, 꿈의 채움의 공간! 해운대 청년채움공간은 청년 창업과 일자리 창출을 통해 지역 청년이 머무르고 성장할 수 있도록 돕는 창업·창직 지원 공간이에요. ",
+      "eligibility": "만 15세 ~ 39세 청년",
+      "keywords": [
+        "🏫교육/강연",
+        "👥모임/커뮤니티",
+        "🎬행사/이벤트"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "클래스 및 요리활동 적합 | 조리기기 구비 (블렌더, 토스터기, 식기건조기 포함) | 유료 및 별도 문의 필요",
+      "link": "http://해운대청년채움공간.kr/facility.do"
+    },
+    {
+      "space_name": "공유오피스 (C동 내)",
+      "parent_facility": "해운대청년채움공간",
+      "location": "해운대구",
+      "introduction": "희망채움, 창의채움, 꿈의 채움의 공간! 해운대 청년채움공간은 청년 창업과 일자리 창출을 통해 지역 청년이 머무르고 성장할 수 있도록 돕는 창업·창직 지원 공간이에요. ",
+      "eligibility": "만 15세 ~ 39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "👥모임/커뮤니티",
+        "🚀진로/창업"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "소모임 및 회의 적합 | 기본 회의 장비 구비 | 4시간 기준 무료 (1일 최대 4시간 사용가능)",
+      "link": "http://해운대청년채움공간.kr/facility.do"
+    },
+    {
+      "space_name": "공유(화상)회의실 (D동 내)",
+      "parent_facility": "해운대청년채움공간",
+      "location": "해운대구",
+      "introduction": "희망채움, 창의채움, 꿈의 채움의 공간! 해운대 청년채움공간은 청년 창업과 일자리 창출을 통해 지역 청년이 머무르고 성장할 수 있도록 돕는 창업·창직 지원 공간이에요. ",
+      "eligibility": "만 15세 ~ 39세 청년",
+      "keywords": [
+        "📝스터디/회의",
+        "👥모임/커뮤니티",
+        "🚀진로/창업"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "소모임 및 화상 회의 적합 | 기본 회의 및 프레젠테이션 장비 구비 | 4시간 기준 무료 (1일 최대 4시간 사용가능)",
+      "link": "http://해운대청년채움공간.kr/facility.do"
+    },
+    {
+      "space_name": "B1 구포청년스튜디오 (댄스연습실)",
+      "parent_facility": "구포청년센터감동",
+      "location": "북구",
+      "introduction": "구포역 앞, 청년들의 밝은 성장을 지원하는 구포청년센터입니다\uD83D\uDE0A",
+      "eligibility": "청년 누구나 이용 가능",
+      "keywords": [
+        "🎬행사/이벤트",
+        "🎨문화/창작"
+      ],
+      "capacity_min": 10,
+      "capacity_max": 20,
+      "features": "안무 연습 및 무대 시연 준비 적합 | 전면·측면 거울, 남·녀 개별 탈의실, 와이파이 등 구비 | 유료",
+      "price": [
+        "B1구포청년스튜디오(평일,10시이전) : 3,900원",
+        "B1구포청년스튜디오(1시간, 평일) : 5,000원",
+        "B1구포청년스튜디오(1시간,주말) : 6,900원"
+      ],
+      "link": "https://naver.me/IMyTg1Xz"
+    },
+    {
+      "space_name": "2F 세미나실, 강의실",
+      "parent_facility": "구포청년센터감동",
+      "location": "북구",
+      "introduction": "구포역 앞, 청년들의 밝은 성장을 지원하는 구포청년센터입니다\uD83D\uDE0A",
+      "eligibility": "청년 누구나 이용 가능",
+      "keywords": [
+        "🏫교육/강연",
+        "🎬행사/이벤트"
+      ],
+      "capacity_min": 20,
+      "capacity_max": 30,
+      "features": "교육 및 세미나 운영 적합 | 기본 회의·프레젠테이션·음향 장비 구비 | 유료",
+      "price": [
+        "2F 세미나실, 강의실(1시간) : 25,000원",
+        "2F 세미나실, 강의실(4시간) : 100,000원"
+      ],
+      "link": "https://naver.me/IMyTg1Xz"
+    },
+    {
+      "space_name": "숨",
+      "parent_facility": "청년아트스테이션",
+      "location": "북구",
+      "introduction": "청년아트스테이션은 문화예술 분야 청년 창업과 전시·강연·체험 프로그램을 위한 공간이에요.\uD83D\uDE42",
+      "eligibility": "청년 누구나 이용 가능",
+      "keywords": [
+        "📝스터디/회의",
+        "🏫교육/강연",
+        "🎬행사/이벤트",
+        "🎨문화/창작",
+        "👥모임/커뮤니티"
+      ],
+      "capacity_min": null,
+      "capacity_max": 15,
+      "features": "청년 콘텐츠 제작 및 소규모 창작 활동 적합 | 기본 회의·프레젠테이션·음향/영상 장비 구비 | 무료",
+      "link": "https://groobuk.com/31"
+    },
+    {
+      "space_name": "딴",
+      "parent_facility": "청년아트스테이션",
+      "location": "북구",
+      "introduction": "청년아트스테이션은 문화예술 분야 청년 창업과 전시·강연·체험 프로그램을 위한 공간이에요.\uD83D\uDE42",
+      "eligibility": "청년 누구나 이용 가능",
+      "keywords": [
+        "📝스터디/회의",
+        "🏫교육/강연",
+        "🎬행사/이벤트",
+        "🎨문화/창작",
+        "👥모임/커뮤니티"
+      ],
+      "capacity_min": null,
+      "capacity_max": 10,
+      "features": "청년 콘텐츠 제작 및 소규모 창작 활동 적합 | 기본 회의·프레젠테이션 장비 구비 | 무료",
+      "link": "https://groobuk.com/31"
+    },
+    {
+      "space_name": "새물갤러리",
+      "parent_facility": "청년아트스테이션",
+      "location": "북구",
+      "introduction": "청년아트스테이션은 문화예술 분야 청년 창업과 전시·강연·체험 프로그램을 위한 공간이에요.\uD83D\uDE42",
+      "eligibility": "청년 누구나 이용 가능",
+      "keywords": [
+        "🎬행사/이벤트",
+        "🎨문화/창작"
+      ],
+      "capacity_min": null,
+      "capacity_max": null,
+      "features": "전시 및 소규모 문화행사에 적합 | 미술관 앞마당 공연 및 소규모 플리마켓 운영 | 무료",
+      "link": "https://groobuk.com/31"
+    },
+    {
+      "space_name": "공간숲 회의실",
+      "parent_facility": "부산청년공간 공간숲",
+      "location": "남구",
+      "introduction": "부산광역시 남구 주관 자기개발 공간, 공간숲입니다.\uD83C\uDF3F",
+      "eligibility": "부산 청년 대상",
+      "keywords": [
+        "📝스터디/회의",
+        "👥모임/커뮤니티",
+        "🚀진로/창업",
+        "🌿휴식/놀이"
+      ],
+      "capacity_min": 1,
+      "capacity_max": 7,
+      "features": "스터디 및 소규모 모임 적합 | 기본 회의 물품 구비 | 무료",
+      "link": "https://naver.me/5Hko5fQCh"
+    },
+    {
+      "space_name": "공간숲 공용주방",
+      "parent_facility": "부산청년공간 공간숲",
+      "location": "남구",
+      "introduction": "부산광역시 남구 주관 자기개발 공간, 공간숲입니다.\uD83C\uDF3F",
+      "eligibility": "부산 청년 대상",
+      "keywords": [
+        "🏫교육/강연",
+        "👥모임/커뮤니티",
+        "🚀진로/창업",
+        "🌿휴식/놀이"
+      ],
+      "capacity_min": 4,
+      "capacity_max": 10,
+      "features": "클래스 및 요리활동 적합 | 기본 양념 포함 조리기기 구비 | 무료",
+      "link": "https://naver.me/5Hko5fQCh"
+    },
+    {
+      "space_name": "부산진구 청년FLEX",
+      "parent_facility": "부산진구 청년FLEX",
+      "location": "부산진구",
+      "introduction": "부산진구와 부산청년정책연구원에서 운영하는 청년Flex이에요.\uD83D\uDE0E",
+      "eligibility": "청년 대상",
+      "keywords": [
+        "🏫교육/강연",
+        "👥모임/커뮤니티",
+        "🚀진로/창업",
+        "🎨문화/창작",
+        "🌿휴식/놀이"
+      ],
+      "capacity_min": null,
+      "capacity_max": 20,
+      "features": "클래스 및 소규모 행사 적합 | 기본 회의·프레젠테이션 장치·노트북 구비 | 무료",
+      "link": "https://form.naver.com/response/xdvUZ994BMjuL8R_BR6VqAh"
+    },
+    {
       "space_name": "와글와글플랫폼",
       "parent_facility": "와글와글플랫폼",
       "location": "부산진구",
+      "introduction": "청년들이 함께 할 수 있는 공간 '와플’",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -19,6 +281,7 @@
       "space_name": "청년 FLEX",
       "parent_facility": "부산진구청년플랫폼 청년 FLEX",
       "location": "부산진구",
+      "introduction": "부산진구와 부산청년정책연구원에서 운영하는 청년Flex이에요.\uD83D\uDE0E",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -34,6 +297,7 @@
       "space_name": "다:이룸 휴게 공간",
       "parent_facility": "청년희망플랫폼 다:이룸",
       "location": "영도구",
+      "introduction": "영도구에서 다 이뤄봐",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -49,6 +313,7 @@
       "space_name": "다:이룸 다목적실",
       "parent_facility": "청년희망플랫폼 다:이룸",
       "location": "영도구",
+      "introduction": "영도구에서 다 이뤄봐",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -64,6 +329,7 @@
       "space_name": "이바구컴퍼니",
       "parent_facility": "이바구컴퍼니",
       "location": "동구",
+      "introduction": "일단 출근하세요. 그리고 생각하세요! 청년 자립 프로그램",
       "eligibility": "만18세~39세 미취업 동구 청년",
       "keywords": [
         "👥모임/커뮤니티",
@@ -79,6 +345,7 @@
       "space_name": "무튼_통째",
       "parent_facility": "무튼304",
       "location": "서구",
+      "introduction": "‘마음을 끌다’의 독일어 muten + 도로명 주소의 304",
       "eligibility": "만18세~39세 미취업 동구 청년",
       "keywords": [
         "📝스터디/회의",
@@ -95,6 +362,7 @@
       "space_name": "무튼_반만",
       "parent_facility": "무튼304",
       "location": "서구",
+      "introduction": "‘마음을 끌다’의 독일어 muten + 도로명 주소의 304",
       "eligibility": "만18세~39세 미취업 동구 청년",
       "keywords": [
         "📝스터디/회의",
@@ -111,6 +379,7 @@
       "space_name": "휴게 공간",
       "parent_facility": "중구 청년센터 청년마루",
       "location": "중구",
+      "introduction": "중구청에서 운영하는 중구 청년센터 '청년마루'",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -129,6 +398,7 @@
       "space_name": "청년 오픈 카페",
       "parent_facility": "중구 청년센터 청년마루",
       "location": "중구",
+      "introduction": "중구청에서 운영하는 중구 청년센터 '청년마루'",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -147,6 +417,7 @@
       "space_name": "스마트 워크스테이션",
       "parent_facility": "중구 청년센터 청년마루",
       "location": "중구",
+      "introduction": "중구청에서 운영하는 중구 청년센터 '청년마루'",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -166,6 +437,7 @@
       "space_name": "공유 주방",
       "parent_facility": "중구 청년센터 청년마루",
       "location": "중구",
+      "introduction": "중구청에서 운영하는 중구 청년센터 '청년마루'",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "🏫교육/강연"
@@ -182,6 +454,7 @@
       "space_name": "스터디룸",
       "parent_facility": "중구 청년센터 청년마루",
       "location": "중구",
+      "introduction": "중구청에서 운영하는 중구 청년센터 '청년마루'",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의"
@@ -198,6 +471,7 @@
       "space_name": "미디어실",
       "parent_facility": "중구 청년센터 청년마루",
       "location": "중구",
+      "introduction": "중구청에서 운영하는 중구 청년센터 '청년마루'",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -215,6 +489,7 @@
       "space_name": "세미나룸",
       "parent_facility": "중구 청년센터 청년마루",
       "location": "중구",
+      "introduction": "중구청에서 운영하는 중구 청년센터 '청년마루'",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -232,6 +507,7 @@
       "space_name": "청년 창업오피스",
       "parent_facility": "중구 청년센터 청년마루",
       "location": "중구",
+      "introduction": "중구청에서 운영하는 중구 청년센터 '청년마루'",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -249,6 +525,7 @@
       "space_name": "서점",
       "parent_facility": "오름라운지",
       "location": "중구",
+      "introduction": "청년 누구나 이용 가능한 열린 공간",
       "eligibility": "만18세~만39세 부산 청년",
       "keywords": [
         "📝스터디/회의",
@@ -266,6 +543,7 @@
       "space_name": "창작소",
       "parent_facility": "오름라운지",
       "location": "중구",
+      "introduction": "청년 누구나 이용 가능한 열린 공간",
       "eligibility": "만18세~만39세 부산 청년",
       "keywords": [
         "📝스터디/회의",
@@ -283,6 +561,7 @@
       "space_name": "회의실 2",
       "parent_facility": "오름라운지",
       "location": "중구",
+      "introduction": "청년 누구나 이용 가능한 열린 공간",
       "eligibility": "만18세~만39세 부산 청년",
       "keywords": [
         "📝스터디/회의",
@@ -301,6 +580,7 @@
       "space_name": "회의실 3",
       "parent_facility": "오름라운지",
       "location": "중구",
+      "introduction": "청년 누구나 이용 가능한 열린 공간",
       "eligibility": "만18세~만39세 부산 청년",
       "keywords": [
         "📝스터디/회의",
@@ -319,6 +599,7 @@
       "space_name": "자율공간",
       "parent_facility": "오름라운지",
       "location": "중구",
+      "introduction": "청년 누구나 이용 가능한 열린 공간",
       "eligibility": "만18세~만39세 부산 청년",
       "keywords": [
         "📝스터디/회의",
@@ -336,6 +617,7 @@
       "space_name": "만날마루",
       "parent_facility": "부산청년센터",
       "location": "중구",
+      "introduction": "지역 거점 청년지원센터",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "🏫교육/강연"
@@ -352,6 +634,7 @@
       "space_name": "모락마루",
       "parent_facility": "부산청년센터",
       "location": "중구",
+      "introduction": "지역 거점 청년지원센터",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "🏫교육/강연"
@@ -368,6 +651,7 @@
       "space_name": "우당탕 다목적실",
       "parent_facility": "부산청년센터",
       "location": "중구",
+      "introduction": "지역 거점 청년지원센터",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "🏫교육/강연"
@@ -384,6 +668,7 @@
       "space_name": "이야기마루1",
       "parent_facility": "부산청년센터",
       "location": "중구",
+      "introduction": "지역 거점 청년지원센터",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -402,6 +687,7 @@
       "space_name": "이야기마루2",
       "parent_facility": "부산청년센터",
       "location": "중구",
+      "introduction": "지역 거점 청년지원센터",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -420,6 +706,7 @@
       "space_name": "이야기마루3",
       "parent_facility": "부산청년센터",
       "location": "중구",
+      "introduction": "지역 거점 청년지원센터",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의",
@@ -438,6 +725,7 @@
       "space_name": "함께마루1",
       "parent_facility": "부산청년센터",
       "location": "중구",
+      "introduction": "지역 거점 청년지원센터",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의"
@@ -454,6 +742,7 @@
       "space_name": "함께마루2",
       "parent_facility": "부산청년센터",
       "location": "중구",
+      "introduction": "지역 거점 청년지원센터",
       "eligibility": "만18세~만39세 청년",
       "keywords": [
         "📝스터디/회의"
@@ -470,6 +759,7 @@
       "space_name": "세미나실(지하 1층)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "📝 스터디/회의",
@@ -484,6 +774,7 @@
       "space_name": "소회의실(지하 1층)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "📝 스터디/회의"
@@ -497,6 +788,7 @@
       "space_name": "진카페(1층)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "🌿 휴식/놀이"
@@ -510,6 +802,7 @@
       "space_name": "디자인스토어(1층)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "🎨 문화/창작"
@@ -523,6 +816,7 @@
       "space_name": "디자인 라이브러리(2층)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "💻 작업/창작실"
@@ -536,6 +830,7 @@
       "space_name": "디자인 라이브러리(2층/스크린)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "🏫 교육/강연"
@@ -549,6 +844,7 @@
       "space_name": "디자인 라이브러리(2층/아이맥)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "💻 작업/창작실"
@@ -562,6 +858,7 @@
       "space_name": "토론의 탕(2층)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "📝 스터디/회의",
@@ -576,6 +873,7 @@
       "space_name": "3D 공작소(3층)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "💻 작업/창작실",
@@ -590,6 +888,7 @@
       "space_name": "3D 후가공실(3층)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "💻 작업/창작실"
@@ -603,6 +902,7 @@
       "space_name": "교육실 1(3층)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "🏫 교육/강연",
@@ -617,6 +917,7 @@
       "space_name": "교육실 2(3층)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "💻 작업/창작실"
@@ -630,6 +931,7 @@
       "space_name": "입주 사무실(4층)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "🚀 진로/창업"
@@ -643,6 +945,7 @@
       "space_name": "입주사무실 휴식공간 및 탕비실(4층)",
       "parent_facility": "청년창조발전소 디자인스프링",
       "location": "부산진구",
+      "introduction": "디자인과 창작, 제조, 전시까지 지원하는 청년 창업·창작 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "🌿 휴식/놀이",
@@ -657,6 +960,7 @@
       "space_name": "클라이맥스",
       "parent_facility": "청년작당소",
       "location": "동구",
+      "introduction": "청년들이 자유롭게 모이고 소통하며 창작할 수 있는 복합 문화 공간",
       "eligibility": "청년",
       "keywords": [
         "👥 모임/커뮤니티",
@@ -672,6 +976,7 @@
       "space_name": "영상 도서관",
       "parent_facility": "청년작당소",
       "location": "동구",
+      "introduction": "청년들이 자유롭게 모이고 소통하며 창작할 수 있는 복합 문화 공간",
       "eligibility": "청년",
       "keywords": [
         "🌿 휴식/놀이",
@@ -686,6 +991,7 @@
       "space_name": "리허설 룸",
       "parent_facility": "청년작당소",
       "location": "동구",
+      "introduction": "청년들이 자유롭게 모이고 소통하며 창작할 수 있는 복합 문화 공간",
       "eligibility": "청년",
       "keywords": [
         "📝 스터디/회의",
@@ -701,6 +1007,7 @@
       "space_name": "대회의실",
       "parent_facility": "청년두드림센터",
       "location": "부산진구",
+      "introduction": "청년의 진로·취업 상담부터 모임·강연까지 지원하는 복합 활동 공간",
       "eligibility": "청년",
       "keywords": [
         "🎬 행사/이벤트",
@@ -715,6 +1022,7 @@
       "space_name": "휴식공간",
       "parent_facility": "청년두드림센터",
       "location": "부산진구",
+      "introduction": "청년의 진로·취업 상담부터 모임·강연까지 지원하는 복합 활동 공간",
       "eligibility": "청년",
       "keywords": [
         "🌿 휴식/놀이"
@@ -728,6 +1036,7 @@
       "space_name": "소회의실",
       "parent_facility": "청년두드림센터",
       "location": "부산진구",
+      "introduction": "청년의 진로·취업 상담부터 모임·강연까지 지원하는 복합 활동 공간",
       "eligibility": "청년",
       "keywords": [
         "📝 스터디/회의",
@@ -742,6 +1051,7 @@
       "space_name": "상담실",
       "parent_facility": "청년두드림센터",
       "location": "부산진구",
+      "introduction": "청년의 진로·취업 상담부터 모임·강연까지 지원하는 복합 활동 공간",
       "eligibility": "청년",
       "keywords": [
         "🚀 진로/창업"
@@ -755,6 +1065,7 @@
       "space_name": "화상회의실 (지하 1층)",
       "parent_facility": "청년창조발전소 고고씽 Job",
       "location": "남구",
+      "introduction": "청년의 학습, 회의, 문화활동까지 지원하는 디지털 기반 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "📝 스터디/회의"
@@ -768,6 +1079,7 @@
       "space_name": "오픈 스터디룸 (전자칠판 보유)",
       "parent_facility": "청년창조발전소 고고씽 Job",
       "location": "남구",
+      "introduction": "청년의 학습, 회의, 문화활동까지 지원하는 디지털 기반 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "📝 스터디/회의"
@@ -781,6 +1093,7 @@
       "space_name": "오픈 스터디룸 (화이트보드 보유)",
       "parent_facility": "청년창조발전소 고고씽 Job",
       "location": "남구",
+      "introduction": "청년의 학습, 회의, 문화활동까지 지원하는 디지털 기반 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "📝 스터디/회의",
@@ -795,6 +1108,7 @@
       "space_name": "멀티룸 (2층)",
       "parent_facility": "청년창조발전소 고고씽 Job",
       "location": "남구",
+      "introduction": "청년의 학습, 회의, 문화활동까지 지원하는 디지털 기반 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "🌿 휴식/놀이"
@@ -808,6 +1122,7 @@
       "space_name": "공연장 (3층)",
       "parent_facility": "청년창조발전소 고고씽 Job",
       "location": "남구",
+      "introduction": "청년의 학습, 회의, 문화활동까지 지원하는 디지털 기반 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "🎬 행사/이벤트",
@@ -822,6 +1137,7 @@
       "space_name": "미디어 교육장 (4층)",
       "parent_facility": "청년창조발전소 고고씽 Job",
       "location": "남구",
+      "introduction": "청년의 학습, 회의, 문화활동까지 지원하는 디지털 기반 복합 공간",
       "eligibility": "청년",
       "keywords": [
         "💻 작업/창작실",
@@ -836,6 +1152,7 @@
       "space_name": "미팅룸(3층)",
       "parent_facility": "청년창조발전소 꿈터+",
       "location": "부산진구",
+      "introduction": "청년의 회의, 강연, 영상편집 등 다양한 활동을 지원하는 창작·협업 공간",
       "eligibility": "청년",
       "keywords": [
         "📝 스터디/회의"
@@ -849,6 +1166,7 @@
       "space_name": "북카페(3층)",
       "parent_facility": "청년창조발전소 꿈터+",
       "location": "부산진구",
+      "introduction": "청년의 회의, 강연, 영상편집 등 다양한 활동을 지원하는 창작·협업 공간",
       "eligibility": "청년",
       "keywords": [
         "🏫 교육/강연",
@@ -863,6 +1181,7 @@
       "space_name": "미팅룸(4층)",
       "parent_facility": "청년창조발전소 꿈터+",
       "location": "부산진구",
+      "introduction": "청년의 회의, 강연, 영상편집 등 다양한 활동을 지원하는 창작·협업 공간",
       "eligibility": "청년",
       "keywords": [
         "📝 스터디/회의"
@@ -876,6 +1195,7 @@
       "space_name": "영상편집실(4층)",
       "parent_facility": "청년창조발전소 꿈터+",
       "location": "부산진구",
+      "introduction": "청년의 회의, 강연, 영상편집 등 다양한 활동을 지원하는 창작·협업 공간",
       "eligibility": "청년",
       "keywords": [
         "💻 작업/창작실"
@@ -889,6 +1209,7 @@
       "space_name": "미팅룸(5층)",
       "parent_facility": "청년창조발전소 꿈터+",
       "location": "부산진구",
+      "introduction": "청년의 회의, 강연, 영상편집 등 다양한 활동을 지원하는 창작·협업 공간",
       "eligibility": "청년",
       "keywords": [
         "📝 스터디/회의"
@@ -902,6 +1223,7 @@
       "space_name": "다목적강당(5층)",
       "parent_facility": "청년창조발전소 꿈터+",
       "location": "부산진구",
+      "introduction": "청년의 회의, 강연, 영상편집 등 다양한 활동을 지원하는 창작·협업 공간",
       "eligibility": "청년",
       "keywords": [
         "🏫 교육/강연",
@@ -917,6 +1239,7 @@
       "space_name": "사상인디스테이션",
       "parent_facility": "사상인디스테이션",
       "location": "사상구",
+      "introduction": "청년의 전시·공연·문화활동을 지원하는 200인 규모의 다목적 문화예술 공간",
       "eligibility": "청년",
       "keywords": [
         "🎨 문화/창작",
@@ -931,6 +1254,7 @@
       "space_name": "스페이스 클라우드",
       "parent_facility": "사상 청년브릿지",
       "location": "사상구",
+      "introduction": "\uD83E\uDDE9작은 회의부터 청년 커뮤니티 프로그램까지, 자유롭게 쓰는 복합문화공간",
       "eligibility": "누구나",
       "keywords": [
         "📝 스터디/회의",
@@ -948,6 +1272,7 @@
       "space_name": "라운지",
       "parent_facility": "해운대 청년 JOB카페",
       "location": "해운대구",
+      "introduction": "☕취업 역량개발부터 진로상담까지! 꿈 실현을 위한 토탈 인프라를 갖춘 곳",
       "eligibility": "청년(만15~39세) 누구나",
       "keywords": [
         "📝 스터디/회의",
@@ -966,6 +1291,7 @@
       "space_name": "라운지",
       "parent_facility": "광안 엑스투지 청년 커뮤니티 센터",
       "location": "수영구",
+      "introduction": "\uD83D\uDD08저녁까지 열려있는 넓은 모임터, 자기계발과 네트워킹을 한자리에서",
       "eligibility": "부산거주 청년(만18~39세) 누구나",
       "keywords": [
         "📝 스터디/회의",
@@ -983,6 +1309,7 @@
       "space_name": "회의실",
       "parent_facility": "광안 엑스투지 청년 커뮤니티 센터",
       "location": "수영구",
+      "introduction": "\uD83D\uDD08저녁까지 열려있는 넓은 모임터, 자기계발과 네트워킹을 한자리에서",
       "eligibility": "부산거주 청년(만18~39세) 누구나",
       "keywords": [
         "📝 스터디/회의",
@@ -999,6 +1326,7 @@
       "space_name": "프로그램실",
       "parent_facility": "광안 엑스투지 청년 커뮤니티 센터",
       "location": "수영구",
+      "introduction": "\uD83D\uDD08저녁까지 열려있는 넓은 모임터, 자기계발과 네트워킹을 한자리에서",
       "eligibility": "부산거주 청년(만18~39세) 누구나",
       "keywords": [
         "📝 스터디/회의",
@@ -1015,6 +1343,7 @@
       "space_name": "컨벤션홀",
       "parent_facility": "광안 엑스투지 청년 커뮤니티 센터",
       "location": "수영구",
+      "introduction": "\uD83D\uDD08저녁까지 열려있는 넓은 모임터, 자기계발과 네트워킹을 한자리에서",
       "eligibility": "부산거주 청년(만18~39세) 누구나",
       "keywords": [
         "📝 스터디/회의",
@@ -1032,6 +1361,7 @@
       "space_name": "창작공간",
       "parent_facility": "청년 복합문화 창작공간 SPACE 119",
       "location": "북구",
+      "introduction": "\uD83C\uDFA8예술하는 청년들을 위한 창작 아지트, 당신의 아이디어가 자라는 곳",
       "eligibility": "청년(만15~39세) 예술인",
       "keywords": [
         "🎨 문화/창작",
@@ -1044,8 +1374,9 @@
     },
     {
       "space_name": "프로그램실1",
-      "parent_facility": "No 29 청년마음건강센터 청춘소설",
+      "parent_facility": "청년마음건강센터 청춘소설",
       "location": "부산진구",
+      "introduction": "\uD83D\uDCAC조용히 마음을 나누는 공간, 지친 마음을 달래고 성장을 돕는 청년쉼터",
       "eligibility": "기관/단체",
       "keywords": [
         "📝 스터디/회의",
@@ -1060,8 +1391,9 @@
     },
     {
       "space_name": "프로그램실2",
-      "parent_facility": "No 29 청년마음건강센터 청춘소설",
+      "parent_facility": "청년마음건강센터 청춘소설",
       "location": "부산진구",
+      "introduction": "\uD83D\uDCAC조용히 마음을 나누는 공간, 지친 마음을 달래고 성장을 돕는 청년쉼터",
       "eligibility": "기관/단체",
       "keywords": [
         "📝 스터디/회의",
@@ -1076,8 +1408,9 @@
     },
     {
       "space_name": "프로그램실3",
-      "parent_facility": "No 29 청년마음건강센터 청춘소설",
+      "parent_facility": "청년마음건강센터 청춘소설",
       "location": "부산진구",
+      "introduction": "\uD83D\uDCAC조용히 마음을 나누는 공간, 지친 마음을 달래고 성장을 돕는 청년쉼터",
       "eligibility": "기관/단체",
       "keywords": [
         "📝 스터디/회의",
@@ -1094,6 +1427,7 @@
       "space_name": "라운지",
       "parent_facility": "부산청년잡(JOB) 성장카페",
       "location": "부산진구",
+      "introduction": "\uD83D\uDCBC취업과 진로를 설계하는 청년 일자리 지원 허브. 취업에 몰입할 수 있는 열린공간 제공",
       "eligibility": "미취업 청년(만15~39세)",
       "keywords": [
         "📝 스터디/회의",
@@ -1111,6 +1445,7 @@
       "space_name": "1인 사무공간",
       "parent_facility": "동래구 청년어울림센터",
       "location": "동래구",
+      "introduction": "\uD83C\uDFE2창업의 시작을 위한 첫 번째 사무실, 예비 창업자들을 위한 안정적인 입주 공간",
       "eligibility": "청년(만18~39세) 누구나",
       "keywords": [
         "🚀 진로/창업",
@@ -1125,6 +1460,7 @@
       "space_name": "AI면접실",
       "parent_facility": "동래구 청년어울림센터",
       "location": "동래구",
+      "introduction": "\uD83C\uDFE2창업의 시작을 위한 첫 번째 사무실, 예비 창업자들을 위한 안정적인 입주 공간",
       "eligibility": "청년(만18~39세) 누구나",
       "keywords": [
         "🚀 진로/창업"
@@ -1138,6 +1474,7 @@
       "space_name": "입주 사무공간",
       "parent_facility": "동래구 청년어울림센터",
       "location": "동래구",
+      "introduction": "\uD83C\uDFE2창업의 시작을 위한 첫 번째 사무실, 예비 창업자들을 위한 안정적인 입주 공간",
       "eligibility": "청년(만18~39세)으로 구성된 기업",
       "keywords": [
         "👥 모임/커뮤니티",
@@ -1153,6 +1490,7 @@
       "space_name": "라운지",
       "parent_facility": "사하청년공간 청신호",
       "location": "사하구",
+      "introduction": "\uD83C\uDF3F누구나 환영받는 열린 커뮤니티, 문화 클래스부터 모임까지 활짝 열려 있어요",
       "eligibility": "청년(만15~39세) 누구나",
       "keywords": [
         "📝 스터디/회의",
@@ -1170,6 +1508,7 @@
       "space_name": "미팅룸1",
       "parent_facility": "사하청년공간 청신호",
       "location": "사하구",
+      "introduction": "\uD83C\uDF3F누구나 환영받는 열린 커뮤니티, 문화 클래스부터 모임까지 활짝 열려 있어요",
       "eligibility": "청년(만15~39세) 누구나",
       "keywords": [
         "📝 스터디/회의",
@@ -1184,6 +1523,7 @@
       "space_name": "미팅룸2",
       "parent_facility": "사하청년공간 청신호",
       "location": "사하구",
+      "introduction": "\uD83C\uDF3F누구나 환영받는 열린 커뮤니티, 문화 클래스부터 모임까지 활짝 열려 있어요",
       "eligibility": "청년(만15~39세) 누구나",
       "keywords": [
         "📝 스터디/회의",
