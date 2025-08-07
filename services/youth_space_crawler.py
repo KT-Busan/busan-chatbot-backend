@@ -54,35 +54,28 @@ class BusanYouthSpaceCrawler:
                 'program_link': ''
             }
 
-            # 1. 기본 정보 추출
             plc_box = li_element.select_one('a.toggle .plc_box')
             if plc_box:
-                # 지역 정보
                 plc_gu = plc_box.select_one('.plc_gu')
                 if plc_gu:
                     space_info['region'] = plc_gu.get_text(strip=True)
 
-                # 공간명 추출
                 plc_tit = plc_box.select_one('.plc_tit')
                 if plc_tit:
                     spans = plc_tit.find_all('span')
                     if len(spans) >= 2:
                         space_info['name'] = spans[1].get_text(strip=True)
 
-                # 연락처
                 plc_part = plc_box.select_one('.plc_part')
                 if plc_part:
                     space_info['contact'] = plc_part.get_text(strip=True)
 
-            # 2. 상세 정보 추출
             toggle_inner = li_element.select_one('.toggle_inner')
             if toggle_inner:
-                # 공간 설명
                 spif_con = toggle_inner.select_one('.spif_con')
                 if spif_con:
                     space_info['description'] = spif_con.get_text(strip=True)
 
-                # 주소, 이용시간, 연락처 추출
                 arrow_list = toggle_inner.select_one('.arrow_list ul')
                 if arrow_list:
                     li_items = arrow_list.find_all('li')
@@ -100,7 +93,6 @@ class BusanYouthSpaceCrawler:
                                 if not space_info['contact']:
                                     space_info['contact'] = value
 
-                # 링크 정보 추출
                 splink_list = toggle_inner.select('.splink_list a')
                 for link in splink_list:
                     link_text = link.select_one('.splink_txt')
@@ -117,7 +109,6 @@ class BusanYouthSpaceCrawler:
                         elif '프로그램' in text:
                             space_info['program_link'] = href
 
-            # 최소 조건 확인
             if space_info['name'] and space_info['region']:
                 return space_info
             else:
@@ -154,7 +145,6 @@ class BusanYouthSpaceCrawler:
         print("부산 청년공간 크롤링 시작")
         all_spaces = []
 
-        # 1, 2, 3 페이지 크롤링
         for page in range(1, 4):
             print(f"페이지 {page}/3 크롤링 중...")
 
@@ -196,17 +186,15 @@ def get_youth_spaces_data():
     import os
     from datetime import datetime, timedelta
 
-    # 프로젝트 루트의 instance 폴더 경로 설정
     basedir = os.path.abspath(os.path.dirname(__file__))
-    project_root = os.path.dirname(basedir)  # services의 상위 폴더 (프로젝트 루트)
+    project_root = os.path.dirname(basedir)
     instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
     if not os.path.exists(instance_path):
         os.makedirs(instance_path)
 
     cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
-    cache_duration = timedelta(hours=24)  # 24시간 캐시
+    cache_duration = timedelta(hours=24)
 
-    # 캐시 파일 확인
     if os.path.exists(cache_file):
         try:
             with open(cache_file, 'r', encoding='utf-8') as f:
@@ -219,12 +207,10 @@ def get_youth_spaces_data():
         except Exception as e:
             print(f"캐시 읽기 오류: {e}")
 
-    # 새로 크롤링
     print("🔄 새로운 청년공간 데이터 크롤링 중...")
     crawler = BusanYouthSpaceCrawler()
     spaces = crawler.crawl_all_spaces()
 
-    # 캐시 저장
     cache_data = {
         'cached_at': datetime.now().isoformat(),
         'data': spaces
@@ -246,20 +232,18 @@ def search_spaces_by_region(region):
     if not spaces:
         return "현재 청년공간 정보를 가져올 수 없습니다."
 
-    # 정확한 지역 매칭 (부분 매칭 → 정확 매칭으로 변경)
     filtered_spaces = []
     for space in spaces:
         space_region = space.get('region', '').strip()
-        if space_region == region:  # 정확히 일치하는 경우만
+        if space_region == region:
             filtered_spaces.append(space)
 
     if not filtered_spaces:
         return f"**{region}**에서 청년공간을 찾을 수 없습니다.\n\n다른 지역을 검색해보세요!"
 
-    # 포맷 수정: 줄바꿈 제거
     result = f"**{region} 청년공간({len(filtered_spaces)}개)**\n\n"
 
-    for space in filtered_spaces[:5]:  # 최대 5개만 표시
+    for space in filtered_spaces[:5]:
         result += format_space_info(space) + "\n"
 
     return result
@@ -285,15 +269,14 @@ def search_spaces_by_keyword(keyword):
 
     result = f"🔍 **{keyword}** 검색 결과 ({len(filtered_spaces)}개)\n\n"
 
-    for space in filtered_spaces[:5]:  # 최대 5개만 표시
+    for space in filtered_spaces[:5]:
         result += format_space_info(space) + "\n"
 
     return result
 
 
 def format_space_info(space):
-    """공간 정보 포맷팅 - 줄바꿈 제거"""
-    # 포맷 수정: [지역]을 공간명 바로 뒤에 붙이기
+    """공간 정보 포맷팅"""
     result = f"**{space['name']}[{space.get('region', '')}]**\n"
 
     if space.get('address'):
@@ -328,7 +311,6 @@ def get_all_youth_spaces():
 
     result = f"**부산 청년공간 전체 목록** ({len(spaces)}개)\n\n"
 
-    # 지역별로 그룹화
     regions = {}
     for space in spaces:
         region = space.get('region', '기타')

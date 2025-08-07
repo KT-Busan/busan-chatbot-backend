@@ -82,7 +82,6 @@ class SpaceHandler:
         equipment_set = set()
         for facility in facility_details:
             if facility.get('equipment') and facility['equipment'] != "명시되지 않음":
-                # 장비를 쉼표로 분리하여 세트에 추가
                 equipment_list = [eq.strip() for eq in facility['equipment'].split(',')]
                 equipment_set.update(equipment_list)
         return list(equipment_set)
@@ -91,7 +90,6 @@ class SpaceHandler:
         """상세 공간 정보 포맷팅"""
         result = f"**🏢 {space['name']}** [{space.get('region', '')}]\n\n"
 
-        # 기본 정보
         if space.get('address'):
             result += f"📍 **주소**: {space['address']}\n"
         if space.get('contact'):
@@ -101,17 +99,14 @@ class SpaceHandler:
         if space.get('description'):
             result += f"📝 **설명**: {space['description']}\n"
 
-        # 대상 이용자
         if space.get('target_users'):
             result += f"👥 **이용대상**: {space['target_users']}\n"
 
-        # 키워드
         if space.get('keywords'):
             result += f"🏷️ **키워드**: {', '.join(space['keywords'])}\n"
 
         result += "\n"
 
-        # 시설 정보
         if space.get('facility_details'):
             result += "🏠 **시설 정보**\n"
             for i, facility in enumerate(space['facility_details'], 1):
@@ -127,11 +122,9 @@ class SpaceHandler:
                 if facility.get('notice') and facility['notice'] != "없음":
                     result += f"   ⚠️ 안내: {facility['notice']}\n"
 
-        # 특별 안내사항
         if space.get('notice') and space['notice'] != "없음":
             result += f"\n⚠️ **특별 안내사항**: {space['notice']}\n"
 
-        # 링크 정보
         links = []
         if space.get('homepage'):
             links.append(f"[홈페이지]({space['homepage']})")
@@ -177,7 +170,6 @@ class SpaceHandler:
             basic_spaces = get_youth_spaces_data()
             merged_spaces = self.merge_space_data(basic_spaces)
 
-            # 공간명으로 검색
             target_space = None
             for space in merged_spaces:
                 if space_name.lower() in space.get('name', '').lower():
@@ -211,11 +203,10 @@ class SpaceHandler:
             basic_spaces = get_youth_spaces_data()
             merged_spaces = self.merge_space_data(basic_spaces)
 
-            # 정확한 지역 매칭으로 변경
             filtered_spaces = []
             for space in merged_spaces:
                 space_region = space.get('region', '').strip()
-                if space_region == region:  # 정확히 일치하는 경우만
+                if space_region == region:
                     filtered_spaces.append(space)
 
             if not filtered_spaces:
@@ -224,11 +215,9 @@ class SpaceHandler:
                     'message': f'**{region}**에서 청년공간을 찾을 수 없습니다.\n\n다른 지역을 검색해보세요!'
                 }
 
-            # 포맷 수정: 줄바꿈 제거
             result = f"**{region} 청년공간({len(filtered_spaces)}개)**\n\n"
 
             for space in filtered_spaces[:5]:  # 최대 5개만 표시
-                # 공간명 포맷 수정
                 result += f"**{space['name']}[{space.get('region', '')}]**\n"
                 if space.get('address'):
                     result += f"📍 {space['address']}\n"
@@ -269,12 +258,10 @@ class SpaceHandler:
             basic_spaces = get_youth_spaces_data()
             merged_spaces = self.merge_space_data(basic_spaces)
 
-            # 키워드로 필터링 (기본 정보 + 추가 정보에서 검색)
             filtered_spaces = []
             keyword_lower = keyword.lower()
 
             for space in merged_spaces:
-                # 기본 검색 대상
                 searchable_text = [
                     space.get('name', ''),
                     space.get('description', ''),
@@ -283,11 +270,9 @@ class SpaceHandler:
                     space.get('notice', '')
                 ]
 
-                # 키워드 배열에서도 검색
                 if space.get('keywords'):
                     searchable_text.extend(space['keywords'])
 
-                # 시설 정보에서도 검색
                 if space.get('facility_details'):
                     for facility in space['facility_details']:
                         searchable_text.extend([
@@ -297,7 +282,6 @@ class SpaceHandler:
                             facility.get('notice', '')
                         ])
 
-                # 키워드 매칭 확인
                 if any(keyword_lower in text.lower() for text in searchable_text):
                     filtered_spaces.append(space)
 
@@ -318,12 +302,10 @@ class SpaceHandler:
                         'description']
                     result += f"📝 {desc}\n"
 
-                # 키워드 표시
                 if space.get('keywords'):
                     keywords_text = ', '.join(space['keywords'][:3])  # 최대 3개 키워드만
                     result += f"🏷️ {keywords_text}\n"
 
-                # 매칭된 시설 정보 표시
                 if space.get('facility_details'):
                     matching_facilities = []
                     for facility in space['facility_details']:
@@ -379,7 +361,6 @@ class SpaceHandler:
             for space in filtered_spaces:
                 result += f"**{space['name']}** [{space.get('region', '')}]\n"
 
-                # 해당 시설 유형의 상세 정보
                 matching_facilities = []
                 for facility in space.get('facility_details', []):
                     if facility_type_lower in facility.get('type', '').lower():
@@ -448,7 +429,6 @@ class SpaceHandler:
             for space in filtered_spaces[:8]:  # 최대 8개까지 표시
                 result += f"**{space['name']}** [{space.get('region', '')}]\n"
 
-                # 해당 가격대의 시설 정보만 표시
                 matching_facilities = []
                 for facility in space.get('facility_details', []):
                     price = facility.get('price', '없음').lower()
@@ -464,7 +444,7 @@ class SpaceHandler:
                         matching_facilities.append(facility_info)
 
                 if matching_facilities:
-                    result += f"🏠 {', '.join(matching_facilities[:2])}\n"  # 최대 2개 시설만
+                    result += f"🏠 {', '.join(matching_facilities[:2])}\n"
 
                 if space.get('contact'):
                     result += f"📞 {space['contact']}\n"
@@ -491,14 +471,12 @@ class SpaceHandler:
             basic_spaces = get_youth_spaces_data()
             merged_spaces = self.merge_space_data(basic_spaces)
 
-            # 키워드별 점수 계산
             scored_spaces = []
 
             for space in merged_spaces:
                 score = 0
                 matched_keywords = []
 
-                # 검색 대상 텍스트 수집
                 searchable_text = [
                     space.get('name', ''),
                     space.get('description', ''),
@@ -518,7 +496,6 @@ class SpaceHandler:
                             facility.get('notice', '')
                         ])
 
-                # 키워드 매칭 점수 계산
                 for keyword in keywords_list:
                     keyword_lower = keyword.lower()
                     for text in searchable_text:
@@ -531,7 +508,6 @@ class SpaceHandler:
                 if score > 0:
                     scored_spaces.append((space, score, matched_keywords))
 
-            # 점수순으로 정렬
             scored_spaces.sort(key=lambda x: x[1], reverse=True)
 
             if not scored_spaces:
@@ -580,16 +556,13 @@ class SpaceHandler:
             for space in merged_spaces:
                 if space.get('facility_details'):
                     for facility in space['facility_details']:
-                        # 인원수 수집
                         if facility.get('capacity') and facility['capacity'] not in ["명시되지 않음", "없음"]:
                             capacities.add(facility['capacity'])
 
-                        # 구비물품 수집
                         if facility.get('equipment') and facility['equipment'] not in ["명시되지 않음", "기재되지 않음", "없음"]:
                             equipment_list = [eq.strip() for eq in facility['equipment'].split(',')]
                             equipment.update(equipment_list)
 
-                        # 구분(타입) 수집
                         if facility.get('type'):
                             type_list = [t.strip() for t in facility['type'].split('/')]
                             types.update(type_list)
@@ -623,14 +596,11 @@ class SpaceHandler:
                     for facility in space['facility_details']:
                         matches = True
 
-                        # 인원수 체크 (필수)
                         if capacity and facility.get('capacity'):
                             if facility['capacity'] not in ["명시되지 않음", "없음"]:
-                                # 범위 형태 체크 (예: "10~20명", "20-25명")
                                 capacity_match = False
                                 facility_capacity = facility['capacity']
 
-                                # 범위 패턴 확인
                                 import re
                                 range_match = re.search(r'(\d+)[-~](\d+)', facility_capacity)
                                 if range_match:
@@ -646,7 +616,6 @@ class SpaceHandler:
                                 if not capacity_match:
                                     matches = False
 
-                        # 구비물품 체크 (선택사항)
                         if equipment_list and len(equipment_list) > 0:
                             if facility.get('equipment') and facility['equipment'] not in ["명시되지 않음", "기재되지 않음", "없음"]:
                                 facility_equipment = facility['equipment'].lower()
@@ -659,7 +628,6 @@ class SpaceHandler:
                             else:
                                 matches = False
 
-                        # 구분(타입) 체크 (선택사항)
                         if space_type:
                             if facility.get('type'):
                                 if space_type.lower() not in facility['type'].lower():
@@ -668,11 +636,9 @@ class SpaceHandler:
                                 matches = False
 
                         if matches:
-                            # 추가 정보 가져오기
                             space_info = space.copy()
                             booking_link = ""
 
-                            # 예약 링크 찾기
                             for link_key in ['rental_link', 'booking_url', 'rental_form']:
                                 if space_info.get(link_key) and space_info[link_key] not in ["없음", ""]:
                                     booking_link = space_info[link_key]
@@ -742,7 +708,6 @@ class SpaceHandler:
             crawler = BusanYouthSpaceCrawler()
             spaces = crawler.crawl_all_spaces()
 
-            # 캐시에 저장
             basedir = os.path.abspath(os.path.dirname(__file__))
             project_root = os.path.dirname(basedir)
             instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
@@ -774,5 +739,4 @@ class SpaceHandler:
             }
 
 
-# 전역 인스턴스 생성
 space_handler = SpaceHandler()
