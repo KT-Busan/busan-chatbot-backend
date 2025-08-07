@@ -51,7 +51,6 @@ def chat():
         return jsonify({'status': 'ok'}), 200
 
     try:
-        # 요청 데이터 로그 추가
         print(f"📨 받은 요청 데이터: {request.get_json()}")
 
         data = request.get_json()
@@ -81,7 +80,6 @@ def chat():
 
         print(f"✅ 모든 필수 데이터 확인됨, chat_handler 호출 시작")
 
-        # chat_handler를 통해 메시지 처리 (조건별 검색, 랜덤 추천 모두 포함)
         result, status_code = chat_handler.process_chat_message(
             user_message_text,
             anonymous_id,
@@ -259,7 +257,7 @@ def crawl_spaces_now():
         return jsonify({"error": "청년공간 크롤링에 실패했습니다."}), 500
 
 
-# === 청년공간 예약 관련 API (기존) ===
+# === 청년공간 예약 관련 API ===
 @app.route('/api/spaces/filter-options', methods=['GET'])
 def get_space_filter_options():
     """청년공간 검색 필터 옵션들 반환 (인원수, 구비물품, 구분)"""
@@ -298,7 +296,7 @@ def get_space_detail_api(space_name):
         return jsonify({"error": f"{space_name} 공간 정보를 불러올 수 없습니다."}), 500
 
 
-# === 청년공간 상세 관련 API (새로 추가된 핵심 기능) ===
+# === 청년공간 상세 관련 API ===
 @app.route('/api/spaces/busan-youth', methods=['GET'])
 def get_busan_youth_spaces():
     """
@@ -307,7 +305,6 @@ def get_busan_youth_spaces():
     - chat_handler에서 이미 로드된 데이터 활용
     """
     try:
-        # chat_handler에서 이미 로드된 spaces_busan_youth.json 데이터 사용
         spaces_data = chat_handler.spaces_data
 
         if not spaces_data:
@@ -340,13 +337,12 @@ def get_busan_youth_spaces():
 
 # === 헬스체크 ===
 @app.route('/health', methods=['GET'])
-@app.route('/api/health', methods=['GET'])  # API 경로도 추가
+@app.route('/api/health', methods=['GET'])
 def health_check():
     """시스템 헬스체크"""
     try:
         from datetime import datetime
 
-        # chat_handler의 spaces_data 상태 확인
         spaces_count = len(chat_handler.spaces_data) if chat_handler.spaces_data else 0
 
         return jsonify({
@@ -400,10 +396,8 @@ if __name__ == "__main__":
     print("🚀 부산 챗봇 시작 (기능별 모듈 구조 + 조건별 검색 기능)...")
 
     try:
-        # 데이터베이스 초기화
         initialize_database(app)
 
-        # chat_handler 초기화 상태 확인
         spaces_count = len(chat_handler.spaces_data) if chat_handler.spaces_data else 0
         print(f"📊 spaces_busan_youth.json: {spaces_count}개 공간 데이터 로드됨")
 
@@ -418,5 +412,4 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"❌ 서버 시작 실패: {e}")
 else:
-    # 프로덕션 환경에서의 초기화
     initialize_database(app)

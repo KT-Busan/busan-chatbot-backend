@@ -34,7 +34,6 @@ class ProgramHandler:
             result_message = search_programs_by_region(region)
             programs = get_youth_programs_data()
 
-            # 해당 지역 프로그램 필터링
             region_normalized = region.replace('구', '') if region.endswith('구') else region
             filtered_programs = []
             for program in programs:
@@ -70,7 +69,6 @@ class ProgramHandler:
             crawler = BusanYouthProgramCrawler()
             programs = crawler.crawl_all_programs()
 
-            # 캐시에 저장
             basedir = os.path.abspath(os.path.dirname(__file__))
             project_root = os.path.dirname(basedir)
             instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
@@ -136,5 +134,4 @@ class ProgramHandler:
             }
 
 
-# 전역 인스턴스 생성
 program_handler = ProgramHandler()
