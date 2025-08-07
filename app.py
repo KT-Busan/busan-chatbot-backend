@@ -257,34 +257,6 @@ def crawl_spaces_now():
         return jsonify({"error": "청년공간 크롤링에 실패했습니다."}), 500
 
 
-# === 청년공간 예약 관련 API ===
-@app.route('/api/spaces/filter-options', methods=['GET'])
-def get_space_filter_options():
-    """청년공간 검색 필터 옵션들 반환 (인원수, 구비물품, 구분)"""
-    try:
-        result = space_handler.get_filter_options()
-        return jsonify(result)
-    except Exception as e:
-        print(f"필터 옵션 조회 오류: {e}")
-        return jsonify({"error": "필터 옵션을 불러올 수 없습니다."}), 500
-
-
-@app.route('/api/spaces/reservation/search', methods=['POST'])
-def search_spaces_for_reservation():
-    """조건에 맞는 청년공간 검색 (예약용)"""
-    try:
-        data = request.get_json()
-        capacity = data.get('capacity')
-        equipment = data.get('equipment', [])
-        space_type = data.get('type')
-
-        result = space_handler.search_spaces_for_reservation(capacity, equipment, space_type)
-        return jsonify(result)
-    except Exception as e:
-        print(f"예약용 청년공간 검색 오류: {e}")
-        return jsonify({"error": "청년공간 검색에 실패했습니다."}), 500
-
-
 @app.route('/api/spaces/detail/<space_name>', methods=['GET'])
 def get_space_detail_api(space_name):
     """특정 공간의 상세 정보"""
@@ -332,6 +304,72 @@ def get_busan_youth_spaces():
             'data': [],
             'count': 0,
             'message': '청년공간 데이터를 가져오는 중 오류가 발생했습니다.'
+        }), 500
+
+
+@app.route('/api/debug/spaces-status', methods=['GET'])
+def get_spaces_debug_status():
+    """청년공간 데이터 로딩 상태 디버깅"""
+    try:
+        from handlers.chat_handler import chat_handler
+
+        # 데이터 상태 확인
+        spaces_count = len(chat_handler.spaces_data) if chat_handler.spaces_data else 0
+
+        # 파일 시스템 정보
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        possible_paths = [
+            os.path.join(basedir, 'config', 'spaces_busan_youth.json'),
+            os.path.join(os.path.dirname(basedir), 'config', 'spaces_busan_youth.json'),
+            '/app/config/spaces_busan_youth.json',
+            os.path.join(os.environ.get('RENDER_DISK_PATH', ''), 'config', 'spaces_busan_youth.json')
+        ]
+
+        path_status = {}
+        for path in possible_paths:
+            path_status[path] = {
+                'exists': os.path.exists(path),
+                'readable': os.path.exists(path) and os.access(path, os.R_OK) if os.path.exists(path) else False
+            }
+
+        return jsonify({
+            'success': True,
+            'spaces_loaded': spaces_count,
+            'file_paths': path_status,
+            'current_dir': os.getcwd(),
+            'app_dir': basedir,
+            'render_path': os.environ.get('RENDER_DISK_PATH', 'None'),
+            'sample_space': chat_handler.spaces_data[0] if chat_handler.spaces_data else None
+        })
+
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+@app.route('/api/debug/reload-spaces', methods=['POST'])
+def reload_spaces_data():
+    """청년공간 데이터 강제 재로드"""
+    try:
+        from handlers.chat_handler import chat_handler
+
+        old_count = len(chat_handler.spaces_data)
+        chat_handler.spaces_data = chat_handler.load_spaces_data()
+        new_count = len(chat_handler.spaces_data)
+
+        return jsonify({
+            'success': True,
+            'message': f'데이터 재로드 완료: {old_count} → {new_count}개',
+            'old_count': old_count,
+            'new_count': new_count
+        })
+
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
         }), 500
 
 
@@ -393,7 +431,7 @@ def bad_request(error):
 
 # === 메인 실행 ===
 if __name__ == "__main__":
-    print("🚀 부산 챗봇 시작 (기능별 모듈 구조 + 조건별 검색 기능)...")
+    print("🚀 부산 챗봇 시작 (리팩토링 완료)...")
 
     try:
         initialize_database(app)
@@ -402,10 +440,12 @@ if __name__ == "__main__":
         print(f"📊 spaces_busan_youth.json: {spaces_count}개 공간 데이터 로드됨")
 
         print("✅ 모든 핸들러 준비 완료!")
-        print("🔧 새로운 기능:")
+        print("🔧 주요 기능:")
         print("   - 조건별 청년공간 검색 (지역/인원/목적)")
         print("   - 랜덤 청년공간 추천")
         print("   - 전체 청년공간 상세 보기")
+        print("   - 키워드별 청년공간 검색")
+        print("   - 청년 프로그램 검색")
 
         app.run(host='0.0.0.0', port=5001, debug=True)
 

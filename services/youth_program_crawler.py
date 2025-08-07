@@ -201,7 +201,7 @@ def get_youth_programs_data():
         os.makedirs(instance_path)
 
     cache_file = os.path.join(instance_path, 'youth_programs_cache.json')
-    cache_duration = timedelta(hours=6)
+    cache_duration = timedelta(hours=3)
 
     if os.path.exists(cache_file):
         try:
@@ -338,7 +338,7 @@ def get_region_from_location(location, spaces_data=None):
 
 
 def search_programs_by_region(region):
-    """지역별 청년 프로그램 검색 (수정된 버전)"""
+    """지역별 청년 프로그램 검색 - 요구사항에 맞는 형식으로 수정"""
     programs = get_youth_programs_data()
 
     try:
@@ -350,11 +350,12 @@ def search_programs_by_region(region):
         spaces_data = []
 
     if not programs:
-        return "현재 청년 프로그램 정보를 가져올 수 없습니다."
+        return f"📍 {region} 청년공간 프로그램 안내(마감 임박순)\n\n현재 프로그램 정보를 가져올 수 없습니다.\n\n📌 전체 프로그램은 [청년 공간 프로그램](https://young.busan.go.kr/policySupport/act.nm?menuCd=261)에서 더 확인할 수 있어요."
 
     print(f"🔍 '{region}' 지역 프로그램 검색 시작")
     print(f"📊 전체 프로그램: {len(programs)}개")
 
+    # 지역 정규화
     if region.endswith('구') or region.endswith('군'):
         region_normalized = region[:-1]
     else:
@@ -362,6 +363,7 @@ def search_programs_by_region(region):
 
     print(f"🎯 정규화된 지역명: '{region_normalized}' (원본: '{region}')")
 
+    # 프로그램 필터링 및 지역 매칭
     filtered_programs = []
     for i, program in enumerate(programs, 1):
         program_region = program.get('region', '')
@@ -373,28 +375,29 @@ def search_programs_by_region(region):
         match_found = False
         match_reason = ""
 
+        # 1. 제목에서 지역 매칭
         if region_normalized in program_title or f"[{region}]" in program_title:
             match_found = True
             match_reason = "제목 매칭"
-
+        # 2. 지역 필드에서 매칭
         elif region in program_region or region_normalized in program_region:
             match_found = True
             match_reason = "지역 필드 매칭"
-
+        # 3. 장소명을 통한 지역 매칭
         else:
             location_region = get_region_from_location(program_location, spaces_data)
             if location_region and (region in location_region or region_normalized in location_region):
                 match_found = True
                 match_reason = f"장소 매칭 ({program_location} -> {location_region})"
-
+                # 지역 정보 업데이트
                 if not program_region:
                     program['region'] = location_region
                     print(f"  🔄 지역 정보 업데이트: '{location_region}'")
 
         if match_found:
+            # 마감일 파싱 추가
             deadline = parse_deadline_date(program.get('application_period', ''))
             program['deadline_date'] = deadline
-
             filtered_programs.append(program)
             print(f"  ✅ {match_reason} - 프로그램 추가됨")
         else:
@@ -402,35 +405,67 @@ def search_programs_by_region(region):
 
     print(f"🎯 최종 결과: {len(filtered_programs)}개 프로그램")
 
+    # 결과가 없는 경우
     if not filtered_programs:
-        return f"**{region}**에서 현재 모집중인 청년 공간 프로그램을 찾을 수 없습니다.\n\n다른 지역을 검색해보세요!"
+        result = f"📍 {region} 청년공간 프로그램 안내(마감 임박순)\n\n"
+        result += f"현재 **{region}**에서 모집중인 청년 공간 프로그램을 찾을 수 없습니다.\n\n"
+        result += "다른 지역을 선택해보시거나, 전체 프로그램을 확인해보세요!\n\n"
+        result += "📌 전체 프로그램은 [청년 공간 프로그램](https://young.busan.go.kr/policySupport/act.nm?menuCd=261)에서 더 확인할 수 있어요."
+        return result
 
+    # 마감일 기준으로 정렬 (마감 임박순)
     today = datetime.now()
     filtered_programs.sort(key=lambda x: (
-        x['deadline_date'] is None,
+        x['deadline_date'] is None,  # None 값은 뒤로
         x['deadline_date'] if x['deadline_date'] else datetime.max
     ))
 
-    result = f"**{region} 청년 공간 프로그램** ({len(filtered_programs)}개 모집중)\n"
-    result += "📅 *마감일 임박 순으로 정렬되었습니다*\n\n"
+    # 결과 포맷팅 - 요구사항에 맞는 형식
+    result = f"📍 {region} 청년공간 프로그램 안내(마감 임박순)\n\n"
 
-    for program in filtered_programs[:8]:
-        deadline_info = ""
-        if program.get('deadline_date'):
-            days_left = (program['deadline_date'] - today).days
-            if days_left < 0:
-                deadline_info = " ⚠️ 마감"
-            elif days_left <= 3:
-                deadline_info = f" 🔥 D-{days_left}"
-            elif days_left <= 7:
-                deadline_info = f" ⏰ D-{days_left}"
-            else:
-                deadline_info = f" 📅 D-{days_left}"
+    # 최대 3개까지만 표시
+    display_count = min(3, len(filtered_programs))
 
-        result += format_program_info(program, deadline_info) + "\n"
+    for i, program in enumerate(filtered_programs[:display_count], 1):
+        # 지역 정보 결정
+        display_region = program.get('region', '')
+        if not display_region:
+            # region 필드가 비어있으면 요청된 지역 사용
+            display_region = region
 
-    if len(filtered_programs) > 8:
-        result += f"... 외 {len(filtered_programs) - 8}개 프로그램 더 있음\n"
+        # 프로그램명
+        program_title = program.get('title', '프로그램명 없음')
+        # 제목에서 지역 부분 제거 (중복 방지)
+        if f"[{region}]" in program_title:
+            program_title = program_title.replace(f"[{region}]", "").strip()
+        if f"[{display_region}]" in program_title:
+            program_title = program_title.replace(f"[{display_region}]", "").strip()
+
+        # 장소명
+        location = program.get('location', '장소 미정')
+
+        # 신청기간
+        application_period = program.get('application_period', '신청기간 미정')
+
+        # 링크
+        link = program.get('link', '')
+
+        # 프로그램 정보 출력
+        result += f"{i}️⃣ {display_region} {program_title}\n"
+        result += f" • 장소: {location}\n"
+        result += f"• 신청기간: {application_period}\n"
+
+        if link:
+            result += f"🔗 [자세히 보기]({link})\n"
+
+        result += "\n"
+
+    # 더 많은 프로그램이 있는 경우 안내
+    if len(filtered_programs) > 3:
+        result += f"... 외 {len(filtered_programs) - 3}개 프로그램 더 있음\n\n"
+
+    # 전체 프로그램 링크
+    result += "📌 전체 프로그램은 [청년 공간 프로그램](https://young.busan.go.kr/policySupport/act.nm?menuCd=261)에서 더 확인할 수 있어요."
 
     return result
 
