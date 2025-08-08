@@ -46,7 +46,7 @@ def after_request(response):
 # === 채팅 관련 API ===
 @app.route("/api/chat", methods=["POST", "OPTIONS"])
 def chat():
-    """채팅 요청 처리 - 조건별 검색과 랜덤 추천 포함"""
+    """채팅 요청 처리 - Override 적용된 청년공간 데이터 사용"""
     if request.method == 'OPTIONS':
         return jsonify({'status': 'ok'}), 200
 
@@ -203,7 +203,7 @@ def search_programs():
 # === 청년공간 관련 API ===
 @app.route('/api/spaces', methods=['GET'])
 def get_spaces():
-    """전체 청년공간 목록"""
+    """전체 청년공간 목록 (Override 적용)"""
     try:
         result = space_handler.get_all_spaces()
         return jsonify(result)
@@ -214,7 +214,7 @@ def get_spaces():
 
 @app.route('/api/spaces/region/<region>', methods=['GET'])
 def get_spaces_by_region_api(region):
-    """지역별 청년공간 검색"""
+    """지역별 청년공간 검색 (Override 적용)"""
     try:
         result = space_handler.get_spaces_by_region(region)
         return jsonify(result)
@@ -225,7 +225,7 @@ def get_spaces_by_region_api(region):
 
 @app.route('/api/spaces/search', methods=['GET'])
 def search_spaces_api():
-    """키워드별 청년공간 검색"""
+    """키워드별 청년공간 검색 (Override 적용)"""
     try:
         keyword = request.args.get('keyword', '')
         result = space_handler.search_spaces_by_keyword(keyword)
@@ -237,7 +237,7 @@ def search_spaces_api():
 
 @app.route('/api/spaces/all', methods=['GET'])
 def get_all_spaces_formatted():
-    """전체 청년공간 목록 (포맷된)"""
+    """전체 청년공간 목록 (포맷된, Override 적용)"""
     try:
         result = space_handler.get_all_spaces_formatted()
         return jsonify(result)
@@ -259,7 +259,7 @@ def crawl_spaces_now():
 
 @app.route('/api/spaces/detail/<space_name>', methods=['GET'])
 def get_space_detail_api(space_name):
-    """특정 공간의 상세 정보"""
+    """특정 공간의 상세 정보 (Override 적용)"""
     try:
         result = space_handler.get_space_detail(space_name)
         return jsonify(result)
@@ -268,32 +268,211 @@ def get_space_detail_api(space_name):
         return jsonify({"error": f"{space_name} 공간 정보를 불러올 수 없습니다."}), 500
 
 
-# === 청년공간 상세 관련 API ===
+# === Override 관련 API ===
+@app.route('/api/spaces/overrides/status', methods=['GET'])
+def get_overrides_status():
+    """Override 데이터 상태 확인"""
+    try:
+        override_spaces = space_handler.load_overrides_data()
+
+        from services.youth_space_crawler import get_cache_data_only
+        cache_spaces = get_cache_data_only()
+
+        override_names = [space.get('name', '') for space in override_spaces]
+
+        stats = {
+            'cache_count': len(cache_spaces),
+            'override_count': len(override_spaces),
+            'override_names': override_names,
+            'total_merged': len(space_handler.get_merged_spaces_data())
+        }
+
+        return jsonify({
+            'success': True,
+            'stats': stats,
+            'message': f'Override: {len(override_spaces)}개, 캐시: {len(cache_spaces)}개, 병합: {stats["total_merged"]}개'
+        })
+
+    except Exception as e:
+        print(f"Override 상태 확인 오류: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'message': 'Override 상태를 확인할 수 없습니다.'
+        }), 500
+
+
+@app.route('/api/spaces/overrides/test/<region>', methods=['GET'])
+def test_region_with_overrides(region):
+    """특정 지역의 Override 적용 테스트"""
+    try:
+        from services.youth_space_crawler import get_cache_data_only
+        cache_spaces = get_cache_data_only()
+        cache_region_spaces = [s for s in cache_spaces if s.get('region') == region]
+
+        merged_spaces = space_handler.get_merged_spaces_data()
+        merged_region_spaces = [s for s in merged_spaces if s.get('region') == region]
+
+        changes = []
+        for merged_space in merged_region_spaces:
+            space_name = merged_space.get('name', '')
+            cache_space = next((s for s in cache_region_spaces if s.get('name') == space_name), None)
+
+            if cache_space:
+                changed_fields = []
+                for field in ['contact', 'hours', 'address', 'homepage', 'sns']:
+                    if cache_space.get(field) != merged_space.get(field):
+                        changed_fields.append({
+                            'field': field,
+                            'old': cache_space.get(field, ''),
+                            'new': merged_space.get(field, '')
+                        })
+
+                if changed_fields:
+                    changes.append({
+                        'name': space_name,
+                        'changes': changed_fields
+                    })
+            else:
+                changes.append({
+                    'name': space_name,
+                    'status': 'new_space'
+                })
+
+        return jsonify({
+            'success': True,
+            'region': region,
+            'cache_spaces': len(cache_region_spaces),
+            'merged_spaces': len(merged_region_spaces),
+            'changes': changes,
+            'message': f'{region} 지역에서 {len(changes)}개 공간에 변경사항이 있습니다.'
+        })
+
+    except Exception as e:
+        print(f"지역별 Override 테스트 오류: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'message': f'{region} 지역의 Override 테스트에 실패했습니다.'
+        }), 500
+
+
+@app.route('/api/spaces/overrides/reload', methods=['POST'])
+def reload_overrides_data():
+    """Override 데이터 강제 재로드"""
+    try:
+        override_spaces = space_handler.load_overrides_data()
+
+        merged_spaces = space_handler.get_merged_spaces_data()
+
+        return jsonify({
+            'success': True,
+            'override_count': len(override_spaces),
+            'merged_count': len(merged_spaces),
+            'message': f'Override 데이터 재로드 완료: {len(override_spaces)}개 Override 적용'
+        })
+
+    except Exception as e:
+        print(f"Override 재로드 오류: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'message': 'Override 데이터 재로드에 실패했습니다.'
+        }), 500
+
+
+@app.route('/api/spaces/overrides/compare/<space_name>', methods=['GET'])
+def compare_space_data(space_name):
+    """특정 공간의 캐시 vs Override 데이터 비교"""
+    try:
+        from services.youth_space_crawler import get_cache_data_only
+        cache_spaces = get_cache_data_only()
+        cache_space = next((s for s in cache_spaces if space_name.lower() in s.get('name', '').lower()), None)
+
+        override_spaces = space_handler.load_overrides_data()
+        override_space = next((s for s in override_spaces if space_name.lower() in s.get('name', '').lower()), None)
+
+        merged_spaces = space_handler.get_merged_spaces_data()
+        merged_space = next((s for s in merged_spaces if space_name.lower() in s.get('name', '').lower()), None)
+
+        comparison = {
+            'space_name': space_name,
+            'found_in_cache': cache_space is not None,
+            'found_in_override': override_space is not None,
+            'found_in_merged': merged_space is not None,
+            'cache_data': cache_space,
+            'override_data': override_space,
+            'merged_data': merged_space,
+            'using_override': override_space is not None
+        }
+
+        return jsonify({
+            'success': True,
+            'comparison': comparison,
+            'message': f'{space_name} 데이터 비교 완료'
+        })
+
+    except Exception as e:
+        print(f"공간 데이터 비교 오류: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'message': f'{space_name} 데이터 비교에 실패했습니다.'
+        }), 500
+
+
+@app.route('/api/spaces/region/<region>/debug', methods=['GET'])
+def get_spaces_by_region_debug(region):
+    """지역별 청년공간 검색 (디버그 정보 포함)"""
+    try:
+        result = space_handler.get_spaces_by_region(region)
+
+        override_spaces = space_handler.load_overrides_data()
+        region_overrides = [s for s in override_spaces if s.get('region') == region]
+
+        if result.get('success'):
+            result['debug'] = {
+                'override_count_in_region': len(region_overrides),
+                'override_names': [s.get('name', '') for s in region_overrides],
+                'data_source': 'merged (cache + override)'
+            }
+
+        return jsonify(result)
+
+    except Exception as e:
+        print(f"지역별 청년공간 디버그 검색 오류: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'message': f'{region} 지역 디버그 검색에 실패했습니다.'
+        }), 500
+
+
+# === 기존 청년공간 상세 관련 API (호환성 유지) ===
 @app.route('/api/spaces/busan-youth', methods=['GET'])
 def get_busan_youth_spaces():
     """
     spaces_busan_youth.json 데이터 직접 반환
     - 조건별 검색 기능의 전체 공간 보기 모드에서 사용
-    - chat_handler에서 이미 로드된 데이터 활용
     """
     try:
-        spaces_data = chat_handler.spaces_data
+        spaces_data = space_handler.get_merged_spaces_data()
 
         if not spaces_data:
-            print("⚠️ spaces_busan_youth.json 데이터가 비어있습니다.")
+            print("⚠️ 청년공간 데이터가 비어있습니다.")
             return jsonify({
                 'success': False,
                 'data': [],
                 'count': 0,
-                'message': '청년공간 데이터가 없습니다. JSON 파일을 확인해주세요.'
+                'message': '청년공간 데이터가 없습니다.'
             }), 404
 
-        print(f"✅ spaces_busan_youth.json에서 {len(spaces_data)}개 데이터 반환")
+        print(f"✅ Override 적용된 청년공간 데이터 {len(spaces_data)}개 반환")
         return jsonify({
             'success': True,
             'data': spaces_data,
             'count': len(spaces_data),
-            'message': f'{len(spaces_data)}개의 청년공간 데이터를 반환했습니다.'
+            'message': f'{len(spaces_data)}개의 청년공간 데이터를 반환했습니다. (Override 적용됨)'
         })
 
     except Exception as e:
@@ -307,22 +486,21 @@ def get_busan_youth_spaces():
         }), 500
 
 
+# === 디버깅 관련 API ===
 @app.route('/api/debug/spaces-status', methods=['GET'])
 def get_spaces_debug_status():
     """청년공간 데이터 로딩 상태 디버깅"""
     try:
-        from handlers.chat_handler import chat_handler
+        cache_spaces = space_handler.load_overrides_data()
+        merged_spaces = space_handler.get_merged_spaces_data()
 
-        # 데이터 상태 확인
-        spaces_count = len(chat_handler.spaces_data) if chat_handler.spaces_data else 0
+        chat_spaces_count = len(chat_handler.spaces_data) if hasattr(chat_handler, 'spaces_data') and chat_handler.spaces_data else 0
 
-        # 파일 시스템 정보
         basedir = os.path.abspath(os.path.dirname(__file__))
         possible_paths = [
+            os.path.join(instance_path, 'youth_spaces_cache.json'),
+            os.path.join(instance_path, 'youth_spaces_overrides.json'),
             os.path.join(basedir, 'config', 'spaces_busan_youth.json'),
-            os.path.join(os.path.dirname(basedir), 'config', 'spaces_busan_youth.json'),
-            '/app/config/spaces_busan_youth.json',
-            os.path.join(os.environ.get('RENDER_DISK_PATH', ''), 'config', 'spaces_busan_youth.json')
         ]
 
         path_status = {}
@@ -334,12 +512,17 @@ def get_spaces_debug_status():
 
         return jsonify({
             'success': True,
-            'spaces_loaded': spaces_count,
+            'data_status': {
+                'override_spaces': len(cache_spaces),
+                'merged_spaces': len(merged_spaces),
+                'chat_handler_spaces': chat_spaces_count
+            },
             'file_paths': path_status,
             'current_dir': os.getcwd(),
             'app_dir': basedir,
+            'instance_path': instance_path,
             'render_path': os.environ.get('RENDER_DISK_PATH', 'None'),
-            'sample_space': chat_handler.spaces_data[0] if chat_handler.spaces_data else None
+            'sample_merged_space': merged_spaces[0] if merged_spaces else None
         })
 
     except Exception as e:
@@ -353,17 +536,24 @@ def get_spaces_debug_status():
 def reload_spaces_data():
     """청년공간 데이터 강제 재로드"""
     try:
-        from handlers.chat_handler import chat_handler
+        old_override_count = len(space_handler.load_overrides_data())
+        override_spaces = space_handler.load_overrides_data()
 
-        old_count = len(chat_handler.spaces_data)
-        chat_handler.spaces_data = chat_handler.load_spaces_data()
-        new_count = len(chat_handler.spaces_data)
+        old_merged_count = len(space_handler.get_merged_spaces_data())
+        merged_spaces = space_handler.get_merged_spaces_data()
+
+        if hasattr(chat_handler, 'load_spaces_data'):
+            chat_handler.spaces_data = chat_handler.load_spaces_data()
 
         return jsonify({
             'success': True,
-            'message': f'데이터 재로드 완료: {old_count} → {new_count}개',
-            'old_count': old_count,
-            'new_count': new_count
+            'message': f'데이터 재로드 완료',
+            'override_count': len(override_spaces),
+            'merged_count': len(merged_spaces),
+            'changes': {
+                'override': f'{old_override_count} → {len(override_spaces)}',
+                'merged': f'{old_merged_count} → {len(merged_spaces)}'
+            }
         })
 
     except Exception as e:
@@ -377,11 +567,14 @@ def reload_spaces_data():
 @app.route('/health', methods=['GET'])
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """시스템 헬스체크"""
+    """시스템 헬스체크 (Override 상태 포함)"""
     try:
         from datetime import datetime
 
-        spaces_count = len(chat_handler.spaces_data) if chat_handler.spaces_data else 0
+        override_count = len(space_handler.load_overrides_data())
+        merged_count = len(space_handler.get_merged_spaces_data())
+        chat_spaces_count = len(chat_handler.spaces_data) if hasattr(chat_handler,
+                                                                     'spaces_data') and chat_handler.spaces_data else 0
 
         return jsonify({
             'status': 'healthy',
@@ -393,7 +586,12 @@ def health_check():
                 'program_handler': 'active',
                 'space_handler': 'active',
                 'database': 'connected',
-                'spaces_data': f'{spaces_count} spaces loaded'
+                'override_system': 'active'
+            },
+            'data_status': {
+                'override_spaces': f'{override_count} spaces',
+                'merged_spaces': f'{merged_count} spaces',
+                'chat_handler_spaces': f'{chat_spaces_count} spaces'
             }
         })
     except Exception as e:
@@ -431,25 +629,23 @@ def bad_request(error):
 
 # === 메인 실행 ===
 if __name__ == "__main__":
-    print("🚀 부산 챗봇 시작 (리팩토링 완료)...")
+    print("🚀 부산 챗봇 시작 (Override 기능 포함)...")
 
     try:
         initialize_database(app)
 
-        spaces_count = len(chat_handler.spaces_data) if chat_handler.spaces_data else 0
-        print(f"📊 spaces_busan_youth.json: {spaces_count}개 공간 데이터 로드됨")
+        override_count = len(space_handler.load_overrides_data())
+        merged_count = len(space_handler.get_merged_spaces_data())
+        chat_spaces_count = len(chat_handler.spaces_data) if hasattr(chat_handler, 'spaces_data') and chat_handler.spaces_data else 0
 
         print("✅ 모든 핸들러 준비 완료!")
-        print("🔧 주요 기능:")
-        print("   - 조건별 청년공간 검색 (지역/인원/목적)")
-        print("   - 랜덤 청년공간 추천")
-        print("   - 전체 청년공간 상세 보기")
-        print("   - 키워드별 청년공간 검색")
-        print("   - 청년 프로그램 검색")
 
         app.run(host='0.0.0.0', port=5001, debug=True)
 
     except Exception as e:
         print(f"❌ 서버 시작 실패: {e}")
+        import traceback
+
+        traceback.print_exc()
 else:
     initialize_database(app)

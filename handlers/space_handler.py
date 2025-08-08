@@ -12,10 +12,79 @@ class SpaceHandler:
     def __init__(self):
         pass
 
-    def get_all_spaces(self):
-        """전체 청년공간 목록 (크롤링 데이터만 사용)"""
+    def load_overrides_data(self):
+        """youth_spaces_overrides.json 데이터 로드"""
         try:
-            spaces = get_youth_spaces_data()
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            project_root = os.path.dirname(basedir)
+            instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
+
+            overrides_file = os.path.join(instance_path, 'youth_spaces_overrides.json')
+
+            if os.path.exists(overrides_file):
+                with open(overrides_file, 'r', encoding='utf-8') as f:
+                    overrides_data = json.load(f)
+                return overrides_data.get('data', [])
+            else:
+                print("youth_spaces_overrides.json 파일이 없습니다.")
+                return []
+        except Exception as e:
+            print(f"Override 데이터 로드 오류: {e}")
+            return []
+
+    def merge_spaces_data(self, cache_spaces, override_spaces):
+        """캐시 데이터와 Override 데이터 병합"""
+        merged_spaces = []
+        override_dict = {}
+
+        # Override 데이터를 딕셔너리로 변환 (name을 키로 사용)
+        for space in override_spaces:
+            override_dict[space.get('name', '')] = space
+
+        # 캐시 데이터를 순회하면서 Override가 있으면 교체, 없으면 원본 사용
+        for cache_space in cache_spaces:
+            space_name = cache_space.get('name', '')
+            if space_name in override_dict:
+                # Override 데이터 사용
+                merged_spaces.append(override_dict[space_name])
+                print(f"✅ Override 적용: {space_name}")
+            else:
+                # 원본 캐시 데이터 사용
+                merged_spaces.append(cache_space)
+
+        # Override에만 있고 캐시에 없는 새로운 공간들 추가
+        cache_names = {space.get('name', '') for space in cache_spaces}
+        for override_space in override_spaces:
+            if override_space.get('name', '') not in cache_names:
+                merged_spaces.append(override_space)
+                print(f"✅ 새로운 공간 추가: {override_space.get('name', '')}")
+
+        return merged_spaces
+
+    def get_merged_spaces_data(self):
+        """캐시 데이터와 Override 데이터를 병합하여 반환"""
+        try:
+            # 캐시 데이터 로드
+            cache_spaces = get_youth_spaces_data()
+
+            # Override 데이터 로드
+            override_spaces = self.load_overrides_data()
+
+            # 데이터 병합
+            merged_spaces = self.merge_spaces_data(cache_spaces, override_spaces)
+
+            print(f"📊 데이터 병합 완료: 캐시 {len(cache_spaces)}개 + Override {len(override_spaces)}개 = 최종 {len(merged_spaces)}개")
+
+            return merged_spaces
+        except Exception as e:
+            print(f"데이터 병합 오류: {e}")
+            # 오류 시 캐시 데이터만 반환
+            return get_youth_spaces_data()
+
+    def get_all_spaces(self):
+        """전체 청년공간 목록 (Override 적용)"""
+        try:
+            spaces = self.get_merged_spaces_data()
             return {
                 'success': True,
                 'data': spaces,
@@ -31,9 +100,9 @@ class SpaceHandler:
             }
 
     def get_space_detail(self, space_name):
-        """특정 공간의 상세 정보"""
+        """특정 공간의 상세 정보 (Override 적용)"""
         try:
-            spaces = get_youth_spaces_data()
+            spaces = self.get_merged_spaces_data()
 
             target_space = None
             for space in spaces:
@@ -85,9 +154,9 @@ class SpaceHandler:
             }
 
     def get_spaces_by_region(self, region):
-        """지역별 청년공간 검색"""
+        """지역별 청년공간 검색 (Override 적용)"""
         try:
-            spaces = get_youth_spaces_data()
+            spaces = self.get_merged_spaces_data()
 
             filtered_spaces = []
             for space in spaces:
@@ -127,7 +196,7 @@ class SpaceHandler:
             }
 
     def search_spaces_by_keyword(self, keyword):
-        """키워드별 청년공간 검색"""
+        """키워드별 청년공간 검색 (Override 적용)"""
         try:
             if not keyword:
                 return {
@@ -136,7 +205,7 @@ class SpaceHandler:
                     'message': '검색 키워드를 입력해주세요.'
                 }
 
-            spaces = get_youth_spaces_data()
+            spaces = self.get_merged_spaces_data()
 
             filtered_spaces = []
             keyword_lower = keyword.lower()
@@ -185,12 +254,36 @@ class SpaceHandler:
             }
 
     def get_all_spaces_formatted(self):
-        """전체 청년공간 목록 (포맷된)"""
+        """전체 청년공간 목록 (포맷된, Override 적용)"""
         try:
-            result_message = get_all_youth_spaces()
+            spaces = self.get_merged_spaces_data()
+
+            if not spaces:
+                return {
+                    'success': False,
+                    'message': '현재 청년공간 정보를 가져올 수 없습니다.'
+                }
+
+            result = f"**부산 청년공간 전체 목록** ({len(spaces)}개)\n\n"
+
+            regions = {}
+            for space in spaces:
+                region = space.get('region', '기타')
+                if region not in regions:
+                    regions[region] = []
+                regions[region].append(space['name'])
+
+            for region, names in sorted(regions.items()):
+                result += f"**📍 {region}** ({len(names)}개)\n"
+                for name in names:
+                    result += f"  • {name}\n"
+                result += "\n"
+
+            result += "💡 지역명이나 공간명으로 자세한 정보를 검색해보세요!"
+
             return {
                 'success': True,
-                'message': result_message
+                'message': result
             }
         except Exception as e:
             print(f"전체 청년공간 API 오류: {e}")
