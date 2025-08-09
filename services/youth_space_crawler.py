@@ -25,34 +25,22 @@ class BusanYouthSpaceCrawler:
     def get_page_content(self, url, encoding='utf-8'):
         """페이지 내용 가져오기"""
         try:
-            print(f"페이지 요청: {url}")
             response = self.session.get(url, timeout=15)
             response.encoding = encoding
 
             if response.status_code == 200:
                 return BeautifulSoup(response.content, 'html.parser')
-            else:
-                print(f"HTTP 오류: {response.status_code}")
-                return None
-
-        except Exception as e:
-            print(f"페이지 로드 오류: {e}")
+            return None
+        except Exception:
             return None
 
     def extract_space_info_from_li(self, li_element, order):
         """li.toggle_type 요소에서 공간 정보 추출"""
         try:
             space_info = {
-                'region': '',
-                'name': '',
-                'contact': '',
-                'description': '',
-                'address': '',
-                'hours': '',
-                'homepage': '',
-                'sns': '',
-                'rental_link': '',
-                'program_link': ''
+                'region': '', 'name': '', 'contact': '', 'description': '',
+                'address': '', 'hours': '', 'homepage': '', 'sns': '',
+                'rental_link': '', 'program_link': ''
             }
 
             plc_box = li_element.select_one('a.toggle .plc_box')
@@ -90,9 +78,8 @@ class BusanYouthSpaceCrawler:
                                 space_info['address'] = value
                             elif '이용시간' in label or '운영시간' in label:
                                 space_info['hours'] = value
-                            elif '연락처' in label:
-                                if not space_info['contact']:
-                                    space_info['contact'] = value
+                            elif '연락처' in label and not space_info['contact']:
+                                space_info['contact'] = value
 
                 splink_list = toggle_inner.select('.splink_list a')
                 for link in splink_list:
@@ -110,13 +97,9 @@ class BusanYouthSpaceCrawler:
                         elif '프로그램' in text:
                             space_info['program_link'] = href
 
-            if space_info['name'] and space_info['region']:
-                return space_info
-            else:
-                return None
+            return space_info if space_info['name'] and space_info['region'] else None
 
-        except Exception as e:
-            print(f"li 요소 파싱 오류: {e}")
+        except Exception:
             return None
 
     def extract_spaces_from_page(self, soup, page_num):
@@ -129,7 +112,7 @@ class BusanYouthSpaceCrawler:
                 space_info = self.extract_space_info_from_li(li_element, i)
                 if space_info:
                     spaces.append(space_info)
-            except Exception as e:
+            except Exception:
                 continue
 
         return spaces
@@ -138,19 +121,16 @@ class BusanYouthSpaceCrawler:
         """페이지에 공간 콘텐츠가 있는지 확인"""
         if not soup:
             return False
-        toggle_items = soup.select('.toggle_type')
-        return len(toggle_items) > 0
+        return len(soup.select('.toggle_type')) > 0
 
     def crawl_all_spaces(self):
         """모든 청년공간 크롤링"""
-        print("부산 청년공간 크롤링 시작")
         all_spaces = []
 
         for page in range(1, 4):
-            print(f"페이지 {page}/3 크롤링 중...")
-
             if page == 1:
                 url = "https://young.busan.go.kr/space/list.nm"
+                soup = self.get_page_content(url)
             else:
                 possible_urls = [
                     f"https://young.busan.go.kr/space/list.nm?pageIndex={page}",
@@ -167,69 +147,69 @@ class BusanYouthSpaceCrawler:
                 if not soup:
                     continue
 
-            if page == 1:
-                soup = self.get_page_content(url)
-
             if not soup:
                 continue
 
             page_spaces = self.extract_spaces_from_page(soup, page)
             all_spaces.extend(page_spaces)
-            time.sleep(1)  # 페이지 간 지연
+            time.sleep(1)
 
-        print(f"크롤링 완료: {len(all_spaces)}개 공간 수집")
         self.spaces_data = all_spaces
         return all_spaces
 
 
+# === 파일 경로 관리 ===
+def get_instance_path():
+    """인스턴스 경로 반환"""
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    project_root = os.path.dirname(basedir)
+    instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
+    os.makedirs(instance_path, exist_ok=True)
+    return instance_path
+
+
+def get_cache_file_path():
+    """캐시 파일 경로 반환"""
+    return os.path.join(get_instance_path(), 'youth_spaces_cache.json')
+
+
+def get_overrides_file_path():
+    """Override 파일 경로 반환"""
+    return os.path.join(get_instance_path(), 'youth_spaces_overrides.json')
+
+
+# === 데이터 로드 함수들 ===
 def load_overrides_data():
     """youth_spaces_overrides.json 데이터 로드"""
     try:
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        project_root = os.path.dirname(basedir)
-        instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
-
-        overrides_file = os.path.join(instance_path, 'youth_spaces_overrides.json')
+        overrides_file = get_overrides_file_path()
 
         if os.path.exists(overrides_file):
             with open(overrides_file, 'r', encoding='utf-8') as f:
                 overrides_data = json.load(f)
-            print(f"✅ Override 데이터 로드: {len(overrides_data.get('data', []))}개")
             return overrides_data.get('data', [])
-        else:
-            print("ℹ️ youth_spaces_overrides.json 파일이 없습니다.")
-            return []
-    except Exception as e:
-        print(f"❌ Override 데이터 로드 오류: {e}")
+        return []
+    except Exception:
         return []
 
 
 def merge_spaces_data(cache_spaces, override_spaces):
     """캐시 데이터와 Override 데이터 병합"""
     merged_spaces = []
-    override_dict = {}
 
-    # Override 데이터를 딕셔너리로 변환 (name을 키로 사용)
-    for space in override_spaces:
-        override_dict[space.get('name', '')] = space
+    override_dict = {space.get('name', ''): space for space in override_spaces}
 
-    # 캐시 데이터를 순회하면서 Override가 있으면 교체, 없으면 원본 사용
     for cache_space in cache_spaces:
         space_name = cache_space.get('name', '')
         if space_name in override_dict:
-            # Override 데이터 사용
             merged_spaces.append(override_dict[space_name])
-            print(f"✅ Override 적용: {space_name}")
         else:
-            # 원본 캐시 데이터 사용
             merged_spaces.append(cache_space)
 
-    # Override에만 있고 캐시에 없는 새로운 공간들 추가
     cache_names = {space.get('name', '') for space in cache_spaces}
     for override_space in override_spaces:
         if override_space.get('name', '') not in cache_names:
             merged_spaces.append(override_space)
-            print(f"✅ 새로운 공간 추가: {override_space.get('name', '')}")
 
     return merged_spaces
 
@@ -237,40 +217,26 @@ def merge_spaces_data(cache_spaces, override_spaces):
 def crawl_new_data():
     """새로운 데이터 크롤링 및 캐시 저장"""
     try:
-        print("🔄 새로운 청년공간 데이터 크롤링 중...")
         crawler = BusanYouthSpaceCrawler()
         spaces = crawler.crawl_all_spaces()
-
-        # 캐시 저장
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        project_root = os.path.dirname(basedir)
-        instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
 
         cache_data = {
             'cached_at': datetime.now().isoformat(),
             'data': spaces
         }
 
-        cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
+        cache_file = get_cache_file_path()
         with open(cache_file, 'w', encoding='utf-8') as f:
             json.dump(cache_data, f, ensure_ascii=False, indent=2)
-        print("💾 청년공간 캐시 저장 완료")
 
         return spaces
-    except Exception as e:
-        print(f"❌ 크롤링 오류: {e}")
+    except Exception:
         return []
 
 
 def get_cache_data_only():
     """캐시 데이터만 가져오기 (Override 적용 안함)"""
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    project_root = os.path.dirname(basedir)
-    instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
-    if not os.path.exists(instance_path):
-        os.makedirs(instance_path)
-
-    cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
+    cache_file = get_cache_file_path()
     cache_duration = timedelta(hours=24)
 
     if os.path.exists(cache_file):
@@ -280,46 +246,35 @@ def get_cache_data_only():
 
             cache_time = datetime.fromisoformat(cached_data['cached_at'])
             if datetime.now() - cache_time < cache_duration:
-                print("📋 캐시된 청년공간 데이터 사용")
                 return cached_data['data']
             else:
-                print("⏰ 캐시가 만료되어 새로운 데이터 크롤링")
                 return crawl_new_data()
-        except Exception as e:
-            print(f"❌ 캐시 읽기 오류: {e}")
+        except Exception:
             return crawl_new_data()
     else:
-        print("🔄 캐시 파일이 없어 새로운 데이터 크롤링")
         return crawl_new_data()
 
 
 def get_youth_spaces_data():
     """청년공간 데이터 가져오기 (Override 적용)"""
-    # 캐시 데이터 로드
     cache_spaces = get_cache_data_only()
-
-    # Override 데이터 로드
     override_spaces = load_overrides_data()
-
-    # 데이터 병합
     merged_spaces = merge_spaces_data(cache_spaces, override_spaces)
-
-    print(f"📊 최종 데이터: 캐시 {len(cache_spaces)}개 + Override {len(override_spaces)}개 = 병합 {len(merged_spaces)}개")
 
     return merged_spaces
 
 
+# === 검색 함수들 ===
 def search_spaces_by_region(region):
     """지역별 청년공간 검색 (Override 적용)"""
     spaces = get_youth_spaces_data()
     if not spaces:
         return "현재 청년공간 정보를 가져올 수 없습니다."
 
-    filtered_spaces = []
-    for space in spaces:
-        space_region = space.get('region', '').strip()
-        if space_region == region:
-            filtered_spaces.append(space)
+    filtered_spaces = [
+        space for space in spaces
+        if space.get('region', '').strip() == region
+    ]
 
     if not filtered_spaces:
         return f"**{region}**에서 청년공간을 찾을 수 없습니다.\n\n다른 지역을 검색해보세요!"
@@ -338,14 +293,12 @@ def search_spaces_by_keyword(keyword):
     if not spaces:
         return "현재 청년공간 정보를 가져올 수 없습니다."
 
-    filtered_spaces = []
     keyword_lower = keyword.lower()
-
-    for space in spaces:
-        if (keyword_lower in space.get('name', '').lower() or
-                keyword_lower in space.get('description', '').lower() or
-                keyword_lower in space.get('region', '').lower()):
-            filtered_spaces.append(space)
+    filtered_spaces = [
+        space for space in spaces
+        if any(keyword_lower in str(space.get(field, '')).lower()
+               for field in ['name', 'description', 'region'])
+    ]
 
     if not filtered_spaces:
         return f"**{keyword}** 관련 청년공간을 찾을 수 없습니다.\n\n다른 키워드로 검색해보세요!"
@@ -362,23 +315,32 @@ def format_space_info(space):
     """공간 정보 포맷팅"""
     result = f"**{space['name']}[{space.get('region', '')}]**\n"
 
-    if space.get('address'):
-        result += f"📍 {space['address']}\n"
-    if space.get('contact'):
-        result += f"📞 {space['contact']}\n"
-    if space.get('hours'):
-        result += f"🕒 {space['hours']}\n"
+    info_fields = [
+        ('address', '📍'),
+        ('contact', '📞'),
+        ('hours', '🕒')
+    ]
+
+    for field, emoji in info_fields:
+        if space.get(field):
+            result += f"{emoji} {space[field]}\n"
+
     if space.get('description'):
-        desc = space['description'][:100] + "..." if len(space['description']) > 100 else space['description']
+        desc = space['description']
+        if len(desc) > 100:
+            desc = desc[:100] + "..."
         result += f"📝 {desc}\n"
 
     links = []
-    if space.get('homepage'):
-        links.append(f"[홈페이지]({space['homepage']})")
-    if space.get('rental_link'):
-        links.append(f"[대관신청]({space['rental_link']})")
-    if space.get('program_link'):
-        links.append(f"[프로그램]({space['program_link']})")
+    link_mapping = [
+        ('homepage', '홈페이지'),
+        ('rental_link', '대관신청'),
+        ('program_link', '프로그램')
+    ]
+
+    for field, label in link_mapping:
+        if space.get(field):
+            links.append(f"[{label}]({space[field]})")
 
     if links:
         result += f"🔗 {' | '.join(links)}\n"
@@ -397,9 +359,7 @@ def get_all_youth_spaces():
     regions = {}
     for space in spaces:
         region = space.get('region', '기타')
-        if region not in regions:
-            regions[region] = []
-        regions[region].append(space['name'])
+        regions.setdefault(region, []).append(space['name'])
 
     for region, names in sorted(regions.items()):
         result += f"**📍 {region}** ({len(names)}개)\n"

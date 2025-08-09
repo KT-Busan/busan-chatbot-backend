@@ -1,6 +1,7 @@
 import os
 import json
 import openai
+import random
 from datetime import datetime
 
 from database.models import db, User, Chat, Message
@@ -13,11 +14,38 @@ class ChatHandler:
     def __init__(self):
         try:
             self.client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        except Exception as e:
-            print(f"OpenAI 클라이언트 초기화 오류: {e}")
+        except Exception:
             self.client = None
 
         self.spaces_data = self.load_spaces_data()
+        self.keyword_mapping = self._init_keyword_mapping()
+        self.purpose_mapping = self._init_purpose_mapping()
+
+    def _init_keyword_mapping(self):
+        """키워드 매핑 초기화"""
+        return {
+            "📝스터디/회의": ["📝스터디/회의", "📝 스터디/회의", "스터디/회의", "스터디", "회의"],
+            "🎤교육/강연": ["🎤교육/강연", "🏫교육/강연", "🏫 교육/강연", "교육/강연", "교육", "강연"],
+            "👥커뮤니티": ["👥커뮤니티", "👥모임/커뮤니티", "👥 모임/커뮤니티", "모임/커뮤니티", "커뮤니티", "모임"],
+            "🚀진로/창업": ["🚀진로/창업", "🚀 진로/창업", "진로/창업", "진로", "창업"],
+            "🎨문화/창작": ["🎨문화/창작", "🎨 문화/창작", "문화/창작", "문화", "창작"],
+            "🛠작업/창작실": ["🛠작업/창작실", "💻작업/창작실", "💻 작업/창작실", "작업/창작실", "작업", "창작실"],
+            "🧘휴식/놀이": ["🧘휴식/놀이", "🌿휴식/놀이", "🌿 휴식/놀이", "휴식/놀이", "휴식", "놀이"],
+            "🎪행사/이벤트": ["🎪행사/이벤트", "🎬행사/이벤트", "🎬 행사/이벤트", "행사/이벤트", "행사", "이벤트"]
+        }
+
+    def _init_purpose_mapping(self):
+        """목적 매핑 초기화"""
+        return {
+            '스터디/회의': ['📝스터디/회의', '📝 스터디/회의', '스터디', '회의'],
+            '교육/강연': ['🎤교육/강연', '🏫교육/강연', '🏫 교육/강연', '교육', '강연'],
+            '커뮤니티': ['👥커뮤니티', '👥모임/커뮤니티', '👥 모임/커뮤니티', '커뮤니티', '모임'],
+            '진로/창업': ['🚀진로/창업', '🚀 진로/창업', '진로', '창업'],
+            '문화/창작': ['🎨문화/창작', '🎨 문화/창작', '문화', '창작'],
+            '작업/창작실': ['🛠작업/창작실', '💻작업/창작실', '💻 작업/창작실', '작업', '창작실'],
+            '휴식/놀이': ['🧘휴식/놀이', '🌿휴식/놀이', '🌿 휴식/놀이', '휴식', '놀이'],
+            '행사/이벤트': ['🎪행사/이벤트', '🎬행사/이벤트', '🎬 행사/이벤트', '행사', '이벤트']
+        }
 
     def load_spaces_data(self):
         """spaces_busan_youth.json 데이터 로드"""
@@ -31,11 +59,8 @@ class ChatHandler:
                 with open(spaces_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     return data.get('spaces_busan_youth', [])
-            else:
-                print("spaces_busan_youth.json 파일을 찾을 수 없습니다.")
-                return []
-        except Exception as e:
-            print(f"청년 공간 데이터 로드 오류: {e}")
+            return []
+        except Exception:
             return []
 
     def format_space_detail(self, space):
@@ -46,26 +71,10 @@ class ChatHandler:
             location = space.get('location', '정보없음')
             introduction = space.get('introduction', '정보없음')
             eligibility = space.get('eligibility', '정보없음')
-            capacity_min = space.get('capacity_min')
-            capacity_max = space.get('capacity_max')
             features = space.get('features', '정보없음')
-            link = space.get('link', [])
 
-            if isinstance(link, list) and len(link) > 0:
-                link_url = link[0]
-            elif isinstance(link, str):
-                link_url = link
-            else:
-                link_url = '정보없음'
-
-            if capacity_min and capacity_max:
-                capacity_info = f"최소 {capacity_min}명 ~ 최대 {capacity_max}명"
-            elif capacity_max:
-                capacity_info = f"최대 {capacity_max}명"
-            elif capacity_min:
-                capacity_info = f"최소 {capacity_min}명"
-            else:
-                capacity_info = "인원 제한 없음"
+            capacity_info = self.format_capacity_info(space)
+            link_url = self.extract_link_url(space.get('link'))
 
             result = f"🟩 **{parent_facility} - {space_name}** - {location}\n"
             result += f"🎯 **한 줄 소개:** {introduction}\n"
@@ -79,37 +88,63 @@ class ChatHandler:
 
             return result
 
-        except Exception as e:
-            print(f"공간 상세 포맷팅 오류: {e}")
+        except Exception:
             return "공간 정보를 불러오는 중 오류가 발생했습니다."
+
+    def extract_link_url(self, link):
+        """링크 URL 추출"""
+        if isinstance(link, list) and len(link) > 0:
+            return link[0]
+        elif isinstance(link, str):
+            return link
+        return '정보없음'
+
+    def format_capacity_info(self, space):
+        """인원 정보 포맷팅"""
+        capacity_min = space.get('capacity_min')
+        capacity_max = space.get('capacity_max')
+
+        if capacity_min and capacity_max:
+            return f"최소 {capacity_min}명 ~ 최대 {capacity_max}명"
+        elif capacity_max:
+            return f"최대 {capacity_max}명"
+        elif capacity_min:
+            return f"최소 {capacity_min}명"
+        else:
+            return "인원 제한 없음"
+
+    def find_matching_spaces(self, user_input):
+        """사용자 입력과 매칭되는 공간 찾기"""
+        if not self.spaces_data:
+            return []
+
+        user_input_lower = user_input.lower()
+        matching_spaces = []
+
+        for space in self.spaces_data:
+            space_name = space.get('space_name', '').lower()
+            parent_facility = space.get('parent_facility', '').lower()
+
+            if (space_name in user_input_lower or
+                    user_input_lower in space_name or
+                    parent_facility in user_input_lower or
+                    user_input_lower in parent_facility):
+                matching_spaces.append(space)
+
+        return matching_spaces
 
     def handle_space_detail_request(self, user_input):
         """청년 공간 상세 요청 처리"""
         try:
-            print(f"🏢 청년 공간 상세 요청 처리 시작")
-            print(f"📊 로드된 데이터 개수: {len(self.spaces_data)}")
-
             if not self.spaces_data:
                 return "❌ 청년 공간 데이터를 불러올 수 없습니다."
 
-            user_input_lower = user_input.lower()
-
-            matching_spaces = []
-            for space in self.spaces_data:
-                space_name = space.get('space_name', '').lower()
-                parent_facility = space.get('parent_facility', '').lower()
-
-                if (space_name in user_input_lower or
-                        user_input_lower in space_name or
-                        parent_facility in user_input_lower or
-                        user_input_lower in parent_facility):
-                    matching_spaces.append(space)
+            matching_spaces = self.find_matching_spaces(user_input)
 
             if matching_spaces:
-                print(f"✅ {len(matching_spaces)}개 공간 매칭됨")
                 result = f"**🔍 '{user_input}' 검색 결과**\n\n"
 
-                for i, space in enumerate(matching_spaces[:5], 1):  # 최대 5개만 표시
+                for i, space in enumerate(matching_spaces[:5], 1):
                     result += f"**{i}.** "
                     result += self.format_space_detail(space)
                     result += "\n"
@@ -121,8 +156,7 @@ class ChatHandler:
 
             return self.show_all_spaces_detail()
 
-        except Exception as e:
-            print(f"❌ 청년 공간 상세 처리 오류: {e}")
+        except Exception:
             return "청년 공간 상세 정보를 불러오는 중 오류가 발생했습니다."
 
     def show_all_spaces_detail(self):
@@ -134,11 +168,8 @@ class ChatHandler:
             regions = {}
             for space in self.spaces_data:
                 location = space.get('location', '기타')
-                if location not in regions:
-                    regions[location] = []
-                regions[location].append(space)
+                regions.setdefault(location, []).append(space)
 
-            count = 0
             for region, spaces in list(regions.items())[:3]:
                 result += f"**📍 {region}**\n"
 
@@ -150,10 +181,6 @@ class ChatHandler:
                     result += f"... 외 {len(spaces) - 2}개 공간 더 있음\n\n"
                 else:
                     result += "\n"
-
-                count += 1
-                if count >= 3:
-                    break
 
             total_spaces = len(self.spaces_data)
             total_regions = len(regions)
@@ -170,55 +197,35 @@ class ChatHandler:
 
             return result
 
-        except Exception as e:
-            print(f"❌ 전체 공간 상세 표시 오류: {e}")
+        except Exception:
             return "청년 공간 목록을 불러오는 중 오류가 발생했습니다."
 
     def search_spaces_by_keyword_json(self, keyword):
         """JSON 데이터에서 키워드로 공간 검색"""
         try:
-            print(f"🔍 키워드 검색 시작: '{keyword}'")
-            print(f"📊 로드된 데이터 개수: {len(self.spaces_data)}")
-
             if not self.spaces_data:
-                return f"❌ 청년 공간 데이터를 불러올 수 없습니다."
+                return "❌ 청년 공간 데이터를 불러올 수 없습니다."
 
-            keyword_mapping = {
-                "📝스터디/회의": ["📝스터디/회의", "📝 스터디/회의", "스터디/회의", "스터디", "회의"],
-                "🎤교육/강연": ["🎤교육/강연", "🏫교육/강연", "🏫 교육/강연", "교육/강연", "교육", "강연"],
-                "👥커뮤니티": ["👥커뮤니티", "👥모임/커뮤니티", "👥 모임/커뮤니티", "모임/커뮤니티", "커뮤니티", "모임"],
-                "🚀진로/창업": ["🚀진로/창업", "🚀 진로/창업", "진로/창업", "진로", "창업"],
-                "🎨문화/창작": ["🎨문화/창작", "🎨 문화/창작", "문화/창작", "문화", "창작"],
-                "🛠작업/창작실": ["🛠작업/창작실", "💻작업/창작실", "💻 작업/창작실", "작업/창작실", "작업", "창작실"],
-                "🧘휴식/놀이": ["🧘휴식/놀이", "🌿휴식/놀이", "🌿 휴식/놀이", "휴식/놀이", "휴식", "놀이"],
-                "🎪행사/이벤트": ["🎪행사/이벤트", "🎬행사/이벤트", "🎬 행사/이벤트", "행사/이벤트", "행사", "이벤트"]
-            }
-
-            search_keywords = keyword_mapping.get(keyword, [keyword])
-            print(f"🎯 검색 키워드 목록: {search_keywords}")
-
+            search_keywords = self.keyword_mapping.get(keyword, [keyword])
             filtered_spaces = []
+
             for space in self.spaces_data:
                 space_keywords = space.get('keywords', [])
-                print(f"🏢 공간: {space.get('space_name')} - 키워드: {space_keywords}")
 
-                found_match = False
                 for search_kw in search_keywords:
                     for space_kw in space_keywords:
                         if search_kw.lower() in space_kw.lower() or space_kw.lower() in search_kw.lower():
-                            found_match = True
-                            print(f"✅ 매칭 발견: '{search_kw}' <-> '{space_kw}'")
+                            filtered_spaces.append(space)
                             break
-                    if found_match:
-                        break
-
-                if found_match:
-                    filtered_spaces.append(space)
-
-            print(f"📋 검색 결과: {len(filtered_spaces)}개 공간")
+                    else:
+                        continue
+                    break
 
             if not filtered_spaces:
-                return f"**{keyword}** 관련 청년공간을 찾을 수 없습니다.\n\n다른 키워드로 검색해보세요!\n\n💡 **사용 가능한 키워드:**\n- 📝스터디/회의\n- 🎤교육/강연\n- 👥커뮤니티\n- 🚀진로/창업\n- 🎨문화/창작\n- 🛠작업/창작실\n- 🧘휴식/놀이\n- 🎪행사/이벤트"
+                return (f"**{keyword}** 관련 청년공간을 찾을 수 없습니다.\n\n다른 키워드로 검색해보세요!\n\n"
+                        f"💡 **사용 가능한 키워드:**\n"
+                        f"- 📝스터디/회의\n- 🎤교육/강연\n- 👥커뮤니티\n- 🚀진로/창업\n"
+                        f"- 🎨문화/창작\n- 🛠작업/창작실\n- 🧘휴식/놀이\n- 🎪행사/이벤트")
 
             result = f"**{keyword}**로 찾은 공간입니다!\n\n"
 
@@ -226,7 +233,6 @@ class ChatHandler:
                 parent_facility = space.get('parent_facility', '정보없음')
                 space_name = space.get('space_name', '정보없음')
                 location = space.get('location', '정보없음')
-
                 result += f"**{i}.** {parent_facility} - {space_name} [{location}]\n"
 
             result += "\n📌 **공간 상세 내용은**\n"
@@ -235,9 +241,31 @@ class ChatHandler:
 
             return result
 
-        except Exception as e:
-            print(f"❌ 키워드 검색 오류: {e}")
+        except Exception:
             return "청년공간 검색 중 오류가 발생했습니다."
+
+    def parse_search_conditions(self, search_text):
+        """검색 조건 파싱"""
+        conditions = {}
+        try:
+            search_part = search_text.split("조건별 검색:", 1)[1].strip()
+
+            for condition in search_part.split("|"):
+                if "=" in condition:
+                    key, value = condition.split("=", 1)
+                    key = key.strip()
+                    value = value.strip()
+
+                    if key == "지역":
+                        conditions['region'] = value
+                    elif key == "인원":
+                        conditions['capacity'] = value
+                    elif key == "목적":
+                        conditions['purpose'] = value
+        except Exception:
+            pass
+
+        return conditions
 
     def handle_space_reservation_search(self, conditions):
         """조건별 청년 공간 검색"""
@@ -245,8 +273,6 @@ class ChatHandler:
             region = conditions.get('region', '').strip()
             capacity = conditions.get('capacity', '').strip()
             purpose = conditions.get('purpose', '').strip()
-
-            print(f"🔍 검색 조건: 지역={region}, 인원={capacity}, 목적={purpose}")
 
             if not any([region, capacity, purpose]):
                 return "❌ 지역, 인원, 이용 목적 중 하나는 반드시 선택해주세요."
@@ -256,44 +282,7 @@ class ChatHandler:
             if capacity: condition_display.append(f"인원 : {capacity}")
             if purpose: condition_display.append(f"목적 : {purpose}")
 
-            filtered_spaces = []
-
-            for space in self.spaces_data:
-                conditions_met = []
-
-                if region:
-                    if space.get('location') == region:
-                        conditions_met.append('region')
-                    else:
-                        continue
-
-                if capacity:
-                    if self.check_capacity_match(space, capacity):
-                        conditions_met.append('capacity')
-                    else:
-                        continue
-
-                if purpose:
-                    if self.check_purpose_match(space, purpose):
-                        conditions_met.append('purpose')
-                    else:
-                        continue
-
-                selected_conditions = []
-                if region: selected_conditions.append('region')
-                if capacity: selected_conditions.append('capacity')
-                if purpose: selected_conditions.append('purpose')
-
-                if set(selected_conditions) == set(conditions_met):
-                    space_copy = space.copy()
-                    space_copy['match_score'] = len(conditions_met)
-                    space_copy['match_reasons'] = []
-                    if region: space_copy['match_reasons'].append(f"지역: {region}")
-                    if capacity: space_copy['match_reasons'].append(f"인원: {capacity}")
-                    if purpose: space_copy['match_reasons'].append(f"목적: {purpose}")
-                    filtered_spaces.append(space_copy)
-
-            print(f"📊 검색 결과: {len(filtered_spaces)}개 공간 발견")
+            filtered_spaces = self.filter_spaces_by_conditions(region, capacity, purpose)
 
             if not filtered_spaces:
                 return self.format_no_results_message(region, capacity, purpose)
@@ -305,9 +294,49 @@ class ChatHandler:
 
             return self.format_search_results(filtered_spaces, region, capacity, purpose)
 
-        except Exception as e:
-            print(f"❌ 검색 처리 오류: {e}")
+        except Exception:
             return "검색 중 오류가 발생했습니다. 다시 시도해주세요."
+
+    def filter_spaces_by_conditions(self, region, capacity, purpose):
+        """조건에 따른 공간 필터링"""
+        filtered_spaces = []
+
+        for space in self.spaces_data:
+            conditions_met = []
+
+            if region:
+                if space.get('location') == region:
+                    conditions_met.append('region')
+                else:
+                    continue
+
+            if capacity:
+                if self.check_capacity_match(space, capacity):
+                    conditions_met.append('capacity')
+                else:
+                    continue
+
+            if purpose:
+                if self.check_purpose_match(space, purpose):
+                    conditions_met.append('purpose')
+                else:
+                    continue
+
+            selected_conditions = []
+            if region: selected_conditions.append('region')
+            if capacity: selected_conditions.append('capacity')
+            if purpose: selected_conditions.append('purpose')
+
+            if set(selected_conditions) == set(conditions_met):
+                space_copy = space.copy()
+                space_copy['match_score'] = len(conditions_met)
+                space_copy['match_reasons'] = []
+                if region: space_copy['match_reasons'].append(f"지역: {region}")
+                if capacity: space_copy['match_reasons'].append(f"인원: {capacity}")
+                if purpose: space_copy['match_reasons'].append(f"목적: {purpose}")
+                filtered_spaces.append(space_copy)
+
+        return filtered_spaces
 
     def check_capacity_match(self, space, selected_capacity):
         """인원 조건 매칭 확인"""
@@ -318,21 +347,17 @@ class ChatHandler:
             if not capacity_min and not capacity_max:
                 return True
 
-            if selected_capacity == '1-2명':
-                if capacity_min is None or capacity_min <= 2:
-                    return True
-            elif selected_capacity == '3-6명':
-                if (capacity_min is None or capacity_min <= 6) and (capacity_max is None or capacity_max >= 3):
-                    return True
-            elif selected_capacity == '7명이상':
-                if capacity_max is None or capacity_max >= 7:
-                    return True
-            elif selected_capacity == '상관없음':
-                return True
+            capacity_checks = {
+                '1-2명': lambda: capacity_min is None or capacity_min <= 2,
+                '3-6명': lambda: (capacity_min is None or capacity_min <= 6) and (
+                        capacity_max is None or capacity_max >= 3),
+                '7명이상': lambda: capacity_max is None or capacity_max >= 7,
+                '상관없음': lambda: True
+            }
 
-            return False
-        except Exception as e:
-            print(f"인원 매칭 오류: {e}")
+            return capacity_checks.get(selected_capacity, lambda: False)()
+
+        except Exception:
             return True
 
     def check_purpose_match(self, space, selected_purpose):
@@ -342,18 +367,7 @@ class ChatHandler:
             if not space_keywords:
                 return False
 
-            purpose_mapping = {
-                '스터디/회의': ['📝스터디/회의', '📝 스터디/회의', '스터디', '회의'],
-                '교육/강연': ['🎤교육/강연', '🏫교육/강연', '🏫 교육/강연', '교육', '강연'],
-                '커뮤니티': ['👥커뮤니티', '👥모임/커뮤니티', '👥 모임/커뮤니티', '커뮤니티', '모임'],
-                '진로/창업': ['🚀진로/창업', '🚀 진로/창업', '진로', '창업'],
-                '문화/창작': ['🎨문화/창작', '🎨 문화/창작', '문화', '창작'],
-                '작업/창작실': ['🛠작업/창작실', '💻작업/창작실', '💻 작업/창작실', '작업', '창작실'],
-                '휴식/놀이': ['🧘휴식/놀이', '🌿휴식/놀이', '🌿 휴식/놀이', '휴식', '놀이'],
-                '행사/이벤트': ['🎪행사/이벤트', '🎬행사/이벤트', '🎬 행사/이벤트', '행사', '이벤트']
-            }
-
-            search_keywords = purpose_mapping.get(selected_purpose, [selected_purpose])
+            search_keywords = self.purpose_mapping.get(selected_purpose, [selected_purpose])
 
             for search_kw in search_keywords:
                 for space_kw in space_keywords:
@@ -361,8 +375,7 @@ class ChatHandler:
                         return True
 
             return False
-        except Exception as e:
-            print(f"목적 매칭 오류: {e}")
+        except Exception:
             return False
 
     def format_search_results(self, spaces, region, capacity, purpose):
@@ -377,47 +390,21 @@ class ChatHandler:
                 result += f"**{i}️⃣ {space.get('parent_facility', '정보없음')} – {space.get('space_name', '정보없음')}**\n"
                 result += f"{space.get('introduction', '정보없음')}\n"
                 result += f"• 📍 **위치 :** {space.get('location', '정보없음')}\n"
-
-                capacity_info = self.format_capacity_info(space)
-                result += f"• 👥 **인원 :** {capacity_info}\n"
-
+                result += f"• 👥 **인원 :** {self.format_capacity_info(space)}\n"
                 result += f"• **지원 대상 :** {space.get('eligibility', '정보없음')}\n"
                 result += f"• 🧰 **특징 :** {space.get('features', '정보없음')}\n"
 
-                link = space.get('link')
-                if isinstance(link, list) and len(link) > 0:
-                    link_url = link[0]
-                elif isinstance(link, str):
-                    link_url = link
-                else:
-                    link_url = None
-
-                if link_url:
+                link_url = self.extract_link_url(space.get('link'))
+                if link_url != '정보없음':
                     result += f"• 🔗 **링크 :** {link_url}\n"
 
                 result += "\n---\n\n"
 
             result += "[SHOW_CONDITIONAL_SEARCH_BUTTONS]"
-
             return result
 
-        except Exception as e:
-            print(f"결과 포맷팅 오류: {e}")
+        except Exception:
             return "검색 결과를 표시하는 중 오류가 발생했습니다."
-
-    def format_capacity_info(self, space):
-        """인원 정보 포맷팅"""
-        capacity_min = space.get('capacity_min')
-        capacity_max = space.get('capacity_max')
-
-        if capacity_min and capacity_max:
-            return f"최소 {capacity_min}명 ~ 최대 {capacity_max}명"
-        elif capacity_max:
-            return f"최대 {capacity_max}명"
-        elif capacity_min:
-            return f"최소 {capacity_min}명"
-        else:
-            return "인원 제한 없음"
 
     def format_no_results_message(self, region, capacity, purpose):
         """결과 없음 메시지 포맷팅"""
@@ -443,39 +430,26 @@ class ChatHandler:
             if not self.spaces_data:
                 return "추천할 청년공간 정보를 불러올 수 없습니다."
 
-            import random
             random_space = random.choice(self.spaces_data)
 
             result = "🎲 **랜덤으로 추천해드릴게요!**\n\n"
             result += f"**1️⃣ {random_space.get('parent_facility', '정보없음')} – {random_space.get('space_name', '정보없음')}**\n"
             result += f"{random_space.get('introduction', '정보없음')}\n"
             result += f"• 📍 **위치 :** {random_space.get('location', '정보없음')}\n"
-
-            capacity_info = self.format_capacity_info(random_space)
-            result += f"• 👥 **인원 :** {capacity_info}\n"
-
+            result += f"• 👥 **인원 :** {self.format_capacity_info(random_space)}\n"
             result += f"• **지원 대상 :** {random_space.get('eligibility', '정보없음')}\n"
             result += f"• 🧰 **특징 :** {random_space.get('features', '정보없음')}\n"
 
-            link = random_space.get('link')
-            if isinstance(link, list) and len(link) > 0:
-                link_url = link[0]
-            elif isinstance(link, str):
-                link_url = link
-            else:
-                link_url = None
-
-            if link_url:
+            link_url = self.extract_link_url(random_space.get('link'))
+            if link_url != '정보없음':
                 result += f"• 🔗 **링크 :** {link_url}\n"
 
             result += "\n---\n\n"
-
             result += "[SHOW_ADDITIONAL_RANDOM]"
 
             return result
 
-        except Exception as e:
-            print(f"랜덤 추천 오류: {e}")
+        except Exception:
             return "랜덤 추천 중 오류가 발생했습니다."
 
     def process_chat_message(self, user_message_text, anonymous_id, chat_id):
@@ -513,9 +487,8 @@ class ChatHandler:
 
             return {"reply": bot_reply}, 200
 
-        except Exception as e:
+        except Exception:
             db.session.rollback()
-            print(f"채팅 처리 오류: {e}")
             return {"error": "채팅 처리 중 오류가 발생했습니다."}, 500
 
     def delete_chat_session(self, chat_id):
@@ -528,105 +501,57 @@ class ChatHandler:
                 return {"message": "채팅이 성공적으로 삭제되었습니다."}, 200
             else:
                 return {"error": "삭제할 채팅을 찾을 수 없습니다."}, 404
-        except Exception as e:
+        except Exception:
             db.session.rollback()
-            print(f"DB 삭제 오류: {e}")
             return {"error": "채팅 삭제 중 오류가 발생했습니다."}, 500
 
     def generate_bot_response(self, user_message_text, chat_id):
         """봇 응답 생성 로직"""
-        print(f"🤖 봇 응답 생성 시작: '{user_message_text}'")
+        special_commands = {
+            "청년 공간 상세": "[SPACE_DETAIL_SEARCH]",
+            "청년 공간 프로그램 확인하기": "[PROGRAM_REGIONS]",
+            "✨ 랜덤 추천": self.handle_random_recommendation()
+        }
 
-        if user_message_text == "청년 공간 상세":
-            print(f"🏢 청년 공간 상세 버튼 클릭 감지")
-            return "[SPACE_DETAIL_SEARCH]"
-
-        # 🔥 새로 추가: 청년 공간 프로그램 확인하기 버튼 처리
-        if user_message_text == "청년 공간 프로그램 확인하기":
-            print(f"🎯 청년 공간 프로그램 확인하기 버튼 클릭 감지")
-            return "[PROGRAM_REGIONS]"
+        if user_message_text in special_commands:
+            command_result = special_commands[user_message_text]
+            return command_result() if callable(command_result) else command_result
 
         if "조건별 검색:" in user_message_text:
-            print(f"🔍 조건별 검색 감지: '{user_message_text}'")
             try:
-                search_part = user_message_text.split("조건별 검색:", 1)[1].strip()
-                conditions = {}
-
-                for condition in search_part.split("|"):
-                    if "=" in condition:
-                        key, value = condition.split("=", 1)
-                        key = key.strip()
-                        value = value.strip()
-
-                        if key == "지역":
-                            conditions['region'] = value
-                        elif key == "인원":
-                            conditions['capacity'] = value
-                        elif key == "목적":
-                            conditions['purpose'] = value
-
-                print(f"🎯 검색 조건: {conditions}")
+                conditions = self.parse_search_conditions(user_message_text)
                 return self.handle_space_reservation_search(conditions)
+            except Exception:
+                return "검색 조건 처리 중 오류가 발생했습니다."
 
-            except Exception as e:
-                print(f"❌ 조건별 검색 파싱 오류: {e}")
-                return f"검색 조건 처리 중 오류가 발생했습니다: {str(e)}"
-
-        if user_message_text == "✨ 랜덤 추천":
-            print(f"🎲 랜덤 추천 요청")
-            return self.handle_random_recommendation()
-
-        # 🔥 수정: 프로그램 관련 처리 - 지역명 + " 프로그램" 형태
         if " 프로그램" in user_message_text:
             region = user_message_text.replace(" 프로그램", "").strip()
             regions = ['중구', '동구', '서구', '영도구', '부산진구', '동래구', '연제구',
                        '금정구', '북구', '사상구', '사하구', '강서구', '남구', '해운대구', '수영구', '기장군']
 
             if region in regions:
-                print(f"🎯 프로그램 지역 검색: '{region}'")
                 return search_programs_by_region(region)
 
-        # 지역 클릭 처리(16개 구/군) - 청년 공간만
         regions = ['중구', '동구', '서구', '영도구', '부산진구', '동래구', '연제구',
                    '금정구', '북구', '사상구', '사하구', '강서구', '남구', '해운대구', '수영구', '기장군']
 
-        for region in regions:
-            if user_message_text.strip() == region:
-                return search_spaces_by_region(region)
+        if user_message_text.strip() in regions:
+            return search_spaces_by_region(user_message_text.strip())
 
-        keyword_list = [
-            '📝스터디/회의',
-            '🎤교육/강연',
-            '👥커뮤니티',
-            '🚀진로/창업',
-            '🎨문화/창작',
-            '🛠작업/창작실',
-            '🧘휴식/놀이',
-            '🎪행사/이벤트'
-        ]
-
-        for keyword in keyword_list:
-            if user_message_text.strip() == keyword:
-                print(f"🎯 새로운 키워드 매칭: '{keyword}'")
-                return self.search_spaces_by_keyword_json(keyword)
+        keyword_list = list(self.keyword_mapping.keys())
+        if user_message_text.strip() in keyword_list:
+            return self.search_spaces_by_keyword_json(user_message_text.strip())
 
         old_keyword_mapping = {
-            '스터디/회의': '📝스터디/회의',
-            '교육/강연': '🎤교육/강연',
-            '모임/커뮤니티': '👥커뮤니티',
-            '진로/창업': '🚀진로/창업',
-            '문화/창작': '🎨문화/창작',
-            '작업/창작실': '🛠작업/창작실',
-            '휴식/놀이': '🧘휴식/놀이',
-            '행사/이벤트': '🎪행사/이벤트'
+            '스터디/회의': '📝스터디/회의', '교육/강연': '🎤교육/강연',
+            '모임/커뮤니티': '👥커뮤니티', '진로/창업': '🚀진로/창업',
+            '문화/창작': '🎨문화/창작', '작업/창작실': '🛠작업/창작실',
+            '휴식/놀이': '🧘휴식/놀이', '행사/이벤트': '🎪행사/이벤트'
         }
 
-        for old_keyword, new_keyword in old_keyword_mapping.items():
-            if user_message_text.strip() == old_keyword:
-                print(f"🔄 구버전 키워드 호환: '{old_keyword}' -> '{new_keyword}'")
-                return self.search_spaces_by_keyword_json(new_keyword)
-
-        # 🔥 삭제: 기존 프로그램 키워드 처리 로직 제거 (이제 청년 공간만 처리)
+        if user_message_text.strip() in old_keyword_mapping:
+            new_keyword = old_keyword_mapping[user_message_text.strip()]
+            return self.search_spaces_by_keyword_json(new_keyword)
 
         if any(keyword in user_message_text for keyword in ['스터디', '창업', '회의', '카페', '라운지', '센터']):
             return search_spaces_by_keyword(user_message_text)
@@ -638,35 +563,35 @@ class ChatHandler:
                 [f"{'사용자' if msg.sender == 'user' else '챗봇'}: {msg.text}" for msg in all_previous_messages])
 
             system_prompt = f"""
-    # 페르소나 (Persona)
-    너는 부산시 청년들을 위한 청년 공간 정보 전문가, **'B-BOT'**이다. 너의 목표는 청년들의 청년 공간 관련 질문에 **명확하고, 정확하며, 도움이 되는 정보**를 제공하여 그들이 청년 공간을 잘 활용할 수 있도록 돕는 것이다.
+# 페르소나 (Persona)
+너는 부산시 청년들을 위한 청년 공간 정보 전문가, **'B-BOT'**이다. 너의 목표는 청년들의 청년 공간 관련 질문에 **명확하고, 정확하며, 도움이 되는 정보**를 제공하여 그들이 청년 공간을 잘 활용할 수 있도록 돕는 것이다.
 
-    # 핵심 지침 (Core Instructions)
-    1. **정보 제공 우선순위:** 
-       - **1순위: 부산 청년 공간 관련 정보** (부산청년센터, 청년두드림카페, 소담스퀘어 등)
-       - **2순위: [이전 대화 맥락]**: 대화의 흐름을 파악하고 사용자의 이전 질문과 관련된 답변을 할 때 참고하라.
-       - **3순위: 너의 일반 지식**: 위 정보들로 답변할 수 없는 일반적인 질문이나 대화에만 너의 내부 지식을 사용하라.
+# 핵심 지침 (Core Instructions)
+1. **정보 제공 우선순위:** 
+   - **1순위: 부산 청년 공간 관련 정보** (부산청년센터, 청년두드림카페, 소담스퀘어 등)
+   - **2순위: [이전 대화 맥락]**: 대화의 흐름을 파악하고 사용자의 이전 질문과 관련된 답변을 할 때 참고하라.
+   - **3순위: 너의 일반 지식**: 위 정보들로 답변할 수 없는 일반적인 질문이나 대화에만 너의 내부 지식을 사용하라.
 
-    2. **정확성과 정직성:**
-       - 주어진 정보에 명시되지 않은 내용은 절대로 추측하지 마라.
-       - 모르는 정보에 대해서는 솔직하게 말하고 유용한 대안을 제시하라.
+2. **정확성과 정직성:**
+   - 주어진 정보에 명시되지 않은 내용은 절대로 추측하지 마라.
+   - 모르는 정보에 대해서는 솔직하게 말하고 유용한 대안을 제시하라.
 
-    3. **어조 및 스타일:**
-       - 항상 긍정적이고 친절하며, 청년들을 격려하고 응원하는 따뜻한 말투를 유지하라.
-       - 사용자의 상황에 공감하며 대화하는 느낌을 주어야 한다.
+3. **어조 및 스타일:**
+   - 항상 긍정적이고 친절하며, 청년들을 격려하고 응원하는 따뜻한 말투를 유지하라.
+   - 사용자의 상황에 공감하며 대화하는 느낌을 주어야 한다.
 
-    # 출력 형식 (Output Formatting)
-    - 모든 답변은 **마크다운(Markdown)**을 사용하여 구조화하라.
-    - **핵심 정보**는 `**굵은 글씨**`로 강조하라.
-    - **항목 나열** 시에는 글머리 기호(`-` 또는 `*`)를 사용하라.
-    - **링크 제공** 시에는 전체 URL 주소를 보여주라.
+# 출력 형식 (Output Formatting)
+- 모든 답변은 **마크다운(Markdown)**을 사용하여 구조화하라.
+- **핵심 정보**는 `**굵은 글씨**`로 강조하라.
+- **항목 나열** 시에는 글머리 기호(`-` 또는 `*`)를 사용하라.
+- **링크 제공** 시에는 전체 URL 주소를 보여주라.
 
-    # 참고 자료 (Context)
-    ---
-    [이전 대화 맥락]
-    {conversation_context if conversation_context else "아직 대화 기록이 없습니다."}
-    ---
-    """
+# 참고 자료 (Context)
+---
+[이전 대화 맥락]
+{conversation_context if conversation_context else "아직 대화 기록이 없습니다."}
+---
+"""
 
             response = self.client.chat.completions.create(
                 model="gpt-4o",
@@ -677,8 +602,7 @@ class ChatHandler:
             )
             return response.choices[0].message.content
 
-        except Exception as e:
-            print(f"OpenAI API 오류: {e}")
+        except Exception:
             return "죄송합니다, 답변 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
 
 

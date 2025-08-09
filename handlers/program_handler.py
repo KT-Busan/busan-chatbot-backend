@@ -10,8 +10,25 @@ from services.youth_program_crawler import (
 
 
 class ProgramHandler:
+
+    def _handle_api_error(self, error, context=""):
+        """API 에러 처리 공통 함수"""
+        return {
+            'success': False,
+            'error': str(error),
+            'message': f'{context} 중 오류가 발생했습니다.' if context else '오류가 발생했습니다.'
+        }
+
+    def _get_instance_path(self):
+        """인스턴스 경로 반환"""
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        project_root = os.path.dirname(basedir)
+        instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
+        os.makedirs(instance_path, exist_ok=True)
+        return instance_path
+
     def get_all_programs(self):
-        """전체 프로그램 목록 (기존 로직 완벽 보존)"""
+        """전체 프로그램 목록"""
         try:
             programs = get_youth_programs_data()
             return {
@@ -21,30 +38,16 @@ class ProgramHandler:
                 'message': f'{len(programs)}개의 모집중인 프로그램을 찾았습니다.'
             }
         except Exception as e:
-            print(f"프로그램 API 오류: {e}")
-            return {
-                'success': False,
-                'error': str(e),
-                'message': '프로그램 정보를 가져오는 중 오류가 발생했습니다.'
-            }
+            return self._handle_api_error(e, '프로그램 정보를 가져오는')
 
     def get_programs_by_region(self, region):
-        """지역별 프로그램 검색 (기존 로직 완벽 보존)"""
+        """지역별 프로그램 검색"""
         try:
             result_message = search_programs_by_region(region)
             programs = get_youth_programs_data()
 
             region_normalized = region.replace('구', '') if region.endswith('구') else region
-            filtered_programs = []
-            for program in programs:
-                program_region = program.get('region', '')
-                program_location = program.get('location', '')
-                program_title = program.get('title', '')
-
-                if (region_normalized in program_region or
-                        region_normalized in program_location or
-                        region_normalized in program_title):
-                    filtered_programs.append(program)
+            filtered_programs = self._filter_programs_by_region(programs, region_normalized)
 
             return {
                 'success': True,
@@ -54,33 +57,35 @@ class ProgramHandler:
                 'region': region
             }
         except Exception as e:
-            print(f"지역별 프로그램 API 오류: {e}")
-            return {
-                'success': False,
-                'error': str(e),
-                'message': f'{region} 지역의 프로그램 정보를 가져오는 중 오류가 발생했습니다.'
-            }
+            return self._handle_api_error(e, f'{region} 지역의 프로그램 정보를 가져오는')
+
+    def _filter_programs_by_region(self, programs, region_normalized):
+        """지역별 프로그램 필터링"""
+        filtered_programs = []
+        for program in programs:
+            program_fields = [
+                program.get('region', ''),
+                program.get('location', ''),
+                program.get('title', '')
+            ]
+
+            if any(region_normalized in field for field in program_fields):
+                filtered_programs.append(program)
+
+        return filtered_programs
 
     def crawl_programs_manually(self):
-        """수동 프로그램 크롤링 (기존 로직 완벽 보존)"""
+        """수동 프로그램 크롤링"""
         try:
-            print("수동 크롤링 요청 받음")
-
             crawler = BusanYouthProgramCrawler()
             programs = crawler.crawl_all_programs()
-
-            basedir = os.path.abspath(os.path.dirname(__file__))
-            project_root = os.path.dirname(basedir)
-            instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
-            if not os.path.exists(instance_path):
-                os.makedirs(instance_path)
 
             cache_data = {
                 'cached_at': datetime.now().isoformat(),
                 'data': programs
             }
 
-            cache_file = os.path.join(instance_path, 'youth_programs_cache.json')
+            cache_file = os.path.join(self._get_instance_path(), 'youth_programs_cache.json')
             with open(cache_file, 'w', encoding='utf-8') as f:
                 json.dump(cache_data, f, ensure_ascii=False, indent=2)
 
@@ -92,12 +97,7 @@ class ProgramHandler:
                 'crawled_at': datetime.now().isoformat()
             }
         except Exception as e:
-            print(f"수동 크롤링 오류: {e}")
-            return {
-                'success': False,
-                'error': str(e),
-                'message': '크롤링 중 오류가 발생했습니다.'
-            }
+            return self._handle_api_error(e, '크롤링')
 
     def search_programs_by_keyword(self, keyword):
         """키워드별 프로그램 검색"""
@@ -109,14 +109,12 @@ class ProgramHandler:
                     'message': '현재 프로그램 정보를 가져올 수 없습니다.'
                 }
 
-            filtered_programs = []
             keyword_lower = keyword.lower()
-
-            for program in programs:
-                if (keyword_lower in program.get('title', '').lower() or
-                        keyword_lower in program.get('location', '').lower() or
-                        keyword_lower in program.get('region', '').lower()):
-                    filtered_programs.append(program)
+            filtered_programs = [
+                program for program in programs
+                if any(keyword_lower in str(program.get(field, '')).lower()
+                       for field in ['title', 'location', 'region'])
+            ]
 
             return {
                 'success': True,
@@ -126,12 +124,7 @@ class ProgramHandler:
                 'message': f'{keyword} 관련 {len(filtered_programs)}개 프로그램을 찾았습니다.'
             }
         except Exception as e:
-            print(f"키워드 검색 오류: {e}")
-            return {
-                'success': False,
-                'error': str(e),
-                'message': '프로그램 검색 중 오류가 발생했습니다.'
-            }
+            return self._handle_api_error(e, '프로그램 검색')
 
 
 program_handler = ProgramHandler()
