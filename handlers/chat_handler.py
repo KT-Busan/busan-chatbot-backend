@@ -47,6 +47,47 @@ class ChatHandler:
             '행사/이벤트': ['🎪행사/이벤트', '🎬행사/이벤트', '🎬 행사/이벤트', '행사', '이벤트']
         }
 
+    def format_space_detail(self, space):
+        """청년 공간 상세 정보 포맷팅 - 정형화된 형식"""
+        try:
+            parent_facility = space.get('parent_facility', '정보없음')
+            space_name = space.get('space_name', '정보없음')
+            location = space.get('location', '정보없음')
+            introduction = space.get('introduction', '정보없음')
+            eligibility = space.get('eligibility', '정보없음')
+            features = space.get('features', '정보없음')
+
+            capacity_info = self.format_capacity_info(space)
+            link_url = self.extract_link_url(space.get('link'))
+
+            result = f"🏢 {parent_facility} - {space_name}\n\n"
+            result += f"{introduction}\n"
+
+            result += f"\u00A0\u00A0📍 위치 : "
+            result += f"{location}\n"
+
+            result += f"\u00A0\u00A0👥 인원 : "
+            result += f"{capacity_info}\n"
+
+            result += f"\u00A0\u00A0🎯 지원 대상 : "
+            result += f"{eligibility}\n"
+
+            result += f"\u00A0\u00A0🧰 특징 : "
+            result += f"{features}\n"
+
+            if link_url != '정보없음':
+                result += f"\u00A0\u00A0🔗 링크 : "
+                result += f"[자세히 보기]({link_url})\n"
+
+            if space.get('keywords'):
+                result += f"\u00A0\u00A0🏷️ 사용 가능한 키워드 : "
+                result += f"{', '.join(space.get('keywords'))}\n"
+
+            return result
+
+        except Exception:
+            return "공간 정보를 불러오는 중 오류가 발생했습니다."
+
     def load_spaces_data(self):
         """spaces_busan_youth.json 데이터 로드"""
         try:
@@ -62,34 +103,6 @@ class ChatHandler:
             return []
         except Exception:
             return []
-
-    def format_space_detail(self, space):
-        """청년 공간 상세 정보 포맷팅"""
-        try:
-            parent_facility = space.get('parent_facility', '정보없음')
-            space_name = space.get('space_name', '정보없음')
-            location = space.get('location', '정보없음')
-            introduction = space.get('introduction', '정보없음')
-            eligibility = space.get('eligibility', '정보없음')
-            features = space.get('features', '정보없음')
-
-            capacity_info = self.format_capacity_info(space)
-            link_url = self.extract_link_url(space.get('link'))
-
-            result = f"🟩 **{parent_facility} - {space_name}** - {location}\n"
-            result += f"🎯 **한 줄 소개:** {introduction}\n"
-            result += f"• 📍 **위치:** {location}\n"
-            result += f"• 👥 **인원:** {capacity_info}\n"
-            result += f"• **지원 대상:** {eligibility}\n"
-            result += f"• 🧰 **특징:** {features}\n"
-
-            if link_url != '정보없음':
-                result += f"• 🔗 **링크:** {link_url}\n"
-
-            return result
-
-        except Exception:
-            return "공간 정보를 불러오는 중 오류가 발생했습니다."
 
     def extract_link_url(self, link):
         """링크 URL 추출"""
@@ -142,10 +155,11 @@ class ChatHandler:
             matching_spaces = self.find_matching_spaces(user_input)
 
             if matching_spaces:
+                matching_spaces.sort(key=lambda x: x.get('parent_facility', ''))
                 result = f"**🔍 '{user_input}' 검색 결과**\n\n"
 
                 for i, space in enumerate(matching_spaces[:5], 1):
-                    result += f"**{i}.** "
+                    result += f"**{i}\\.\u00A0.** "
                     result += self.format_space_detail(space)
                     result += "\n"
 
@@ -170,6 +184,9 @@ class ChatHandler:
                 location = space.get('location', '기타')
                 regions.setdefault(location, []).append(space)
 
+            for region in regions:
+                regions[region].sort(key=lambda x: x.get('parent_facility', ''))
+
             for region, spaces in list(regions.items())[:3]:
                 result += f"**📍 {region}**\n"
 
@@ -188,7 +205,7 @@ class ChatHandler:
             if total_regions > 3:
                 result += f"... 외 {total_regions - 3}개 지역 더 있음\n\n"
 
-            result += f"💡 총 **{total_spaces}개**의 청년 공간이 있습니다.\n"
+            result += f"💡 총 **{total_spaces}\u00A0개**의 청년 공간이 있습니다.\n"
             result += "**특정 공간명을 입력**하시면 해당 공간의 상세 정보를 확인할 수 있어요!\n\n"
             result += "🔍 **검색 예시:**\n"
             result += "• \"커뮤니티룸\" - 커뮤니티룸 관련 공간들\n"
@@ -211,7 +228,6 @@ class ChatHandler:
 
             for space in self.spaces_data:
                 space_keywords = space.get('keywords', [])
-
                 for search_kw in search_keywords:
                     for space_kw in space_keywords:
                         if search_kw.lower() in space_kw.lower() or space_kw.lower() in search_kw.lower():
@@ -222,20 +238,20 @@ class ChatHandler:
                     break
 
             if not filtered_spaces:
-                return (f"**{keyword}** 관련 청년공간을 찾을 수 없습니다.\n\n다른 키워드로 검색해보세요!\n\n"
-                        f"💡 **사용 가능한 키워드:**\n"
-                        f"- 📝스터디/회의\n- 🎤교육/강연\n- 👥커뮤니티\n- 🚀진로/창업\n"
-                        f"- 🎨문화/창작\n- 🛠작업/창작실\n- 🧘휴식/놀이\n- 🎪행사/이벤트")
+                return (f"{keyword} 관련 청년공간을 찾을 수 없습니다.\n\n다른 키워드로 검색해보세요!\n\n"
+                        f"💡사용 가능한 키워드 : \n"
+                        f"📝스터디/회의\n- 🎤교육/강연\n- 👥커뮤니티\n- 🚀진로/창업\n- 🎨문화/창작\n- 🛠작업/창작실\n- 🧘휴식/놀이\n- 🎪행사/이벤트")
 
-            result = f"**{keyword}**로 찾은 공간입니다!\n\n"
+            filtered_spaces.sort(key=lambda x: x.get('parent_facility', ''))
+            result = f"{keyword}(으)로 찾은 공간입니다!\n\n"
 
             for i, space in enumerate(filtered_spaces, 1):
                 parent_facility = space.get('parent_facility', '정보없음')
                 space_name = space.get('space_name', '정보없음')
                 location = space.get('location', '정보없음')
-                result += f"**{i}.** {parent_facility} - {space_name} [{location}]\n"
+                result += f"{i}\\.\u00A0{parent_facility} - {space_name} [{location}]\n"
 
-            result += "\n📌 **공간 상세 내용은**\n"
+            result += "\n**📌\u00A0공간 상세 내용은**"
             result += "👉 \"청년 공간 상세\" 버튼을 눌러 확인하거나,\n"
             result += "👉 공간명을 입력해서 직접 확인해보세요!"
 
@@ -287,10 +303,10 @@ class ChatHandler:
             if not filtered_spaces:
                 return self.format_no_results_message(region, capacity, purpose)
 
-            result = f"✅ **선택하신 조건**\n"
+            result = f"✅ 선택하신 조건\n"
             for condition in condition_display:
-                result += f"• {condition}\n"
-            result += f"\n🔎 **조건에 맞는 공간을 찾고 있어요...**\n\n"
+                result += f"\u00A0\u00A0{condition}\n"
+            result += f"\n🔎 조건에 맞는 공간을 찾고 있어요...\n\n"
 
             return self.format_search_results(filtered_spaces, region, capacity, purpose)
 
@@ -381,22 +397,22 @@ class ChatHandler:
     def format_search_results(self, spaces, region, capacity, purpose):
         """검색 결과 포맷팅"""
         try:
-            spaces.sort(key=lambda x: x.get('match_score', 0), reverse=True)
+            spaces.sort(key=lambda x: (-x.get('match_score', 0), x.get('parent_facility', '')))
 
-            result = f"📌 **총 {len(spaces)}개의 공간**을 찾았어요!\n\n"
+            result = f"**📌\u00A0총\u00A0 {len(spaces)}개의 공간을 찾았어요!**\n\n"
             result += "---\n\n"
 
             for i, space in enumerate(spaces, 1):
-                result += f"**{i}️⃣ {space.get('parent_facility', '정보없음')} – {space.get('space_name', '정보없음')}**\n"
+                result += f"**{i}\\.\u00A0{space.get('parent_facility', '정보없음')} – {space.get('space_name', '정보없음')}**\n"
                 result += f"{space.get('introduction', '정보없음')}\n"
-                result += f"• 📍 **위치 :** {space.get('location', '정보없음')}\n"
-                result += f"• 👥 **인원 :** {self.format_capacity_info(space)}\n"
-                result += f"• **지원 대상 :** {space.get('eligibility', '정보없음')}\n"
-                result += f"• 🧰 **특징 :** {space.get('features', '정보없음')}\n"
+                result += f"\u00A0\u00A0📍 위치 : {space.get('location', '정보없음')}\n"
+                result += f"\u00A0\u00A0👥 인원 : {self.format_capacity_info(space)}\n"
+                result += f"\u00A0\u00A0🎯 지원 대상 : {space.get('eligibility', '정보없음')}\n"
+                result += f"\u00A0\u00A0🧰 특징 : {space.get('features', '정보없음')}\n"
 
                 link_url = self.extract_link_url(space.get('link'))
-                if link_url != '정보없음':
-                    result += f"• 🔗 **링크 :** {link_url}\n"
+                if link_url and link_url != '정보없음':
+                    result += f"\u00A0\u00A0🔗 링크 : [자세히 보기]({link_url})\n"
 
                 result += "\n---\n\n"
 
@@ -415,11 +431,11 @@ class ChatHandler:
 
         condition_text = ", ".join(conditions)
 
-        result = f"😥 **{condition_text}** 조건에 맞는 청년공간을 찾을 수 없습니다.\n\n"
-        result += "💡 **다른 조건으로 검색해보세요!**\n"
-        result += "• 지역 조건을 넓혀보거나\n"
-        result += "• 인원 조건을 '상관없음'으로 변경하거나\n"
-        result += "• 다른 이용 목적을 선택해보세요\n\n"
+        result = f"😥 {condition_text} 조건에 맞는 청년공간을 찾을 수 없습니다.\n\n"
+        result += "💡 다른 조건으로 검색해보세요!\n"
+        result += "\u00A0\u00A0지역 조건을 넓혀보거나\n"
+        result += "\u00A0\u00A0인원 조건을 '상관없음'으로 변경하거나\n"
+        result += "\u00A0\u00A0다른 이용 목적을 선택해보세요\n\n"
         result += "[🔄 새로 검색하기] 버튼을 눌러 다시 시도하세요!"
 
         return result
@@ -433,16 +449,16 @@ class ChatHandler:
             random_space = random.choice(self.spaces_data)
 
             result = "🎲 **랜덤으로 추천해드릴게요!**\n\n"
-            result += f"**1️⃣ {random_space.get('parent_facility', '정보없음')} – {random_space.get('space_name', '정보없음')}**\n"
+            result += f"**{random_space.get('parent_facility', '정보없음')} – {random_space.get('space_name', '정보없음')}**\n"
             result += f"{random_space.get('introduction', '정보없음')}\n"
-            result += f"• 📍 **위치 :** {random_space.get('location', '정보없음')}\n"
-            result += f"• 👥 **인원 :** {self.format_capacity_info(random_space)}\n"
-            result += f"• **지원 대상 :** {random_space.get('eligibility', '정보없음')}\n"
-            result += f"• 🧰 **특징 :** {random_space.get('features', '정보없음')}\n"
+            result += f"\u00A0\u00A0📍 위치 : {random_space.get('location', '정보없음')}\n"
+            result += f"\u00A0\u00A0👥 인원 : {self.format_capacity_info(random_space)}\n"
+            result += f"\u00A0\u00A0🎯 지원 대상 : {random_space.get('eligibility', '정보없음')}\n"
+            result += f"\u00A0\u00A0🧰 특징 : {random_space.get('features', '정보없음')}\n"
 
             link_url = self.extract_link_url(random_space.get('link'))
-            if link_url != '정보없음':
-                result += f"• 🔗 **링크 :** {link_url}\n"
+            if link_url and link_url != '정보없음':
+                result += f"\u00A0\u00A0🔗 링크 : [자세히 보기]({link_url})\n"
 
             result += "\n---\n\n"
             result += "[SHOW_ADDITIONAL_RANDOM]"
@@ -471,9 +487,11 @@ class ChatHandler:
             if not chat_session:
                 chat_session = Chat(id=chat_id, user_id=user.id, title=user_message_text)
                 db.session.add(chat_session)
+                db.session.commit()
 
             if len(chat_session.messages) == 0 and user_message_text not in PREDEFINED_ANSWERS:
                 chat_session.title = user_message_text
+                db.session.commit()
 
             user_message = Message(chat_id=chat_id, sender='user', text=user_message_text)
             db.session.add(user_message)
@@ -487,7 +505,7 @@ class ChatHandler:
 
             return {"reply": bot_reply}, 200
 
-        except Exception:
+        except Exception as e:
             db.session.rollback()
             return {"error": "채팅 처리 중 오류가 발생했습니다."}, 500
 
