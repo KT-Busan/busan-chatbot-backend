@@ -10,7 +10,6 @@ from services.youth_program_crawler import (
 
 
 class ProgramHandler:
-
     def _handle_api_error(self, error, context=""):
         """API 에러 처리 공통 함수"""
         return {

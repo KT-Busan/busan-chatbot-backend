@@ -1,13 +1,7 @@
 import json
 import os
 from datetime import datetime
-
-from services.youth_space_crawler import (
-    get_youth_spaces_data,
-    search_spaces_by_region,
-    search_spaces_by_keyword,
-    get_all_youth_spaces
-)
+from services.youth_space_crawler import get_youth_spaces_data
 
 
 class SpaceHandler:
@@ -262,9 +256,9 @@ class SpaceHandler:
                 regions.setdefault(region, []).append(space['name'])
 
             for region, names in sorted(regions.items()):
-                result += f"**📍 {region}** ({len(names)}개)\n"
+                result += f"📍 {region} ({len(names)}개)\n"
                 for name in names:
-                    result += f"  • {name}\n"
+                    result += f"\u00A0\u00A0{name}\n"
                 result += "\n"
 
             result += "💡 지역명이나 공간명으로 자세한 정보를 검색해보세요!"
