@@ -12,31 +12,84 @@ from services.youth_program_crawler import get_youth_programs_data, search_progr
 
 class ChatHandler:
     def __init__(self):
+        print("🚀 ChatHandler 초기화 시작...")
+
         try:
             self.client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        except Exception:
+            print("✅ OpenAI 클라이언트 초기화 성공")
+        except Exception as e:
             self.client = None
+            print(f"❌ OpenAI 클라이언트 초기화 실패: {str(e)}")
+
+        print("📂 데이터 파일 로딩 시작...")
 
         self.spaces_data = self.load_spaces_data()
+        print(f"📄 spaces_data 로드 완료: {len(self.spaces_data)}개")
+
         self.centers_data = self.load_centers_data()
+        print(f"🏢 centers_data 로드 완료: {len(self.centers_data)}개")
+
         self.keyword_data = self.load_keyword_data()
+        print(f"🏷️ keyword_data 로드 완료: {len(self.keyword_data)}개")
+
         self.keyword_mapping = self._init_keyword_mapping()
         self.purpose_mapping = self._init_purpose_mapping()
+
+        # 💡 데이터 로딩 실패 시 재시도
+        if len(self.centers_data) == 0:
+            print("⚠️ centers_data가 비어있음 - 재시도...")
+            import time
+            time.sleep(1)  # 1초 대기
+            self.centers_data = self.load_centers_data()
+            print(f"🔄 centers_data 재시도 결과: {len(self.centers_data)}개")
+
+        print("✅ ChatHandler 초기화 완료!")
+
+        # 샘플 데이터 확인
+        if self.centers_data:
+            sample_center = self.centers_data[0]
+            print(f"📋 센터 데이터 샘플: {sample_center.get('name', 'N/A')}")
+        else:
+            print("⚠️ 센터 데이터가 여전히 비어있음!")
+
+        if self.spaces_data:
+            sample_space = self.spaces_data[0]
+            print(
+                f"🏠 공간 데이터 샘플: {sample_space.get('parent_facility', 'N/A')} - {sample_space.get('space_name', 'N/A')}")
+        else:
+            print("⚠️ 공간 데이터가 여전히 비어있음!")
 
     def load_centers_data(self):
         """youth_spaces_cache.json 데이터 로드 (33개 센터 정보)"""
         try:
             basedir = os.path.abspath(os.path.dirname(__file__))
             project_root = os.path.dirname(basedir)
-            instance_path = os.path.join(project_root, 'instance')
-            cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
 
-            if os.path.exists(cache_file):
-                with open(cache_file, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                    return data.get('data', [])
+            # 💡 RENDER 환경에서는 instance 경로가 다를 수 있음
+            instance_paths = [
+                os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance'),
+                os.path.join(project_root, 'instance'),
+                os.path.join(basedir, 'instance')
+            ]
+
+            for instance_path in instance_paths:
+                cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
+                print(f"📁 centers_data 파일 경로 시도: {cache_file}")
+                print(f"📁 파일 존재 여부: {os.path.exists(cache_file)}")
+
+                if os.path.exists(cache_file):
+                    with open(cache_file, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+                        result = data.get('data', [])
+                        print(f"✅ centers_data 로드 성공: {len(result)}개")
+                        if result:  # 빈 배열이 아닌 경우만 반환
+                            return result
+
+            print("❌ youth_spaces_cache.json 파일을 찾을 수 없거나 빈 데이터")
             return []
-        except Exception:
+
+        except Exception as e:
+            print(f"❌ centers_data 로드 실패: {str(e)}")
             return []
 
     def load_keyword_data(self):
