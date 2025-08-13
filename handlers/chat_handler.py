@@ -62,11 +62,12 @@ class ChatHandler:
         try:
             basedir = os.path.abspath(os.path.dirname(__file__))
             project_root = os.path.dirname(basedir)
-            instance_path = os.path.join(project_root, 'instance')
+            instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
             cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
 
             print(f"📁 centers_data 파일 경로: {cache_file}")
             print(f"📁 파일 존재 여부: {os.path.exists(cache_file)}")
+            print(f"📁 RENDER_DISK_PATH: {os.environ.get('RENDER_DISK_PATH', 'None')}")
 
             if os.path.exists(cache_file):
                 with open(cache_file, 'r', encoding='utf-8') as f:
@@ -111,7 +112,7 @@ class ChatHandler:
         try:
             basedir = os.path.abspath(os.path.dirname(__file__))
             project_root = os.path.dirname(basedir)
-            instance_path = os.path.join(project_root, 'instance')
+            instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
             overrides_file = os.path.join(instance_path, 'youth_spaces_overrides.json')
 
             if os.path.exists(overrides_file):
@@ -322,9 +323,9 @@ class ChatHandler:
     def load_spaces_data(self):
         """spaces_busan_youth.json 데이터 로드"""
         try:
-            basedir = os.path.abspath(os.path.dirname(__file__))  # /opt/render/project/src/handlers
-            project_root = os.path.dirname(basedir)  # /opt/render/project/src
-            config_path = os.path.join(project_root, 'config')  # /opt/render/project/src/config
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            project_root = os.path.dirname(basedir)
+            config_path = os.path.join(project_root, 'config')
             spaces_file = os.path.join(config_path, 'spaces_busan_youth.json')
 
             print(f"📁 spaces_data 파일 경로: {spaces_file}")

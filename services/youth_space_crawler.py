@@ -159,22 +159,31 @@ class BusanYouthSpaceCrawler:
 
 
 def get_instance_path():
-    """인스턴스 경로 반환"""
+    """인스턴스 경로 반환 - app.py와 동일한 방식"""
     basedir = os.path.abspath(os.path.dirname(__file__))
     project_root = os.path.dirname(basedir)
+
     instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
     os.makedirs(instance_path, exist_ok=True)
+
+    print(f"🔧 crawler instance_path: {instance_path}")
+    print(f"🔧 RENDER_DISK_PATH: {os.environ.get('RENDER_DISK_PATH', 'None')}")
+
     return instance_path
 
 
 def get_cache_file_path():
     """캐시 파일 경로 반환"""
-    return os.path.join(get_instance_path(), 'youth_spaces_cache.json')
+    cache_file = os.path.join(get_instance_path(), 'youth_spaces_cache.json')
+    print(f"🔧 cache_file_path: {cache_file}")
+    return cache_file
 
 
 def get_overrides_file_path():
     """Override 파일 경로 반환"""
-    return os.path.join(get_instance_path(), 'youth_spaces_overrides.json')
+    overrides_file = os.path.join(get_instance_path(), 'youth_spaces_overrides.json')
+    print(f"🔧 overrides_file_path: {overrides_file}")
+    return overrides_file
 
 
 def load_overrides_data():
