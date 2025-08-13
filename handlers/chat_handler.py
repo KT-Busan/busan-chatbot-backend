@@ -706,6 +706,8 @@ class ChatHandler:
 
     def generate_bot_response(self, user_message_text, chat_id):
         """봇 응답 생성 로직"""
+        print(f"📥 사용자 메시지: '{user_message_text}'")
+
         special_commands = {
             "청년 공간 상세": "[SPACE_DETAIL_SEARCH]",
             "청년 공간 프로그램 확인하기": "[PROGRAM_REGIONS]",
@@ -715,11 +717,22 @@ class ChatHandler:
 
         if user_message_text in special_commands:
             command_result = special_commands[user_message_text]
-            return command_result() if callable(command_result) else command_result
+            result = command_result() if callable(command_result) else command_result
+            print(f"📤 특수 명령 응답: {result[:100]}...")
+            return result
 
         if user_message_text.endswith(' 상세보기'):
             center_name = user_message_text.replace(' 상세보기', '').strip()
-            return self.get_center_detail_with_spaces(center_name)
+            print(f"🏢 센터 상세보기 요청: '{center_name}'")
+            print(f"📊 사용 가능한 센터 개수: {len(self.centers_data)}")
+
+            if self.centers_data:
+                center_names = [center.get('name', '') for center in self.centers_data[:3]]
+                print(f"📝 센터명 예시: {center_names}")
+
+            result = self.get_center_detail_with_spaces(center_name)
+            print(f"📤 센터 상세보기 응답: {result[:100]}...")
+            return result
 
         if '-' in user_message_text and user_message_text.endswith(' 상세보기'):
             space_detail = user_message_text.replace(' 상세보기', '').strip()
@@ -728,13 +741,19 @@ class ChatHandler:
                 if len(parts) == 2:
                     facility_name = parts[0].strip()
                     space_name = parts[1].strip()
-                    return self.get_space_detail_by_facility_and_name(facility_name, space_name)
+                    print(f"🏠 공간 상세보기 요청: '{facility_name}' - '{space_name}'")
+                    result = self.get_space_detail_by_facility_and_name(facility_name, space_name)
+                    print(f"📤 공간 상세보기 응답: {result[:100]}...")
+                    return result
 
         if "조건별 검색:" in user_message_text:
             try:
                 conditions = self.parse_search_conditions(user_message_text)
-                return self.handle_space_reservation_search(conditions)
-            except Exception:
+                result = self.handle_space_reservation_search(conditions)
+                print(f"📤 조건별 검색 응답: {result[:100]}...")
+                return result
+            except Exception as e:
+                print(f"❌ 조건별 검색 오류: {str(e)}")
                 return "검색 조건 처리 중 오류가 발생했습니다."
 
         if " 프로그램" in user_message_text:
@@ -743,17 +762,23 @@ class ChatHandler:
                        '금정구', '북구', '사상구', '사하구', '강서구', '남구', '해운대구', '수영구', '기장군']
 
             if region in regions:
-                return search_programs_by_region(region)
+                result = search_programs_by_region(region)
+                print(f"📤 프로그램 검색 응답: {result[:100]}...")
+                return result
 
         regions = ['중구', '동구', '서구', '영도구', '부산진구', '동래구', '연제구',
                    '금정구', '북구', '사상구', '사하구', '강서구', '남구', '해운대구', '수영구', '기장군']
 
         if user_message_text.strip() in regions:
-            return search_spaces_by_region(user_message_text.strip())
+            result = search_spaces_by_region(user_message_text.strip())
+            print(f"📤 지역 검색 응답: {result[:100]}...")
+            return result
 
         keyword_list = list(self.keyword_mapping.keys())
         if user_message_text.strip() in keyword_list:
-            return self.search_spaces_by_keyword_json(user_message_text.strip())
+            result = self.search_spaces_by_keyword_json(user_message_text.strip())
+            print(f"📤 키워드 검색 응답: {result[:100]}...")
+            return result
 
         old_keyword_mapping = {
             '스터디/회의': '📝스터디/회의', '교육/강연': '🎤교육/강연',
@@ -764,10 +789,14 @@ class ChatHandler:
 
         if user_message_text.strip() in old_keyword_mapping:
             new_keyword = old_keyword_mapping[user_message_text.strip()]
-            return self.search_spaces_by_keyword_json(new_keyword)
+            result = self.search_spaces_by_keyword_json(new_keyword)
+            print(f"📤 구 키워드 검색 응답: {result[:100]}...")
+            return result
 
         if any(keyword in user_message_text for keyword in ['스터디', '창업', '회의', '카페', '라운지', '센터']):
-            return search_spaces_by_keyword(user_message_text)
+            result = search_spaces_by_keyword(user_message_text)
+            print(f"📤 일반 키워드 검색 응답: {result[:100]}...")
+            return result
 
         try:
             all_previous_messages = Message.query.filter_by(chat_id=chat_id).order_by(
@@ -776,36 +805,37 @@ class ChatHandler:
                 [f"{'사용자' if msg.sender == 'user' else '챗봇'}: {msg.text}" for msg in all_previous_messages])
 
             system_prompt = f"""
-# 페르소나 (Persona)
-너는 부산시 청년들을 위한 청년 공간 정보 전문가, **'B-BOT'**이다. 너의 목표는 청년들의 청년 공간 관련 질문에 **명확하고, 정확하며, 도움이 되는 정보**를 제공하여 그들이 청년 공간을 잘 활용할 수 있도록 돕는 것이다.
+    # 페르소나 (Persona)
+    너는 부산시 청년들을 위한 청년 공간 정보 전문가, **'B-BOT'**이다. 너의 목표는 청년들의 청년 공간 관련 질문에 **명확하고, 정확하며, 도움이 되는 정보**를 제공하여 그들이 청년 공간을 잘 활용할 수 있도록 돕는 것이다.
 
-# 핵심 지침 (Core Instructions)
-1. **정보 제공 우선순위:** 
-   - **1순위: 부산 청년 공간 관련 정보** (부산청년센터, 청년두드림카페, 소담스퀘어 등)
-   - **2순위: [이전 대화 맥락]**: 대화의 흐름을 파악하고 사용자의 이전 질문과 관련된 답변을 할 때 참고하라.
-   - **3순위: 너의 일반 지식**: 위 정보들로 답변할 수 없는 일반적인 질문이나 대화에만 너의 내부 지식을 사용하라.
+    # 핵심 지침 (Core Instructions)
+    1. **정보 제공 우선순위:** 
+       - **1순위: 부산 청년 공간 관련 정보** (부산청년센터, 청년두드림카페, 소담스퀘어 등)
+       - **2순위: [이전 대화 맥락]**: 대화의 흐름을 파악하고 사용자의 이전 질문과 관련된 답변을 할 때 참고하라.
+       - **3순위: 너의 일반 지식**: 위 정보들로 답변할 수 없는 일반적인 질문이나 대화에만 너의 내부 지식을 사용하라.
 
-2. **정확성과 정직성:**
-   - 주어진 정보에 명시되지 않은 내용은 절대로 추측하지 마라.
-   - 모르는 정보에 대해서는 솔직하게 말하고 유용한 대안을 제시하라.
+    2. **정확성과 정직성:**
+       - 주어진 정보에 명시되지 않은 내용은 절대로 추측하지 마라.
+       - 모르는 정보에 대해서는 솔직하게 말하고 유용한 대안을 제시하라.
 
-3. **어조 및 스타일:**
-   - 항상 긍정적이고 친절하며, 청년들을 격려하고 응원하는 따뜻한 말투를 유지하라.
-   - 사용자의 상황에 공감하며 대화하는 느낌을 주어야 한다.
+    3. **어조 및 스타일:**
+       - 항상 긍정적이고 친절하며, 청년들을 격려하고 응원하는 따뜻한 말투를 유지하라.
+       - 사용자의 상황에 공감하며 대화하는 느낌을 주어야 한다.
 
-# 출력 형식 (Output Formatting)
-- 모든 답변은 **마크다운(Markdown)**을 사용하여 구조화하라.
-- **핵심 정보**는 `**굵은 글씨**`로 강조하라.
-- **항목 나열** 시에는 글머리 기호(`-` 또는 `*`)를 사용하라.
-- **링크 제공** 시에는 전체 URL 주소를 보여주라.
+    # 출력 형식 (Output Formatting)
+    - 모든 답변은 **마크다운(Markdown)**을 사용하여 구조화하라.
+    - **핵심 정보**는 `**굵은 글씨**`로 강조하라.
+    - **항목 나열** 시에는 글머리 기호(`-` 또는 `*`)를 사용하라.
+    - **링크 제공** 시에는 전체 URL 주소를 보여주라.
 
-# 참고 자료 (Context)
----
-[이전 대화 맥락]
-{conversation_context if conversation_context else "아직 대화 기록이 없습니다."}
----
-"""
+    # 참고 자료 (Context)
+    ---
+    [이전 대화 맥락]
+    {conversation_context if conversation_context else "아직 대화 기록이 없습니다."}
+    ---
+    """
 
+            print(f"🤖 GPT 호출 시작...")
             response = self.client.chat.completions.create(
                 model="gpt-4o",
                 messages=[
@@ -813,9 +843,12 @@ class ChatHandler:
                     {"role": "user", "content": user_message_text}
                 ]
             )
-            return response.choices[0].message.content
+            result = response.choices[0].message.content
+            print(f"📤 GPT 응답: {result[:100]}...")
+            return result
 
-        except Exception:
+        except Exception as e:
+            print(f"❌ GPT 호출 오류: {str(e)}")
             return "죄송합니다, 답변 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
 
 
