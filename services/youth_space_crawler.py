@@ -158,7 +158,6 @@ class BusanYouthSpaceCrawler:
         return all_spaces
 
 
-# === 파일 경로 관리 ===
 def get_instance_path():
     """인스턴스 경로 반환"""
     basedir = os.path.abspath(os.path.dirname(__file__))
@@ -178,7 +177,6 @@ def get_overrides_file_path():
     return os.path.join(get_instance_path(), 'youth_spaces_overrides.json')
 
 
-# === 데이터 로드 함수들 ===
 def load_overrides_data():
     """youth_spaces_overrides.json 데이터 로드"""
     try:
@@ -264,9 +262,8 @@ def get_youth_spaces_data():
     return merged_spaces
 
 
-# === 검색 함수들 ===
 def search_spaces_by_region(region):
-    """지역별 청년공간 검색 (Override 적용)"""
+    """지역별 청년공간 검색 (Override 적용) - 구분선 추가"""
     spaces = get_youth_spaces_data()
     if not spaces:
         return "현재 청년공간 정보를 가져올 수 없습니다."
@@ -281,14 +278,17 @@ def search_spaces_by_region(region):
 
     result = f"**{region} 청년공간({len(filtered_spaces)}개)**\n\n"
 
-    for space in filtered_spaces[:5]:
-        result += format_space_info(space) + "\n"
+    for i, space in enumerate(filtered_spaces[:5]):
+        result += format_space_info(space)
+
+        if i < len(filtered_spaces[:5]) - 1:
+            result += "---\n"
 
     return result
 
 
 def search_spaces_by_keyword(keyword):
-    """키워드별 청년공간 검색 (Override 적용)"""
+    """키워드별 청년공간 검색 (Override 적용) - 구분선 추가"""
     spaces = get_youth_spaces_data()
     if not spaces:
         return "현재 청년공간 정보를 가져올 수 없습니다."
@@ -305,8 +305,11 @@ def search_spaces_by_keyword(keyword):
 
     result = f"🔍 **{keyword}** 검색 결과 ({len(filtered_spaces)}개)\n\n"
 
-    for space in filtered_spaces[:5]:
-        result += format_space_info(space) + "\n"
+    for i, space in enumerate(filtered_spaces[:5]):
+        result += format_space_info(space)
+
+        if i < len(filtered_spaces[:5]) - 1:
+            result += "---\n"
 
     return result
 

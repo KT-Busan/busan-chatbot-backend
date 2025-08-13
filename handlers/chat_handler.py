@@ -18,8 +18,188 @@ class ChatHandler:
             self.client = None
 
         self.spaces_data = self.load_spaces_data()
+        self.centers_data = self.load_centers_data()
+        self.keyword_data = self.load_keyword_data()
         self.keyword_mapping = self._init_keyword_mapping()
         self.purpose_mapping = self._init_purpose_mapping()
+
+    def load_centers_data(self):
+        """youth_spaces_cache.json 데이터 로드 (33개 센터 정보)"""
+        try:
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            project_root = os.path.dirname(basedir)
+            instance_path = os.path.join(project_root, 'instance')
+            cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
+
+            if os.path.exists(cache_file):
+                with open(cache_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    return data.get('data', [])
+            return []
+        except Exception:
+            return []
+
+    def load_keyword_data(self):
+        """spaces_busan_keyword.json 데이터 로드"""
+        try:
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            project_root = os.path.dirname(basedir)
+            config_path = os.path.join(project_root, 'config')
+            keyword_file = os.path.join(config_path, 'spaces_busan_keyword.json')
+
+            if os.path.exists(keyword_file):
+                with open(keyword_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    return data.get('spaces_busan_keyword', [])
+            return []
+        except Exception:
+            return []
+
+    def load_overrides_data(self):
+        """youth_spaces_overrides.json 데이터 로드"""
+        try:
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            project_root = os.path.dirname(basedir)
+            instance_path = os.path.join(project_root, 'instance')
+            overrides_file = os.path.join(instance_path, 'youth_spaces_overrides.json')
+
+            if os.path.exists(overrides_file):
+                with open(overrides_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    return data.get('data', [])
+            return []
+        except Exception:
+            return []
+
+    def merge_center_data(self, center_name):
+        """크롤링 데이터 + Override 데이터 + 키워드 데이터 병합"""
+        try:
+            center_info = None
+            for center in self.centers_data:
+                if center.get('name') == center_name:
+                    center_info = center.copy()
+                    break
+
+            if not center_info:
+                return None
+
+            override_data = self.load_overrides_data()
+            for override in override_data:
+                if override.get('name') == center_name:
+                    center_info.update(override)
+                    break
+
+            for keyword_item in self.keyword_data:
+                if keyword_item.get('parent_facility') == center_name:
+                    center_info['introduction'] = keyword_item.get('introduction', '')
+                    center_info['keywords'] = keyword_item.get('keywords', [])
+                    break
+
+            return center_info
+
+        except Exception:
+            return None
+
+    def get_all_centers_cards(self):
+        """33개 센터 카드형 데이터 반환"""
+        try:
+            result = "[CENTER_LIST_VIEW]"
+            return result
+        except Exception:
+            return "33개 센터 정보를 불러오는 중 오류가 발생했습니다."
+
+    def get_center_detail_with_spaces(self, center_name):
+        """특정 센터 상세 정보 + 대여가능한 공간들 반환"""
+        try:
+            center_info = self.merge_center_data(center_name)
+            if not center_info:
+                return f"'{center_name}' 센터 정보를 찾을 수 없습니다."
+
+            result = f"**{center_info.get('name', '')}[{center_info.get('region', '')}]**\n"
+
+            if center_info.get('introduction'):
+                result += f"{center_info['introduction']}\n\n"
+
+            if center_info.get('address'):
+                result += f"📍 {center_info['address']}\n"
+            if center_info.get('contact'):
+                result += f"📞 {center_info['contact']}\n"
+            if center_info.get('hours'):
+                result += f"🕒 {center_info['hours']}\n"
+            if center_info.get('description'):
+                result += f"📝 {center_info['description']}\n"
+
+            links = []
+            if center_info.get('homepage'):
+                links.append(f"[홈페이지]({center_info['homepage']})")
+            if center_info.get('rental_link'):
+                links.append(f"[대관신청]({center_info['rental_link']})")
+            if center_info.get('program_link'):
+                links.append(f"[프로그램]({center_info['program_link']})")
+            if center_info.get('sns'):
+                links.append(f"[SNS]({center_info['sns']})")
+
+            if links:
+                result += f"🔗 {' | '.join(links)}\n"
+
+            if center_info.get('keywords'):
+                result += f"🏷️ 사용 가능한 키워드 : {', '.join(center_info['keywords'])}\n\n"
+
+            rental_spaces = []
+            for space in self.spaces_data:
+                if space.get('parent_facility') == center_name:
+                    rental_spaces.append(space)
+
+            if rental_spaces:
+                result += f"[CENTER_RENTAL_SPACES:{center_name}]"
+            else:
+                result += "현재 이 센터에는 대여 가능한 공간 정보가 없습니다."
+
+            return result
+
+        except Exception:
+            return f"'{center_name}' 센터 정보를 처리하는 중 오류가 발생했습니다."
+
+    def get_space_detail_by_facility_and_name(self, facility_name, space_name):
+        """센터명과 공간명으로 특정 공간 상세 정보 반환"""
+        try:
+            target_space = None
+            for space in self.spaces_data:
+                if (space.get('parent_facility') == facility_name and
+                        space.get('space_name') == space_name):
+                    target_space = space
+                    break
+
+            if not target_space:
+                return f"'{facility_name}'의 '{space_name}' 공간을 찾을 수 없습니다."
+
+            result = f"🏢 {target_space.get('parent_facility', '정보없음')} - {target_space.get('space_name', '정보없음')}\n\n"
+
+            if target_space.get('introduction'):
+                result += f"{target_space['introduction']}\n\n"
+
+            result += f"\u00A0\u00A0📍 위치 : {target_space.get('location', '정보없음')}\n"
+
+            capacity_info = self.format_capacity_info(target_space)
+            result += f"\u00A0\u00A0👥 인원 : {capacity_info}\n"
+
+            if target_space.get('eligibility'):
+                result += f"\u00A0\u00A0🎯 지원 대상 : {target_space['eligibility']}\n"
+
+            if target_space.get('features'):
+                result += f"\u00A0\u00A0🧰 특징 : {target_space['features']}\n"
+
+            link_url = self.extract_link_url(target_space.get('link'))
+            if link_url != '정보없음':
+                result += f"\u00A0\u00A0🔗 링크 : [자세히 보기]({link_url})\n"
+
+            if target_space.get('keywords'):
+                result += f"\u00A0\u00A0🏷️ 사용 가능한 키워드 : {', '.join(target_space['keywords'])}\n"
+
+            return result
+
+        except Exception:
+            return f"'{facility_name}'의 '{space_name}' 공간 정보를 처리하는 중 오류가 발생했습니다."
 
     def _init_keyword_mapping(self):
         """키워드 매핑 초기화"""
@@ -159,7 +339,7 @@ class ChatHandler:
                 result = f"**🔍 '{user_input}' 검색 결과**\n\n"
 
                 for i, space in enumerate(matching_spaces[:5], 1):
-                    result += f"**{i}\\.\u00A0.** "
+                    result += f"**{i}.\u00A0.** "
                     result += self.format_space_detail(space)
                     result += "\n"
 
@@ -176,7 +356,7 @@ class ChatHandler:
     def show_all_spaces_detail(self):
         """모든 청년 공간을 상세 포맷으로 표시"""
         try:
-            result = "**🏢 부산 청년 공간 상세 정보**\n\n"
+            result = "**🏢 부산 청년 공간**\n\n"
             result += "아래 공간들 중 원하는 공간명을 입력하시면 더 자세한 정보를 확인할 수 있습니다!\n\n"
 
             regions = {}
@@ -238,7 +418,7 @@ class ChatHandler:
                     break
 
             if not filtered_spaces:
-                return (f"{keyword} 관련 청년공간을 찾을 수 없습니다.\n\n다른 키워드로 검색해보세요!\n\n"
+                return (f"{keyword}로 검색할 수 있는 공간을 찾아보겠습니다.\n\n"
                         f"💡사용 가능한 키워드 : \n"
                         f"📝스터디/회의\n- 🎤교육/강연\n- 👥커뮤니티\n- 🚀진로/창업\n- 🎨문화/창작\n- 🛠작업/창작실\n- 🧘휴식/놀이\n- 🎪행사/이벤트")
 
@@ -395,15 +575,14 @@ class ChatHandler:
             return False
 
     def format_search_results(self, spaces, region, capacity, purpose):
-        """검색 결과 포맷팅"""
+        """검색 결과 포맷팅 - 버튼 추가"""
         try:
             spaces.sort(key=lambda x: (-x.get('match_score', 0), x.get('parent_facility', '')))
 
-            result = f"**📌\u00A0총\u00A0 {len(spaces)}개의 공간을 찾았어요!**\n\n"
-            result += "---\n\n"
+            result = f"**📌\u00A0총\u00A0{len(spaces)}개의 공간을 찾았어요!**\n\n"
 
             for i, space in enumerate(spaces, 1):
-                result += f"**{i}\\.\u00A0{space.get('parent_facility', '정보없음')} – {space.get('space_name', '정보없음')}**\n"
+                result += f"**{i}.\u00A0{space.get('parent_facility', '정보없음')} – {space.get('space_name', '정보없음')}**\n"
                 result += f"{space.get('introduction', '정보없음')}\n"
                 result += f"\u00A0\u00A0📍 위치 : {space.get('location', '정보없음')}\n"
                 result += f"\u00A0\u00A0👥 인원 : {self.format_capacity_info(space)}\n"
@@ -414,16 +593,17 @@ class ChatHandler:
                 if link_url and link_url != '정보없음':
                     result += f"\u00A0\u00A0🔗 링크 : [자세히 보기]({link_url})\n"
 
-                result += "\n---\n\n"
+                result += "---"
 
             result += "[SHOW_CONDITIONAL_SEARCH_BUTTONS]"
+
             return result
 
         except Exception:
             return "검색 결과를 표시하는 중 오류가 발생했습니다."
 
     def format_no_results_message(self, region, capacity, purpose):
-        """결과 없음 메시지 포맷팅"""
+        """결과 없음 메시지 포맷팅 - 버튼 추가"""
         conditions = []
         if region: conditions.append(f"지역: {region}")
         if capacity: conditions.append(f"인원: {capacity}")
@@ -436,19 +616,20 @@ class ChatHandler:
         result += "\u00A0\u00A0지역 조건을 넓혀보거나\n"
         result += "\u00A0\u00A0인원 조건을 '상관없음'으로 변경하거나\n"
         result += "\u00A0\u00A0다른 이용 목적을 선택해보세요\n\n"
-        result += "[🔄 새로 검색하기] 버튼을 눌러 다시 시도하세요!"
+        result += "💡 **다른 방법으로 공간을 찾아보세요!**\n\n"
+        result += "[SHOW_CONDITIONAL_SEARCH_BUTTONS]"
 
         return result
 
     def handle_random_recommendation(self):
-        """랜덤 추천 처리"""
+        """랜덤 추천 처리 - 추가 버튼 포함"""
         try:
             if not self.spaces_data:
                 return "추천할 청년공간 정보를 불러올 수 없습니다."
 
             random_space = random.choice(self.spaces_data)
 
-            result = "🎲 **랜덤으로 추천해드릴게요!**\n\n"
+            result = "**🎲\u00A0\u00A0랜덤으로 추천해드릴게요!**\n\n"
             result += f"**{random_space.get('parent_facility', '정보없음')} – {random_space.get('space_name', '정보없음')}**\n"
             result += f"{random_space.get('introduction', '정보없음')}\n"
             result += f"\u00A0\u00A0📍 위치 : {random_space.get('location', '정보없음')}\n"
@@ -460,7 +641,7 @@ class ChatHandler:
             if link_url and link_url != '정보없음':
                 result += f"\u00A0\u00A0🔗 링크 : [자세히 보기]({link_url})\n"
 
-            result += "\n---\n\n"
+            result += "---"
             result += "[SHOW_ADDITIONAL_RANDOM]"
 
             return result
@@ -528,12 +709,26 @@ class ChatHandler:
         special_commands = {
             "청년 공간 상세": "[SPACE_DETAIL_SEARCH]",
             "청년 공간 프로그램 확인하기": "[PROGRAM_REGIONS]",
-            "✨ 랜덤 추천": self.handle_random_recommendation()
+            "✨ 랜덤 추천": self.handle_random_recommendation(),
+            "33개 센터 전체보기": self.get_all_centers_cards()
         }
 
         if user_message_text in special_commands:
             command_result = special_commands[user_message_text]
             return command_result() if callable(command_result) else command_result
+
+        if user_message_text.endswith(' 상세보기'):
+            center_name = user_message_text.replace(' 상세보기', '').strip()
+            return self.get_center_detail_with_spaces(center_name)
+
+        if '-' in user_message_text and user_message_text.endswith(' 상세보기'):
+            space_detail = user_message_text.replace(' 상세보기', '').strip()
+            if '-' in space_detail:
+                parts = space_detail.split('-', 1)
+                if len(parts) == 2:
+                    facility_name = parts[0].strip()
+                    space_name = parts[1].strip()
+                    return self.get_space_detail_by_facility_and_name(facility_name, space_name)
 
         if "조건별 검색:" in user_message_text:
             try:

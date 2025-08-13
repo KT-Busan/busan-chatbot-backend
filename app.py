@@ -62,6 +62,42 @@ def validate_required_fields(data, required_fields):
     return None, None
 
 
+def load_keyword_data(self):
+    """spaces_busan_keyword.json 데이터 로드 및 정규화"""
+    try:
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        project_root = os.path.dirname(basedir)
+        config_path = os.path.join(project_root, 'config')
+        keyword_file = os.path.join(config_path, 'spaces_busan_keyword.json')
+
+        if os.path.exists(keyword_file):
+            with open(keyword_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                raw_data = data.get('spaces_busan_keyword', [])
+
+                normalized_data = []
+                for item in raw_data:
+                    normalized_item = item.copy()
+                    keywords = item.get('keywords')
+
+                    if keywords is None:
+                        normalized_item['keywords'] = []
+                    elif isinstance(keywords, str):
+                        normalized_item['keywords'] = [keywords]
+                    elif isinstance(keywords, list):
+                        normalized_item['keywords'] = keywords
+                    else:
+                        normalized_item['keywords'] = []
+
+                    normalized_data.append(normalized_item)
+
+                return normalized_data
+        return []
+    except Exception as e:
+        print(f"키워드 데이터 로드 중 오류: {e}")
+        return []
+
+
 # === 채팅 관련 API ===
 @app.route("/api/chat", methods=["POST", "OPTIONS"])
 def chat():
@@ -538,6 +574,121 @@ def reload_spaces_data():
 
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/spaces/cache-data', methods=['GET'])
+def get_cache_data():
+    """33개 센터 데이터 반환 (youth_spaces_cache.json)"""
+    try:
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        instance_path = os.path.join(basedir, 'instance')
+        cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
+
+        if os.path.exists(cache_file):
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                return {
+                    'success': True,
+                    'data': data.get('data', []),
+                    'count': len(data.get('data', [])),
+                    'message': f"{len(data.get('data', []))}개의 센터 데이터를 불러왔습니다."
+                }
+        else:
+            return {
+                'success': False,
+                'data': [],
+                'count': 0,
+                'message': '센터 데이터 파일을 찾을 수 없습니다.'
+            }, 404
+
+    except Exception as e:
+        return {
+            'success': False,
+            'error': str(e),
+            'data': [],
+            'count': 0,
+            'message': '센터 데이터를 불러오는 중 오류가 발생했습니다.'
+        }, 500
+
+
+@app.route('/api/spaces/keyword-data', methods=['GET'])
+def get_keyword_data():
+    """키워드 데이터 반환 (spaces_busan_keyword.json)"""
+    try:
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        config_path = os.path.join(basedir, 'config')
+        keyword_file = os.path.join(config_path, 'spaces_busan_keyword.json')
+
+        if os.path.exists(keyword_file):
+            with open(keyword_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                keyword_data = data.get('spaces_busan_keyword', [])
+                return {
+                    'success': True,
+                    'data': keyword_data,
+                    'count': len(keyword_data),
+                    'message': f"{len(keyword_data)}개의 키워드 데이터를 불러왔습니다."
+                }
+        else:
+            return {
+                'success': False,
+                'data': [],
+                'count': 0,
+                'message': '키워드 데이터 파일을 찾을 수 없습니다.'
+            }, 404
+
+    except Exception as e:
+        return {
+            'success': False,
+            'error': str(e),
+            'data': [],
+            'count': 0,
+            'message': '키워드 데이터를 불러오는 중 오류가 발생했습니다.'
+        }, 500
+
+
+@app.route('/api/spaces/rental-spaces/<center_name>', methods=['GET'])
+def get_rental_spaces(center_name):
+    """특정 센터의 대여가능한 공간들 반환"""
+    try:
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        config_path = os.path.join(basedir, 'config')
+        spaces_file = os.path.join(config_path, 'spaces_busan_youth.json')
+
+        if os.path.exists(spaces_file):
+            with open(spaces_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                all_spaces = data.get('spaces_busan_youth', [])
+
+                # 해당 센터의 공간들만 필터링
+                center_spaces = [
+                    space for space in all_spaces
+                    if space.get('parent_facility') == center_name
+                ]
+
+                return {
+                    'success': True,
+                    'data': center_spaces,
+                    'count': len(center_spaces),
+                    'center_name': center_name,
+                    'message': f"{center_name}의 {len(center_spaces)}개 대여공간을 찾았습니다."
+                }
+        else:
+            return {
+                'success': False,
+                'data': [],
+                'count': 0,
+                'message': '대여공간 데이터 파일을 찾을 수 없습니다.'
+            }, 404
+
+    except Exception as e:
+        return {
+            'success': False,
+            'error': str(e),
+            'data': [],
+            'count': 0,
+            'message': '대여공간 데이터를 불러오는 중 오류가 발생했습니다.'
+        }, 500
 
 
 # === 헬스체크 ===

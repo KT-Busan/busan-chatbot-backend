@@ -292,18 +292,19 @@ def match_program_region(program, region, region_normalized, spaces_data):
 def format_program_list(programs, region, max_count=3):
     """프로그램 목록 포맷팅"""
     if not programs:
-        return (f"📌 {region} 청년공간 프로그램 안내(마감 임박순)\n\n"
+        return (f"**📌\u00A0\u00A0{region} 청년공간 프로그램 안내(마감 임박순)**\n\n"
                 f"현재 {region}에서 모집중인 청년 공간 프로그램을 찾을 수 없습니다.\n"
                 "다른 지역을 선택해보시거나, 전체 프로그램을 확인해보세요!\n\n"
-                "📌 전체 프로그램은 [청년 공간 프로그램](https://young.busan.go.kr/policySupport/act.nm?menuCd=261)에서 더 확인할 수 있어요.")
+                "📌\u00A0\u00A0전체 프로그램은 [청년 공간 프로그램](https://young.busan.go.kr/policySupport/act.nm?menuCd=261)에서 더 확인할 수 있어요.")
 
     programs.sort(key=lambda x: (
         x['deadline_date'] is None,
         x['deadline_date'] if x['deadline_date'] else datetime.max
     ))
 
-    result = f"📌 {region} 청년공간 프로그램 안내(마감 임박순)\n\n"
-    display_count = min(max_count, len(programs))
+    result = f"**📌\u00A0\u00A0{region} 청년공간 프로그램 안내(마감 임박순)**\n\n"
+
+    display_count = min(3, len(programs))
 
     for i, program in enumerate(programs[:display_count], 1):
         display_region = program.get('region', '') or region
@@ -312,18 +313,15 @@ def format_program_list(programs, region, max_count=3):
         for region_tag in [f"[{region}]", f"[{display_region}]"]:
             program_title = program_title.replace(region_tag, "").strip()
 
-        result += f"{i}\\.\u00A0{display_region} {program_title}\n"
+        result += f"**{i}.\u00A0\u00A0{display_region} {program_title}**\n"
         result += f"\u00A0\u00A0📍 장소 : {program.get('location', '장소 미정')}\n"
         result += f"\u00A0\u00A0📅 신청기간 : {program.get('application_period', '신청기간 미정')}\n"
+        result += f"\u00A0\u00A0🔗 [자세히 보기]({program['link']})\n" if program.get('link') else "🔗 자세히 보기\n"
 
-        if program.get('link'):
-            result += f"\u00A0\u00A0🔗 [자세히 보기]({program['link']})\n"
-        result += "\n"
+        if i < display_count:
+            result += "---\n"
 
-    if len(programs) > max_count:
-        result += f"... 외 {len(programs) - max_count}개 프로그램 더 있음\n\n"
-
-    result += "📌 전체 프로그램은 [청년 공간 프로그램](https://young.busan.go.kr/policySupport/act.nm?menuCd=261)에서 더 확인할 수 있어요."
+    result += "\n📌\u00A0\u00A0전체 프로그램은 [청년 공간 프로그램](https://young.busan.go.kr/policySupport/act.nm?menuCd=261)에서 더 확인할 수 있어요."
     return result
 
 
@@ -367,9 +365,9 @@ def search_programs_by_keyword(keyword):
     ]
 
     if not filtered_programs:
-        return f"**{keyword}** 관련 모집중인 청년 프로그램을 찾을 수 없습니다.\n\n다른 키워드로 검색해보세요!"
+        return f"{keyword} 관련 모집중인 청년 프로그램을 찾을 수 없습니다.\n\n다른 키워드로 검색해보세요!"
 
-    result = f"🔍 **{keyword}** 검색 결과 ({len(filtered_programs)}개 모집중)\n\n"
+    result = f"🔍 {keyword} 검색 결과 ({len(filtered_programs)}개 모집중)\n\n"
 
     for program in filtered_programs[:8]:
         result += format_program_info(program) + "\n"
@@ -389,13 +387,13 @@ def format_program_info(program, deadline_info=""):
         result += f"{status_emoji} {program['status']}\n"
 
     if program.get('application_period'):
-        result += f"📅 신청기간: {program['application_period']}\n"
+        result += f"📅 신청기간 : {program['application_period']}\n"
 
     if program.get('location'):
-        result += f"📍 장소: {program['location']}\n"
+        result += f"📍 장소 : {program['location']}\n"
 
     if program.get('region'):
-        result += f"🏛️ 지역: {program['region']}\n"
+        result += f"🏛️ 지역 : {program['region']}\n"
 
     if program.get('link'):
         result += f"🔗 [자세히 보기]({program['link']})\n"
@@ -422,7 +420,7 @@ def get_all_youth_programs():
         regions.setdefault(region, []).append(program)
 
     for region, region_programs in sorted(regions.items()):
-        result += f"**{region}** ({len(region_programs)}개)\n"
+        result += f"{region} ({len(region_programs)}개)\n"
         for program in region_programs[:3]:
             result += f"{program['title']}\n"
             if program.get('application_period'):
