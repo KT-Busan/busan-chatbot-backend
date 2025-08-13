@@ -58,26 +58,36 @@ class ChatHandler:
             print("⚠️ 공간 데이터가 여전히 비어있음!")
 
     def load_centers_data(self):
-        """youth_spaces_cache.json 데이터 로드 (33개 센터 정보)"""
+        """youth_spaces_cache.json 데이터 로드 - config 우선, instance 차선"""
         try:
             basedir = os.path.abspath(os.path.dirname(__file__))
             project_root = os.path.dirname(basedir)
-            instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
-            cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
 
-            print(f"📁 centers_data 파일 경로: {cache_file}")
-            print(f"📁 파일 존재 여부: {os.path.exists(cache_file)}")
-            print(f"📁 RENDER_DISK_PATH: {os.environ.get('RENDER_DISK_PATH', 'None')}")
+            config_file = os.path.join(project_root, 'config', 'youth_spaces_cache.json')
+            print(f"📁 config centers_data 경로: {config_file}")
+            print(f"📁 config 파일 존재: {os.path.exists(config_file)}")
 
-            if os.path.exists(cache_file):
-                with open(cache_file, 'r', encoding='utf-8') as f:
+            if os.path.exists(config_file):
+                with open(config_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     result = data.get('data', [])
-                    print(f"✅ centers_data 로드 성공: {len(result)}개")
+                    print(f"✅ config에서 centers_data 로드 성공: {len(result)}개")
                     return result
-            else:
-                print("❌ youth_spaces_cache.json 파일을 찾을 수 없음")
-                return []
+
+            instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
+            instance_file = os.path.join(instance_path, 'youth_spaces_cache.json')
+            print(f"📁 instance centers_data 경로: {instance_file}")
+            print(f"📁 instance 파일 존재: {os.path.exists(instance_file)}")
+
+            if os.path.exists(instance_file):
+                with open(instance_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    result = data.get('data', [])
+                    print(f"✅ instance에서 centers_data 로드 성공: {len(result)}개")
+                    return result
+
+            print("❌ config, instance 모든 경로에서 파일을 찾을 수 없음")
+            return []
 
         except Exception as e:
             print(f"❌ centers_data 로드 실패: {str(e)}")
