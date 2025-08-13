@@ -62,12 +62,17 @@ def validate_required_fields(data, required_fields):
     return None, None
 
 
-def load_keyword_data(self):
+def get_config_path():
+    """config 경로 반환"""
+    config_path = os.path.join(basedir, 'config')
+    os.makedirs(config_path, exist_ok=True)
+    return config_path
+
+
+def load_keyword_data():
     """spaces_busan_keyword.json 데이터 로드 및 정규화"""
     try:
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        project_root = os.path.dirname(basedir)
-        config_path = os.path.join(project_root, 'config')
+        config_path = get_config_path()
         keyword_file = os.path.join(config_path, 'spaces_busan_keyword.json')
 
         if os.path.exists(keyword_file):
@@ -459,8 +464,7 @@ def get_spaces_by_region_debug(region):
 def get_busan_youth_spaces():
     """부산 청년공간 데이터 반환 (JSON 파일 형식으로)"""
     try:
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        config_path = os.path.join(basedir, 'config')
+        config_path = get_config_path()
         spaces_file = os.path.join(config_path, 'spaces_busan_youth.json')
 
         print(f"🔍 JSON 파일 경로: {spaces_file}")
@@ -506,10 +510,13 @@ def get_busan_youth_spaces():
 # === 디버깅 관련 API ===
 def get_file_path_status():
     """파일 경로 상태 확인 공통 함수"""
+    config_path = get_config_path()
+
     possible_paths = [
-        os.path.join(instance_path, 'youth_spaces_cache.json'),
+        os.path.join(config_path, 'youth_spaces_cache.json'),
+        os.path.join(config_path, 'youth_programs_cache.json'),
         os.path.join(instance_path, 'youth_spaces_overrides.json'),
-        os.path.join(basedir, 'config', 'spaces_busan_youth.json'),
+        os.path.join(config_path, 'spaces_busan_youth.json'),
     ]
 
     path_status = {}
@@ -541,6 +548,7 @@ def get_spaces_debug_status():
             'current_dir': os.getcwd(),
             'app_dir': basedir,
             'instance_path': instance_path,
+            'config_path': get_config_path(),
             'render_path': os.environ.get('RENDER_DISK_PATH', 'None'),
             'sample_merged_space': merged_spaces[0] if merged_spaces else None
         })
@@ -579,12 +587,10 @@ def reload_spaces_data():
 
 @app.route('/api/spaces/cache-data', methods=['GET'])
 def get_cache_data():
-    """센터 데이터 반환 (youth_spaces_cache.json) - 없으면 자동 생성"""
+    """센터 데이터 반환 (youth_spaces_cache.json) - config에서 자동 로드"""
     try:
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        instance_path = os.path.join(basedir, 'instance')
-        config_path = os.path.join(basedir, 'config')
-        cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
+        config_path = get_config_path()
+        cache_file = os.path.join(config_path, 'youth_spaces_cache.json')
         spaces_file = os.path.join(config_path, 'spaces_busan_youth.json')
 
         if not os.path.exists(cache_file):
@@ -593,7 +599,7 @@ def get_cache_data():
                     spaces_data = json.load(f)
                     if isinstance(spaces_data, dict):
                         spaces_data = spaces_data.get('spaces_busan_youth', spaces_data)
-                os.makedirs(instance_path, exist_ok=True)
+
                 with open(cache_file, 'w', encoding='utf-8') as f:
                     json.dump({"data": spaces_data}, f, ensure_ascii=False, indent=2)
                 print(f"✅ {cache_file} 자동 생성 완료 ({len(spaces_data)}개 데이터)")
@@ -629,8 +635,7 @@ def get_cache_data():
 def get_keyword_data():
     """키워드 데이터 반환 (spaces_busan_keyword.json)"""
     try:
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        config_path = os.path.join(basedir, 'config')
+        config_path = get_config_path()
         keyword_file = os.path.join(config_path, 'spaces_busan_keyword.json')
 
         if os.path.exists(keyword_file):
@@ -665,8 +670,7 @@ def get_keyword_data():
 def get_rental_spaces(center_name):
     """특정 센터의 대여가능한 공간들 반환"""
     try:
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        config_path = os.path.join(basedir, 'config')
+        config_path = get_config_path()
         spaces_file = os.path.join(config_path, 'spaces_busan_youth.json')
 
         if os.path.exists(spaces_file):

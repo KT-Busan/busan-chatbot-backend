@@ -158,17 +158,8 @@ class BusanYouthSpaceCrawler:
         return all_spaces
 
 
-def get_instance_path():
-    """인스턴스 경로 반환 - 런타임 캐시용"""
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    project_root = os.path.dirname(basedir)
-    instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
-    os.makedirs(instance_path, exist_ok=True)
-    return instance_path
-
-
 def get_config_path():
-    """config 경로 반환 - 정적 파일용"""
+    """config 경로 반환"""
     basedir = os.path.abspath(os.path.dirname(__file__))
     project_root = os.path.dirname(basedir)
     config_path = os.path.join(project_root, 'config')
@@ -176,30 +167,31 @@ def get_config_path():
     return config_path
 
 
+def get_instance_path():
+    """인스턴스 경로 반환 - overrides 파일용"""
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    project_root = os.path.dirname(basedir)
+    instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
+    os.makedirs(instance_path, exist_ok=True)
+    return instance_path
+
+
 def get_cache_file_path():
-    """캐시 파일 경로 반환 - config 폴더 우선, 없으면 instance"""
+    """캐시 파일 경로 반환 - config 폴더만 사용"""
     config_file = os.path.join(get_config_path(), 'youth_spaces_cache.json')
-    instance_file = os.path.join(get_instance_path(), 'youth_spaces_cache.json')
-
-    if os.path.exists(config_file):
-        print(f"🔧 config에서 캐시 파일 사용: {config_file}")
-        return config_file
-
-    print(f"🔧 instance에서 캐시 파일 사용: {instance_file}")
-    return instance_file
+    return config_file
 
 
 def get_overrides_file_path():
     """Override 파일 경로 반환"""
     overrides_file = os.path.join(get_instance_path(), 'youth_spaces_overrides.json')
-    print(f"🔧 overrides_file_path: {overrides_file}")
     return overrides_file
 
 
 def save_to_config_file(spaces_data):
     """config 폴더에 정적 파일로 저장 (Git에 포함됨)"""
     try:
-        config_file = os.path.join(get_config_path(), 'youth_spaces_cache.json')
+        config_file = get_cache_file_path()
         cache_data = {
             'cached_at': datetime.now().isoformat(),
             'data': spaces_data
@@ -251,21 +243,13 @@ def merge_spaces_data(cache_spaces, override_spaces):
 
 
 def crawl_new_data():
-    """새로운 데이터 크롤링 및 캐시 저장"""
+    """새로운 데이터 크롤링 및 config에 저장"""
     try:
         crawler = BusanYouthSpaceCrawler()
         spaces = crawler.crawl_all_spaces()
 
+        # config 폴더에 저장
         save_to_config_file(spaces)
-
-        cache_data = {
-            'cached_at': datetime.now().isoformat(),
-            'data': spaces
-        }
-
-        cache_file = get_cache_file_path()
-        with open(cache_file, 'w', encoding='utf-8') as f:
-            json.dump(cache_data, f, ensure_ascii=False, indent=2)
 
         return spaces
     except Exception:
@@ -273,21 +257,19 @@ def crawl_new_data():
 
 
 def get_cache_data_only():
-    """캐시 데이터만 가져오기 - config 우선, 없으면 크롤링"""
+    """캐시 데이터만 가져오기 - config 파일 우선"""
     cache_file = get_cache_file_path()
-    cache_duration = timedelta(hours=24)
+    # cache_duration = timedelta(hours=24)
+    cache_duration = timedelta(minutes=1)
 
     if os.path.exists(cache_file):
         try:
             with open(cache_file, 'r', encoding='utf-8') as f:
                 cached_data = json.load(f)
 
-            if 'config' in cache_file:
-                print(f"✅ config 파일에서 센터 데이터 로드: {len(cached_data.get('data', []))}개")
-                return cached_data['data']
-
             cache_time = datetime.fromisoformat(cached_data['cached_at'])
             if datetime.now() - cache_time < cache_duration:
+                print(f"✅ config 파일에서 센터 데이터 로드: {len(cached_data.get('data', []))}개")
                 return cached_data['data']
             else:
                 return crawl_new_data()

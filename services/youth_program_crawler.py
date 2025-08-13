@@ -140,7 +140,7 @@ class BusanYouthProgramCrawler:
                 break
 
             all_programs.extend(page_programs)
-            time.sleep(1)  # 페이지 간 지연
+            time.sleep(1)
 
         self.programs_data = all_programs
         return all_programs
@@ -218,20 +218,26 @@ def get_region_from_location(location, spaces_data=None):
     return ""
 
 
-def get_cache_paths():
-    """캐시 파일 경로 반환"""
+def get_config_path():
+    """config 경로 반환"""
     basedir = os.path.abspath(os.path.dirname(__file__))
     project_root = os.path.dirname(basedir)
-    instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
-    os.makedirs(instance_path, exist_ok=True)
+    config_path = os.path.join(project_root, 'config')
+    os.makedirs(config_path, exist_ok=True)
+    return config_path
 
-    return os.path.join(instance_path, 'youth_programs_cache.json')
+
+def get_cache_file_path():
+    """캐시 파일 경로 반환 - config 폴더만 사용"""
+    config_file = os.path.join(get_config_path(), 'youth_programs_cache.json')
+    return config_file
 
 
 def get_youth_programs_data():
-    """청년 프로그램 데이터 가져오기 (캐시 우선)"""
-    cache_file = get_cache_paths()
-    cache_duration = timedelta(hours=3)
+    """청년 프로그램 데이터 가져오기 (config 파일 우선)"""
+    cache_file = get_cache_file_path()
+    # cache_duration = timedelta(hours=3)
+    cache_duration = timedelta(minutes=1)
 
     if os.path.exists(cache_file):
         try:

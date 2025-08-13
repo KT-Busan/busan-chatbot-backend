@@ -57,13 +57,20 @@ class ChatHandler:
         else:
             print("⚠️ 공간 데이터가 여전히 비어있음!")
 
-    def load_centers_data(self):
-        """youth_spaces_cache.json 데이터 로드 - config 우선, instance 차선"""
-        try:
-            basedir = os.path.abspath(os.path.dirname(__file__))
-            project_root = os.path.dirname(basedir)
+    def get_config_path(self):
+        """config 경로 반환"""
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        project_root = os.path.dirname(basedir)
+        config_path = os.path.join(project_root, 'config')
+        os.makedirs(config_path, exist_ok=True)
+        return config_path
 
-            config_file = os.path.join(project_root, 'config', 'youth_spaces_cache.json')
+    def load_centers_data(self):
+        """youth_spaces_cache.json 데이터 로드 - config 폴더에서만"""
+        try:
+            config_path = self.get_config_path()
+            config_file = os.path.join(config_path, 'youth_spaces_cache.json')
+
             print(f"📁 config centers_data 경로: {config_file}")
             print(f"📁 config 파일 존재: {os.path.exists(config_file)}")
 
@@ -74,19 +81,7 @@ class ChatHandler:
                     print(f"✅ config에서 centers_data 로드 성공: {len(result)}개")
                     return result
 
-            instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
-            instance_file = os.path.join(instance_path, 'youth_spaces_cache.json')
-            print(f"📁 instance centers_data 경로: {instance_file}")
-            print(f"📁 instance 파일 존재: {os.path.exists(instance_file)}")
-
-            if os.path.exists(instance_file):
-                with open(instance_file, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                    result = data.get('data', [])
-                    print(f"✅ instance에서 centers_data 로드 성공: {len(result)}개")
-                    return result
-
-            print("❌ config, instance 모든 경로에서 파일을 찾을 수 없음")
+            print("❌ config 경로에서 파일을 찾을 수 없음")
             return []
 
         except Exception as e:
@@ -96,9 +91,7 @@ class ChatHandler:
     def load_keyword_data(self):
         """spaces_busan_keyword.json 데이터 로드"""
         try:
-            basedir = os.path.abspath(os.path.dirname(__file__))
-            project_root = os.path.dirname(basedir)
-            config_path = os.path.join(project_root, 'config')
+            config_path = self.get_config_path()
             keyword_file = os.path.join(config_path, 'spaces_busan_keyword.json')
 
             print(f"📁 keyword_data 파일 경로: {keyword_file}")
@@ -333,9 +326,7 @@ class ChatHandler:
     def load_spaces_data(self):
         """spaces_busan_youth.json 데이터 로드"""
         try:
-            basedir = os.path.abspath(os.path.dirname(__file__))
-            project_root = os.path.dirname(basedir)
-            config_path = os.path.join(project_root, 'config')
+            config_path = self.get_config_path()
             spaces_file = os.path.join(config_path, 'spaces_busan_youth.json')
 
             print(f"📁 spaces_data 파일 경로: {spaces_file}")

@@ -18,13 +18,13 @@ class ProgramHandler:
             'message': f'{context} 중 오류가 발생했습니다.' if context else '오류가 발생했습니다.'
         }
 
-    def _get_instance_path(self):
-        """인스턴스 경로 반환"""
+    def _get_config_path(self):
+        """config 경로 반환"""
         basedir = os.path.abspath(os.path.dirname(__file__))
         project_root = os.path.dirname(basedir)
-        instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
-        os.makedirs(instance_path, exist_ok=True)
-        return instance_path
+        config_path = os.path.join(project_root, 'config')
+        os.makedirs(config_path, exist_ok=True)
+        return config_path
 
     def get_all_programs(self):
         """전체 프로그램 목록"""
@@ -74,7 +74,7 @@ class ProgramHandler:
         return filtered_programs
 
     def crawl_programs_manually(self):
-        """수동 프로그램 크롤링"""
+        """수동 프로그램 크롤링 - config 폴더에 저장"""
         try:
             crawler = BusanYouthProgramCrawler()
             programs = crawler.crawl_all_programs()
@@ -84,7 +84,9 @@ class ProgramHandler:
                 'data': programs
             }
 
-            cache_file = os.path.join(self._get_instance_path(), 'youth_programs_cache.json')
+            config_path = self._get_config_path()
+            cache_file = os.path.join(config_path, 'youth_programs_cache.json')
+
             with open(cache_file, 'w', encoding='utf-8') as f:
                 json.dump(cache_data, f, ensure_ascii=False, indent=2)
 
@@ -93,7 +95,8 @@ class ProgramHandler:
                 'data': programs,
                 'count': len(programs),
                 'message': f'크롤링 완료! {len(programs)}개의 모집중인 프로그램을 수집했습니다.',
-                'crawled_at': datetime.now().isoformat()
+                'crawled_at': datetime.now().isoformat(),
+                'saved_to': cache_file
             }
         except Exception as e:
             return self._handle_api_error(e, '크롤링')

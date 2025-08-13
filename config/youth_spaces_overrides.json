@@ -1,0 +1,77 @@
+{
+  "cached_at": "2025-08-08T12:00:00",
+  "data": [
+    {
+      "region": "사상구",
+      "name": "사상청년브릿지",
+      "contact": "051-310-5252",
+      "description": "청년프로그램 운영, 공간 대여",
+      "address": "부산 사상구 광장로 19",
+      "hours": "(월,화) 10:00~18:00, (수~금) 10:00~22:00, (토) 13:00~17:00",
+      "homepage": "https://www.spacecloud.kr/space/70707",
+      "sns": "",
+      "rental_link": "",
+      "program_link": ""
+    },
+    {
+      "region": "해운대구",
+      "name": "해운대 청년JOB카페",
+      "contact": "051-321-3307",
+      "description": "미취업 청년 취업지원을 위한 잡(JOB)카페",
+      "address": "부산광역시 해운대구 반여로 120, 해운대기술교육원 1층",
+      "hours": "평일 09:00~18:00",
+      "homepage": "https://www.haeundae.go.kr/youth/index.do",
+      "sns": "",
+      "rental_link": "",
+      "program_link": "https://www.haeundae.go.kr/youth/index.do"
+    },
+    {
+      "region": "북구",
+      "name": "청년 복합문화 창작공간 SPACE 119",
+      "contact": "051-309-4066",
+      "description": "청년 예술인 창작 및 활동 공간(창작실, 오픈스튜디오 등)",
+      "address": "부산광역시 북구 금곡대로616번길 139(금곡동)",
+      "hours": "(월~금) 09:00~23:00",
+      "homepage": "",
+      "sns": "",
+      "rental_link": "",
+      "program_link": ""
+    },
+    {
+      "region": "남구",
+      "name": "동네 청년공간 공간숲",
+      "contact": "051-607-3665",
+      "description": "지역 청년 누구나 이용 가능하며, 청년들이 관계망을 형성하고 편안하게 쉬어가는 공간입니다.",
+      "address": "부산광역시 남구 용소로14번길 10(대연동), 2층",
+      "hours": "(평일) 14:00~21:00, (토) 12:00~19:00, 일요일 및 공유일 휴무",
+      "homepage": "https://naver.me/5Hko5fQC",
+      "sns": "https://www.instagram.com/space_forest24",
+      "rental_link": "https://naver.me/5Hko5fQC",
+      "program_link": "https://www.instagram.com/space_forest24"
+    },
+    {
+      "region": "부산진구",
+      "name": "부산진구 청년마루",
+      "contact": "051-893-9155",
+      "description": "청년들이 관계망을 형성하고 공동체를 구성할 수 있는 자유 공간",
+      "address": "부산광역시 부산진구 백양대로 78번길 15(당감동)",
+      "hours": "(월~금) 09:00~21:00  (토) 10:00~15:00,  일요일 및 공휴일 휴무",
+      "homepage": " https://blog.naver.com/youngwithjingu",
+      "sns": "https://www.instagram.com/youngmarujingu",
+      "rental_link": "",
+      "program_link": "https://www.instagram.com/youngmarujingu"
+    },
+    {
+      "region": "부산진구",
+      "name": "부산진구청년플랫폼 청년 FLEX",
+      "contact": "051-805-6342",
+      "description": "핫플 전포역에 위치한 신상 청년시설",
+      "address": "부산광역시 부산진구 전포대로 지하 181(전포역)",
+      "hours": "(월~금) 11:00~20:00, (토) 11:00~15:00,  일요일 및 공휴일 휴무",
+      "homepage": "https://blog.naver.com/youngwithjingu",
+      "sns": "https://www.instagram.com/youngwithjingu",
+      "rental_link": "https://www.instagram.com/youngwithjingu",
+      "program_link": "https://www.instagram.com/youngwithjingu"
+    }
+  ]
+}
