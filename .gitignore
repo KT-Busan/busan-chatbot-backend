@@ -66,6 +66,9 @@ db.sqlite3-journal
 
 # Flask stuff:
 instance/
+!instance/youth_spaces_cache.json
+!instance/youth_spaces_overrides.json
+!instance/youth_programs_cache.json
 .webassets-cache
 
 # Scrapy stuff:

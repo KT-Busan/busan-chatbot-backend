@@ -527,7 +527,8 @@ def get_spaces_debug_status():
     try:
         cache_spaces = space_handler.load_overrides_data()
         merged_spaces = space_handler.get_merged_spaces_data()
-        chat_spaces_count = len(chat_handler.spaces_data) if hasattr(chat_handler, 'spaces_data') and chat_handler.spaces_data else 0
+        chat_spaces_count = len(chat_handler.spaces_data) if hasattr(chat_handler,
+                                                                     'spaces_data') and chat_handler.spaces_data else 0
 
         return jsonify({
             'success': True,
@@ -578,28 +579,41 @@ def reload_spaces_data():
 
 @app.route('/api/spaces/cache-data', methods=['GET'])
 def get_cache_data():
-    """33개 센터 데이터 반환 (youth_spaces_cache.json)"""
+    """센터 데이터 반환 (youth_spaces_cache.json) - 없으면 자동 생성"""
     try:
         basedir = os.path.abspath(os.path.dirname(__file__))
         instance_path = os.path.join(basedir, 'instance')
+        config_path = os.path.join(basedir, 'config')
         cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
+        spaces_file = os.path.join(config_path, 'spaces_busan_youth.json')
 
-        if os.path.exists(cache_file):
-            with open(cache_file, 'r', encoding='utf-8') as f:
-                data = json.load(f)
+        if not os.path.exists(cache_file):
+            if os.path.exists(spaces_file):
+                with open(spaces_file, 'r', encoding='utf-8') as f:
+                    spaces_data = json.load(f)
+                    if isinstance(spaces_data, dict):
+                        spaces_data = spaces_data.get('spaces_busan_youth', spaces_data)
+                os.makedirs(instance_path, exist_ok=True)
+                with open(cache_file, 'w', encoding='utf-8') as f:
+                    json.dump({"data": spaces_data}, f, ensure_ascii=False, indent=2)
+                print(f"✅ {cache_file} 자동 생성 완료 ({len(spaces_data)}개 데이터)")
+            else:
                 return {
-                    'success': True,
-                    'data': data.get('data', []),
-                    'count': len(data.get('data', [])),
-                    'message': f"{len(data.get('data', []))}개의 센터 데이터를 불러왔습니다."
-                }
-        else:
-            return {
-                'success': False,
-                'data': [],
-                'count': 0,
-                'message': '센터 데이터 파일을 찾을 수 없습니다.'
-            }, 404
+                    'success': False,
+                    'data': [],
+                    'count': 0,
+                    'message': '센터 데이터 파일을 찾을 수 없습니다.'
+                }, 404
+
+        with open(cache_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        return {
+            'success': True,
+            'data': data.get('data', []),
+            'count': len(data.get('data', [])),
+            'message': f"{len(data.get('data', []))}개의 센터 데이터를 불러왔습니다."
+        }
 
     except Exception as e:
         return {
@@ -699,7 +713,8 @@ def health_check():
     try:
         override_count = len(space_handler.load_overrides_data())
         merged_count = len(space_handler.get_merged_spaces_data())
-        chat_spaces_count = len(chat_handler.spaces_data) if hasattr(chat_handler, 'spaces_data') and chat_handler.spaces_data else 0
+        chat_spaces_count = len(chat_handler.spaces_data) if hasattr(chat_handler,
+                                                                     'spaces_data') and chat_handler.spaces_data else 0
 
         return jsonify({
             'status': 'healthy',
