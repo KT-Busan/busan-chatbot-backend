@@ -35,7 +35,6 @@ class ChatHandler:
         self.keyword_mapping = self._init_keyword_mapping()
         self.purpose_mapping = self._init_purpose_mapping()
 
-        # 💡 데이터 로딩 실패 시 재시도
         if len(self.centers_data) == 0:
             print("⚠️ centers_data가 비어있음 - 재시도...")
             import time
@@ -45,7 +44,6 @@ class ChatHandler:
 
         print("✅ ChatHandler 초기화 완료!")
 
-        # 샘플 데이터 확인
         if self.centers_data:
             sample_center = self.centers_data[0]
             print(f"📋 센터 데이터 샘플: {sample_center.get('name', 'N/A')}")
@@ -63,15 +61,12 @@ class ChatHandler:
         """youth_spaces_cache.json 데이터 로드 (33개 센터 정보)"""
         try:
             basedir = os.path.abspath(os.path.dirname(__file__))
-
             project_root = os.path.dirname(basedir)
             instance_path = os.path.join(project_root, 'instance')
             cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
 
             print(f"📁 centers_data 파일 경로: {cache_file}")
             print(f"📁 파일 존재 여부: {os.path.exists(cache_file)}")
-            print(f"📁 프로젝트 루트: {project_root}")
-            print(f"📁 현재 디렉토리: {basedir}")
 
             if os.path.exists(cache_file):
                 with open(cache_file, 'r', encoding='utf-8') as f:
@@ -81,19 +76,6 @@ class ChatHandler:
                     return result
             else:
                 print("❌ youth_spaces_cache.json 파일을 찾을 수 없음")
-                try:
-                    print("🔄 API에서 직접 센터 데이터 가져오기 시도...")
-                    import requests
-                    response = requests.get('http://localhost:10000/api/spaces/cache-data', timeout=5)
-                    if response.status_code == 200:
-                        api_data = response.json()
-                        if api_data.get('success'):
-                            result = api_data.get('data', [])
-                            print(f"✅ API에서 centers_data 로드 성공: {len(result)}개")
-                            return result
-                except Exception as e:
-                    print(f"❌ API에서 데이터 가져오기 실패: {str(e)}")
-
                 return []
 
         except Exception as e:
@@ -108,12 +90,20 @@ class ChatHandler:
             config_path = os.path.join(project_root, 'config')
             keyword_file = os.path.join(config_path, 'spaces_busan_keyword.json')
 
+            print(f"📁 keyword_data 파일 경로: {keyword_file}")
+            print(f"📁 파일 존재 여부: {os.path.exists(keyword_file)}")
+
             if os.path.exists(keyword_file):
                 with open(keyword_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    return data.get('spaces_busan_keyword', [])
+                    result = data.get('spaces_busan_keyword', [])
+                    print(f"✅ keyword_data 로드 성공: {len(result)}개")
+                    return result
+            else:
+                print("❌ spaces_busan_keyword.json 파일을 찾을 수 없음")
             return []
-        except Exception:
+        except Exception as e:
+            print(f"❌ keyword_data 로드 실패: {str(e)}")
             return []
 
     def load_overrides_data(self):
@@ -332,17 +322,25 @@ class ChatHandler:
     def load_spaces_data(self):
         """spaces_busan_youth.json 데이터 로드"""
         try:
-            basedir = os.path.abspath(os.path.dirname(__file__))
-            project_root = os.path.dirname(basedir)
-            config_path = os.path.join(project_root, 'config')
+            basedir = os.path.abspath(os.path.dirname(__file__))  # /opt/render/project/src/handlers
+            project_root = os.path.dirname(basedir)  # /opt/render/project/src
+            config_path = os.path.join(project_root, 'config')  # /opt/render/project/src/config
             spaces_file = os.path.join(config_path, 'spaces_busan_youth.json')
+
+            print(f"📁 spaces_data 파일 경로: {spaces_file}")
+            print(f"📁 파일 존재 여부: {os.path.exists(spaces_file)}")
 
             if os.path.exists(spaces_file):
                 with open(spaces_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    return data.get('spaces_busan_youth', [])
+                    result = data.get('spaces_busan_youth', [])
+                    print(f"✅ spaces_data 로드 성공: {len(result)}개")
+                    return result
+            else:
+                print("❌ spaces_busan_youth.json 파일을 찾을 수 없음")
             return []
-        except Exception:
+        except Exception as e:
+            print(f"❌ spaces_data 로드 실패: {str(e)}")
             return []
 
     def extract_link_url(self, link):
