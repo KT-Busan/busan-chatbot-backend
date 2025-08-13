@@ -63,30 +63,38 @@ class ChatHandler:
         """youth_spaces_cache.json 데이터 로드 (33개 센터 정보)"""
         try:
             basedir = os.path.abspath(os.path.dirname(__file__))
+
             project_root = os.path.dirname(basedir)
+            instance_path = os.path.join(project_root, 'instance')
+            cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
 
-            # 💡 RENDER 환경에서는 instance 경로가 다를 수 있음
-            instance_paths = [
-                os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance'),
-                os.path.join(project_root, 'instance'),
-                os.path.join(basedir, 'instance')
-            ]
+            print(f"📁 centers_data 파일 경로: {cache_file}")
+            print(f"📁 파일 존재 여부: {os.path.exists(cache_file)}")
+            print(f"📁 프로젝트 루트: {project_root}")
+            print(f"📁 현재 디렉토리: {basedir}")
 
-            for instance_path in instance_paths:
-                cache_file = os.path.join(instance_path, 'youth_spaces_cache.json')
-                print(f"📁 centers_data 파일 경로 시도: {cache_file}")
-                print(f"📁 파일 존재 여부: {os.path.exists(cache_file)}")
-
-                if os.path.exists(cache_file):
-                    with open(cache_file, 'r', encoding='utf-8') as f:
-                        data = json.load(f)
-                        result = data.get('data', [])
-                        print(f"✅ centers_data 로드 성공: {len(result)}개")
-                        if result:  # 빈 배열이 아닌 경우만 반환
+            if os.path.exists(cache_file):
+                with open(cache_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    result = data.get('data', [])
+                    print(f"✅ centers_data 로드 성공: {len(result)}개")
+                    return result
+            else:
+                print("❌ youth_spaces_cache.json 파일을 찾을 수 없음")
+                try:
+                    print("🔄 API에서 직접 센터 데이터 가져오기 시도...")
+                    import requests
+                    response = requests.get('http://localhost:10000/api/spaces/cache-data', timeout=5)
+                    if response.status_code == 200:
+                        api_data = response.json()
+                        if api_data.get('success'):
+                            result = api_data.get('data', [])
+                            print(f"✅ API에서 centers_data 로드 성공: {len(result)}개")
                             return result
+                except Exception as e:
+                    print(f"❌ API에서 데이터 가져오기 실패: {str(e)}")
 
-            print("❌ youth_spaces_cache.json 파일을 찾을 수 없거나 빈 데이터")
-            return []
+                return []
 
         except Exception as e:
             print(f"❌ centers_data 로드 실패: {str(e)}")
