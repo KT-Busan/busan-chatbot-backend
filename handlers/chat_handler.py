@@ -16,46 +16,25 @@ class ChatHandler:
 
         try:
             self.client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-            print("✅ OpenAI 클라이언트 초기화 성공")
         except Exception as e:
             self.client = None
-            print(f"❌ OpenAI 클라이언트 초기화 실패: {str(e)}")
-
-        print("📂 데이터 파일 로딩 시작...")
 
         self.spaces_data = self.load_spaces_data()
-        print(f"📄 spaces_data 로드 완료: {len(self.spaces_data)}개")
-
         self.centers_data = self.load_centers_data()
-        print(f"🏢 centers_data 로드 완료: {len(self.centers_data)}개")
-
         self.keyword_data = self.load_keyword_data()
-        print(f"🏷️ keyword_data 로드 완료: {len(self.keyword_data)}개")
-
         self.keyword_mapping = self._init_keyword_mapping()
         self.purpose_mapping = self._init_purpose_mapping()
 
         if len(self.centers_data) == 0:
-            print("⚠️ centers_data가 비어있음 - 재시도...")
             import time
-            time.sleep(1)  # 1초 대기
+            time.sleep(1)
             self.centers_data = self.load_centers_data()
-            print(f"🔄 centers_data 재시도 결과: {len(self.centers_data)}개")
-
-        print("✅ ChatHandler 초기화 완료!")
 
         if self.centers_data:
             sample_center = self.centers_data[0]
-            print(f"📋 센터 데이터 샘플: {sample_center.get('name', 'N/A')}")
-        else:
-            print("⚠️ 센터 데이터가 여전히 비어있음!")
 
         if self.spaces_data:
             sample_space = self.spaces_data[0]
-            print(
-                f"🏠 공간 데이터 샘플: {sample_space.get('parent_facility', 'N/A')} - {sample_space.get('space_name', 'N/A')}")
-        else:
-            print("⚠️ 공간 데이터가 여전히 비어있음!")
 
     def get_config_path(self):
         """config 경로 반환"""
@@ -71,21 +50,15 @@ class ChatHandler:
             config_path = self.get_config_path()
             config_file = os.path.join(config_path, 'youth_spaces_cache.json')
 
-            print(f"📁 config centers_data 경로: {config_file}")
-            print(f"📁 config 파일 존재: {os.path.exists(config_file)}")
-
             if os.path.exists(config_file):
                 with open(config_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     result = data.get('data', [])
-                    print(f"✅ config에서 centers_data 로드 성공: {len(result)}개")
                     return result
 
-            print("❌ config 경로에서 파일을 찾을 수 없음")
             return []
 
         except Exception as e:
-            print(f"❌ centers_data 로드 실패: {str(e)}")
             return []
 
     def load_keyword_data(self):
@@ -94,20 +67,14 @@ class ChatHandler:
             config_path = self.get_config_path()
             keyword_file = os.path.join(config_path, 'spaces_busan_keyword.json')
 
-            print(f"📁 keyword_data 파일 경로: {keyword_file}")
-            print(f"📁 파일 존재 여부: {os.path.exists(keyword_file)}")
-
             if os.path.exists(keyword_file):
                 with open(keyword_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     result = data.get('spaces_busan_keyword', [])
-                    print(f"✅ keyword_data 로드 성공: {len(result)}개")
                     return result
-            else:
-                print("❌ spaces_busan_keyword.json 파일을 찾을 수 없음")
+
             return []
         except Exception as e:
-            print(f"❌ keyword_data 로드 실패: {str(e)}")
             return []
 
     def load_overrides_data(self):
@@ -198,7 +165,8 @@ class ChatHandler:
                 result += f"🔗 {' | '.join(links)}\n"
 
             if center_info.get('keywords'):
-                result += f"🏷️ 사용 가능한 키워드 : {', '.join(center_info['keywords'])}\n\n"
+                keywords_str = ', '.join(center_info['keywords'])
+                result += f"🏷️ 사용 가능한 키워드: {keywords_str}\n\n"
 
             rental_spaces = []
             for space in self.spaces_data:
@@ -329,20 +297,15 @@ class ChatHandler:
             config_path = self.get_config_path()
             spaces_file = os.path.join(config_path, 'spaces_busan_youth.json')
 
-            print(f"📁 spaces_data 파일 경로: {spaces_file}")
-            print(f"📁 파일 존재 여부: {os.path.exists(spaces_file)}")
-
             if os.path.exists(spaces_file):
                 with open(spaces_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     result = data.get('spaces_busan_youth', [])
-                    print(f"✅ spaces_data 로드 성공: {len(result)}개")
                     return result
-            else:
-                print("❌ spaces_busan_youth.json 파일을 찾을 수 없음")
+
             return []
+
         except Exception as e:
-            print(f"❌ spaces_data 로드 실패: {str(e)}")
             return []
 
     def extract_link_url(self, link):
@@ -767,8 +730,6 @@ class ChatHandler:
 
     def generate_bot_response(self, user_message_text, chat_id):
         """봇 응답 생성 로직"""
-        print(f"📥 사용자 메시지: '{user_message_text}'")
-
         special_commands = {
             "청년 공간 상세": "[SPACE_DETAIL_SEARCH]",
             "청년 공간 프로그램 확인하기": "[PROGRAM_REGIONS]",
@@ -779,20 +740,15 @@ class ChatHandler:
         if user_message_text in special_commands:
             command_result = special_commands[user_message_text]
             result = command_result() if callable(command_result) else command_result
-            print(f"📤 특수 명령 응답: {result[:100]}...")
             return result
 
         if user_message_text.endswith(' 상세보기'):
             center_name = user_message_text.replace(' 상세보기', '').strip()
-            print(f"🏢 센터 상세보기 요청: '{center_name}'")
-            print(f"📊 사용 가능한 센터 개수: {len(self.centers_data)}")
 
             if self.centers_data:
                 center_names = [center.get('name', '') for center in self.centers_data[:3]]
-                print(f"📝 센터명 예시: {center_names}")
 
             result = self.get_center_detail_with_spaces(center_name)
-            print(f"📤 센터 상세보기 응답: {result[:100]}...")
             return result
 
         if '-' in user_message_text and user_message_text.endswith(' 상세보기'):
@@ -802,19 +758,15 @@ class ChatHandler:
                 if len(parts) == 2:
                     facility_name = parts[0].strip()
                     space_name = parts[1].strip()
-                    print(f"🏠 공간 상세보기 요청: '{facility_name}' - '{space_name}'")
                     result = self.get_space_detail_by_facility_and_name(facility_name, space_name)
-                    print(f"📤 공간 상세보기 응답: {result[:100]}...")
                     return result
 
         if "조건별 검색:" in user_message_text:
             try:
                 conditions = self.parse_search_conditions(user_message_text)
                 result = self.handle_space_reservation_search(conditions)
-                print(f"📤 조건별 검색 응답: {result[:100]}...")
                 return result
             except Exception as e:
-                print(f"❌ 조건별 검색 오류: {str(e)}")
                 return "검색 조건 처리 중 오류가 발생했습니다."
 
         if " 프로그램" in user_message_text:
@@ -824,7 +776,6 @@ class ChatHandler:
 
             if region in regions:
                 result = search_programs_by_region(region)
-                print(f"📤 프로그램 검색 응답: {result[:100]}...")
                 return result
 
         regions = ['중구', '동구', '서구', '영도구', '부산진구', '동래구', '연제구',
@@ -832,13 +783,11 @@ class ChatHandler:
 
         if user_message_text.strip() in regions:
             result = search_spaces_by_region(user_message_text.strip())
-            print(f"📤 지역 검색 응답: {result[:100]}...")
             return result
 
         keyword_list = list(self.keyword_mapping.keys())
         if user_message_text.strip() in keyword_list:
             result = self.search_spaces_by_keyword_json(user_message_text.strip())
-            print(f"📤 키워드 검색 응답: {result[:100]}...")
             return result
 
         old_keyword_mapping = {
@@ -851,12 +800,10 @@ class ChatHandler:
         if user_message_text.strip() in old_keyword_mapping:
             new_keyword = old_keyword_mapping[user_message_text.strip()]
             result = self.search_spaces_by_keyword_json(new_keyword)
-            print(f"📤 구 키워드 검색 응답: {result[:100]}...")
             return result
 
         if any(keyword in user_message_text for keyword in ['스터디', '창업', '회의', '카페', '라운지', '센터']):
             result = search_spaces_by_keyword(user_message_text)
-            print(f"📤 일반 키워드 검색 응답: {result[:100]}...")
             return result
 
         try:
@@ -896,7 +843,6 @@ class ChatHandler:
     ---
     """
 
-            print(f"🤖 GPT 호출 시작...")
             response = self.client.chat.completions.create(
                 model="gpt-4o",
                 messages=[
@@ -905,11 +851,9 @@ class ChatHandler:
                 ]
             )
             result = response.choices[0].message.content
-            print(f"📤 GPT 응답: {result[:100]}...")
             return result
 
         except Exception as e:
-            print(f"❌ GPT 호출 오류: {str(e)}")
             return "죄송합니다, 답변 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
 
 
