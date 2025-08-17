@@ -146,7 +146,6 @@ class BusanYouthProgramCrawler:
         return all_programs
 
 
-# === 지역 매핑 상수 ===
 LOCATION_MAPPINGS = {
     '해운대': '해운대구', '해운대 청년채움공간': '해운대구', '해운대 청년JOB카페': '해운대구', '해운대 청년잡카페': '해운대구',
     '고고씽': '남구', '청년창조발전소 고고씽 Job': '남구', '청년창조발전소  고고씽 Job': '남구',
@@ -169,7 +168,6 @@ LOCATION_MAPPINGS = {
 }
 
 
-# === 헬퍼 함수들 ===
 def parse_deadline_date(application_period):
     """신청기간에서 마감일 추출 및 파싱"""
     try:
@@ -331,7 +329,6 @@ def format_program_list(programs, region, max_count=3):
     return result
 
 
-# === 메인 검색 함수들 ===
 def search_programs_by_region(region):
     """지역별 청년 프로그램 검색"""
     programs = get_youth_programs_data()

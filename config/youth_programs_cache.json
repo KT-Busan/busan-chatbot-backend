@@ -1,6 +1,56 @@
 {
-  "cached_at": "2025-08-15T23:07:24.272832",
+  "cached_at": "2025-08-17T14:23:06.125332",
   "data": [
+    {
+      "title": "[Event] QR 찍고 선물 받자!",
+      "region": "",
+      "location": "청년창조발전소  고고씽 Job",
+      "status": "모집중",
+      "application_period": "2025-08-16 ~ 2025-08-21",
+      "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002122",
+      "program_date": "",
+      "description": ""
+    },
+    {
+      "title": "문화 탐방단 5기 (9월)",
+      "region": "",
+      "location": "청년창조발전소  고고씽 Job",
+      "status": "모집중",
+      "application_period": "2025-08-16 ~ 2025-08-26",
+      "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002121",
+      "program_date": "",
+      "description": ""
+    },
+    {
+      "title": "싱잉볼 명상(8월)",
+      "region": "",
+      "location": "청년창조발전소  고고씽 Job",
+      "status": "모집중",
+      "application_period": "2025-08-16 ~ 2025-08-29",
+      "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002120",
+      "program_date": "",
+      "description": ""
+    },
+    {
+      "title": "[동래구] 청년성장 프로젝트 9월 프로그램 참여 안내",
+      "region": "동래구",
+      "location": "동래구 청년어울림센터",
+      "status": "모집중",
+      "application_period": "2025-08-13 ~ 2025-09-30",
+      "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002119",
+      "program_date": "",
+      "description": ""
+    },
+    {
+      "title": "[서구] 로컬 프린트 살롱 참여자 모집",
+      "region": "서구",
+      "location": "무튼304",
+      "status": "모집중",
+      "application_period": "2025-08-18 ~ 2025-09-01",
+      "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002118",
+      "program_date": "",
+      "description": ""
+    },
     {
       "title": "나도 프로 집밥러 6기",
       "region": "",
@@ -112,16 +162,6 @@
       "description": ""
     },
     {
-      "title": "해운대 청년JOB카페 [강사 스쿨] 9월 확정 수요 조사",
-      "region": "",
-      "location": "해운대 청년JOB카페",
-      "status": "모집중",
-      "application_period": "2025-08-12 ~ 2025-08-15",
-      "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002104",
-      "program_date": "",
-      "description": ""
-    },
-    {
       "title": "[해운대구] 청년 크리에이터 육성 참여자 모집",
       "region": "해운대구",
       "location": "해운대 청년채움공간",
@@ -188,16 +228,6 @@
       "status": "모집중",
       "application_period": "2025-08-11 ~ 2025-08-22",
       "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002097",
-      "program_date": "",
-      "description": ""
-    },
-    {
-      "title": "청년 힐링 마사지",
-      "region": "",
-      "location": "청년창조발전소  고고씽 Job",
-      "status": "모집중",
-      "application_period": "2025-08-09 ~ 2025-08-16",
-      "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002095",
       "program_date": "",
       "description": ""
     },
@@ -282,16 +312,6 @@
       "description": ""
     },
     {
-      "title": "[부산진구] 청년마루 \"ADsP 데이터분석 준전문가 과정 프로그램\"",
-      "region": "부산진구",
-      "location": "부산진구 청년마루",
-      "status": "모집중",
-      "application_period": "2025-08-07 ~ 2025-08-15",
-      "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002082",
-      "program_date": "",
-      "description": ""
-    },
-    {
       "title": "[해운대구] 동네_소통(모바일 포토그래퍼) 프로그램 참여자 모집",
       "region": "해운대구",
       "location": "해운대 청년채움공간",
@@ -308,16 +328,6 @@
       "status": "모집중",
       "application_period": "2025-08-07 ~ 2025-08-17",
       "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002080",
-      "program_date": "",
-      "description": ""
-    },
-    {
-      "title": "[부산진구] 청년마루 \"컴퓨터활용능력 2급 자격 과정 프로그램\"",
-      "region": "부산진구",
-      "location": "부산진구 청년마루",
-      "status": "모집중",
-      "application_period": "2025-08-07 ~ 2025-08-15",
-      "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002078",
       "program_date": "",
       "description": ""
     },
@@ -358,26 +368,6 @@
       "status": "모집중",
       "application_period": "2025-07-29 ~ 2025-08-19",
       "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002069",
-      "program_date": "",
-      "description": ""
-    },
-    {
-      "title": "발표 끝판왕 - 취업을 위한 발표 스피치 전략",
-      "region": "",
-      "location": "해운대 청년JOB카페",
-      "status": "모집중",
-      "application_period": "2025-08-05 ~ 2025-08-21",
-      "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002066",
-      "program_date": "",
-      "description": ""
-    },
-    {
-      "title": "나의 사운드 행성: 자작곡 만들기",
-      "region": "",
-      "location": "청년문화교류공간 '청년작당소'",
-      "status": "모집중",
-      "application_period": "2025-08-05 ~ 2025-08-30",
-      "link": "https://young.busan.go.kr/policySupport/view.nm?menuCd=13&bizSid=SUP0000002063",
       "program_date": "",
       "description": ""
     }

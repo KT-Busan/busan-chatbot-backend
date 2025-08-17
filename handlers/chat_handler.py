@@ -44,6 +44,14 @@ class ChatHandler:
         os.makedirs(config_path, exist_ok=True)
         return config_path
 
+    def get_instance_path(self):
+        """인스턴스 경로 반환 - overrides 파일용"""
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        project_root = os.path.dirname(basedir)
+        instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
+        os.makedirs(instance_path, exist_ok=True)
+        return instance_path
+
     def load_centers_data(self):
         """youth_spaces_cache.json 데이터 로드 - config 폴더에서만"""
         try:
@@ -78,12 +86,10 @@ class ChatHandler:
             return []
 
     def load_overrides_data(self):
-        """youth_spaces_overrides.json 데이터 로드"""
+        """youth_spaces_overrides.json 데이터 로드 - config 폴더에서"""
         try:
-            basedir = os.path.abspath(os.path.dirname(__file__))
-            project_root = os.path.dirname(basedir)
-            instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
-            overrides_file = os.path.join(instance_path, 'youth_spaces_overrides.json')
+            config_path = self.get_config_path()
+            overrides_file = os.path.join(config_path, 'youth_spaces_overrides.json')
 
             if os.path.exists(overrides_file):
                 with open(overrides_file, 'r', encoding='utf-8') as f:
@@ -93,23 +99,53 @@ class ChatHandler:
         except Exception:
             return []
 
-    def merge_center_data(self, center_name):
-        """크롤링 데이터 + Override 데이터 + 키워드 데이터 병합"""
+    def merge_centers_data(self):
+        """크롤링 데이터와 Override 데이터 병합 (name + region으로 구분)"""
         try:
+            cache_centers = self.centers_data.copy()
+            override_centers = self.load_overrides_data()
+
+            override_dict = {}
+            for center in override_centers:
+                key = f"{center.get('name', '')}_{center.get('region', '')}"
+                override_dict[key] = center
+
+            merged_centers = []
+
+            for cache_center in cache_centers:
+                center_name = cache_center.get('name', '')
+                center_region = cache_center.get('region', '')
+                key = f"{center_name}_{center_region}"
+
+                if key in override_dict:
+                    merged_centers.append(override_dict[key])
+                else:
+                    merged_centers.append(cache_center)
+
+            cache_keys = {f"{center.get('name', '')}_{center.get('region', '')}" for center in cache_centers}
+            for override_center in override_centers:
+                override_key = f"{override_center.get('name', '')}_{override_center.get('region', '')}"
+                if override_key not in cache_keys:
+                    merged_centers.append(override_center)
+
+            return merged_centers
+
+        except Exception:
+            return self.centers_data
+
+    def merge_center_data(self, center_name):
+        """특정 센터의 크롤링 데이터 + Override 데이터 + 키워드 데이터 병합"""
+        try:
+            merged_centers = self.merge_centers_data()
             center_info = None
-            for center in self.centers_data:
+
+            for center in merged_centers:
                 if center.get('name') == center_name:
                     center_info = center.copy()
                     break
 
             if not center_info:
                 return None
-
-            override_data = self.load_overrides_data()
-            for override in override_data:
-                if override.get('name') == center_name:
-                    center_info.update(override)
-                    break
 
             for keyword_item in self.keyword_data:
                 if keyword_item.get('parent_facility') == center_name:
@@ -123,7 +159,7 @@ class ChatHandler:
             return None
 
     def get_all_centers_cards(self):
-        """33개 센터 카드형 데이터 반환"""
+        """33개 센터 카드형 데이터 반환 (Override 적용)"""
         try:
             result = "[CENTER_LIST_VIEW]"
             return result
@@ -131,7 +167,7 @@ class ChatHandler:
             return "33개 센터 정보를 불러오는 중 오류가 발생했습니다."
 
     def get_center_detail_with_spaces(self, center_name):
-        """특정 센터 상세 정보 + 대여가능한 공간들 반환"""
+        """특정 센터 상세 정보 + 대여가능한 공간들 반환 (Override 적용)"""
         try:
             center_info = self.merge_center_data(center_name)
             if not center_info:
@@ -745,8 +781,9 @@ class ChatHandler:
         if user_message_text.endswith(' 상세보기'):
             center_name = user_message_text.replace(' 상세보기', '').strip()
 
-            if self.centers_data:
-                center_names = [center.get('name', '') for center in self.centers_data[:3]]
+            merged_centers = self.merge_centers_data()
+            if merged_centers:
+                center_names = [center.get('name', '') for center in merged_centers[:3]]
 
             result = self.get_center_detail_with_spaces(center_name)
             return result
