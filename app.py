@@ -10,7 +10,6 @@ from handlers.user_handler import user_handler
 from handlers.program_handler import program_handler
 from handlers.space_handler import space_handler
 
-# --- 기본 설정 ---
 load_dotenv()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -19,14 +18,12 @@ os.makedirs(instance_path, exist_ok=True)
 
 app = Flask(__name__)
 
-# --- 데이터베이스 설정 ---
 app.config.update({
     'SQLALCHEMY_DATABASE_URI': f'sqlite:///{os.path.join(instance_path, "chatbot.db")}',
     'SQLALCHEMY_TRACK_MODIFICATIONS': False
 })
 db.init_app(app)
 
-# --- CORS 헤더 설정 ---
 ALLOWED_ORIGINS = [
     'http://localhost:5173', 'http://localhost:3000',
     'http://127.0.0.1:5173', 'http://127.0.0.1:3000',
@@ -47,7 +44,6 @@ def after_request(response):
     return response
 
 
-# --- 공통 에러 처리 함수 ---
 def handle_api_error(error_message, status_code=500):
     """API 에러 처리를 위한 공통 함수"""
     return jsonify({"error": error_message}), status_code
@@ -103,7 +99,6 @@ def load_keyword_data():
         return []
 
 
-# === 채팅 관련 API ===
 @app.route("/api/chat", methods=["POST", "OPTIONS"])
 def chat():
     """채팅 요청 처리 - Override 적용된 청년공간 데이터 사용"""
@@ -139,7 +134,6 @@ def delete_chat(chat_id):
         return handle_api_error("서버 오류가 발생했습니다.")
 
 
-# === 사용자 관련 API ===
 @app.route("/api/history/<anonymous_id>", methods=["GET"])
 def get_history(anonymous_id):
     """사용자 채팅 히스토리 조회"""
@@ -181,7 +175,6 @@ def get_users_stats():
         return handle_api_error("통계 정보를 불러올 수 없습니다.")
 
 
-# === 프로그램 관련 API ===
 @app.route('/api/programs', methods=['GET'])
 def get_programs():
     """전체 프로그램 목록"""
@@ -223,7 +216,6 @@ def search_programs():
         return handle_api_error("프로그램 검색에 실패했습니다.")
 
 
-# === 청년공간 관련 API ===
 @app.route('/api/spaces', methods=['GET'])
 def get_spaces():
     """전체 청년공간 목록 (Override 적용)"""
@@ -285,7 +277,6 @@ def get_space_detail_api(space_name):
         return handle_api_error(f"{space_name} 공간 정보를 불러올 수 없습니다.")
 
 
-# === Override 관련 API ===
 @app.route('/api/spaces/overrides/status', methods=['GET'])
 def get_overrides_status():
     """Override 데이터 상태 확인"""
@@ -507,7 +498,6 @@ def get_busan_youth_spaces():
         }), 500
 
 
-# === 디버깅 관련 API ===
 def get_file_path_status():
     """파일 경로 상태 확인 공통 함수"""
     config_path = get_config_path()
@@ -587,41 +577,94 @@ def reload_spaces_data():
 
 @app.route('/api/spaces/cache-data', methods=['GET'])
 def get_cache_data():
-    """센터 데이터 반환 (youth_spaces_cache.json) - config에서 자동 로드"""
+    """센터 데이터 반환 (youth_spaces_cache.json + Override 병합) - 33개 센터"""
     try:
         config_path = get_config_path()
         cache_file = os.path.join(config_path, 'youth_spaces_cache.json')
         spaces_file = os.path.join(config_path, 'spaces_busan_youth.json')
 
-        if not os.path.exists(cache_file):
-            if os.path.exists(spaces_file):
-                with open(spaces_file, 'r', encoding='utf-8') as f:
-                    spaces_data = json.load(f)
-                    if isinstance(spaces_data, dict):
-                        spaces_data = spaces_data.get('spaces_busan_youth', spaces_data)
+        cache_data = []
+        if os.path.exists(cache_file):
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                cache_data = data.get('data', [])
+        elif os.path.exists(spaces_file):
+            with open(spaces_file, 'r', encoding='utf-8') as f:
+                spaces_data = json.load(f)
+                if isinstance(spaces_data, dict):
+                    spaces_data = spaces_data.get('spaces_busan_youth', spaces_data)
 
-                with open(cache_file, 'w', encoding='utf-8') as f:
-                    json.dump({"data": spaces_data}, f, ensure_ascii=False, indent=2)
-                print(f"✅ {cache_file} 자동 생성 완료 ({len(spaces_data)}개 데이터)")
+            with open(cache_file, 'w', encoding='utf-8') as f:
+                json.dump({"data": spaces_data}, f, ensure_ascii=False, indent=2)
+            print(f"✅ {cache_file} 자동 생성 완료")
+        else:
+            return {
+                'success': False,
+                'data': [],
+                'count': 0,
+                'message': '센터 데이터 파일을 찾을 수 없습니다.'
+            }, 404
+
+        override_data = []
+        try:
+            overrides_file = os.path.join(config_path, 'youth_spaces_overrides.json')
+
+            if os.path.exists(overrides_file):
+                with open(overrides_file, 'r', encoding='utf-8') as f:
+                    overrides_json = json.load(f)
+                    override_data = overrides_json.get('data', [])
+                    print(f"✅ Override 데이터 로드: {len(override_data)}개 (config 폴더)")
             else:
-                return {
-                    'success': False,
-                    'data': [],
-                    'count': 0,
-                    'message': '센터 데이터 파일을 찾을 수 없습니다.'
-                }, 404
+                print(f"⚠️ Override 파일 없음: {overrides_file}")
+        except Exception as e:
+            print(f"⚠️ Override 데이터 로드 실패: {e}")
+            override_data = []
 
-        with open(cache_file, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+        merged_data = []
+        override_dict = {}
+
+        for space in override_data:
+            key = f"{space.get('name', '')}_{space.get('region', '')}"
+            override_dict[key] = space
+
+        for cache_space in cache_data:
+            space_name = cache_space.get('name', '')
+            space_region = cache_space.get('region', '')
+            key = f"{space_name}_{space_region}"
+
+            if key in override_dict:
+                merged_data.append(override_dict[key])
+                print(f"🔄 Override 적용: {space_name} [{space_region}]")
+            else:
+                merged_data.append(cache_space)
+
+        cache_keys = {f"{space.get('name', '')}_{space.get('region', '')}" for space in cache_data}
+        for override_space in override_data:
+            override_key = f"{override_space.get('name', '')}_{override_space.get('region', '')}"
+            if override_key not in cache_keys:
+                merged_data.append(override_space)
+                print(f"➕ 새 센터 추가: {override_space.get('name', '')} [{override_space.get('region', '')}]")
+
+        print(f"✅ 최종 병합 완료: 캐시 {len(cache_data)}개 + Override {len(override_data)}개 = 병합 {len(merged_data)}개")
 
         return {
             'success': True,
-            'data': data.get('data', []),
-            'count': len(data.get('data', [])),
-            'message': f"{len(data.get('data', []))}개의 센터 데이터를 불러왔습니다."
+            'data': merged_data,
+            'count': len(merged_data),
+            'message': f"{len(merged_data)}개의 센터 데이터를 불러왔습니다. (Override 적용)",
+            'debug_info': {
+                'cache_count': len(cache_data),
+                'override_count': len(override_data),
+                'merged_count': len(merged_data),
+                'override_applied': len(
+                    [s for s in merged_data if f"{s.get('name', '')}_{s.get('region', '')}" in override_dict]),
+                'new_centers_added': len(
+                    [s for s in override_data if f"{s.get('name', '')}_{s.get('region', '')}" not in cache_keys])
+            }
         }
 
     except Exception as e:
+        print(f"❌ 센터 데이터 처리 중 오류: {e}")
         return {
             'success': False,
             'error': str(e),
@@ -678,7 +721,6 @@ def get_rental_spaces(center_name):
                 data = json.load(f)
                 all_spaces = data.get('spaces_busan_youth', [])
 
-                # 해당 센터의 공간들만 필터링
                 center_spaces = [
                     space for space in all_spaces
                     if space.get('parent_facility') == center_name
@@ -709,7 +751,6 @@ def get_rental_spaces(center_name):
         }, 500
 
 
-# === 헬스체크 ===
 @app.route('/health', methods=['GET'])
 @app.route('/api/health', methods=['GET'])
 def health_check():
@@ -746,7 +787,6 @@ def health_check():
         }), 500
 
 
-# === 에러 핸들링 ===
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({'error': '요청한 리소스를 찾을 수 없습니다.', 'status': 404}), 404
@@ -762,7 +802,6 @@ def bad_request(error):
     return jsonify({'error': '잘못된 요청입니다.', 'status': 400}), 400
 
 
-# === 메인 실행 ===
 def init_app():
     """앱 초기화"""
     try:

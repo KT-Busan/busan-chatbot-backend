@@ -84,6 +84,15 @@
       "sns": "https://www.instagram.com/jobcafe.busan",
       "rental_link": "",
       "program_link": "https://www.busanjobcafe.kr/edu"
+    },
+    {
+      "region": "사상구",
+      "name": "부산청년잡(JOB) 성장카페",
+      "contact": "051-316-7411",
+      "description": "초기상담과 맞춤형 프로그램, 기업발굴과 매칭을 통한 기업-청년 일자리 미스매치 해소",
+      "address": "부산시 사상구 학감대로 252, 수성빌딩 604호",
+      "hours": "(월~금) 09:00~18:00 (주말, 공휴일 휴무)",
+      "homepage": "https://www.busanjobcafe.kr/"
     }
   ]
 }
