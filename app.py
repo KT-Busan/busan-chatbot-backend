@@ -458,9 +458,6 @@ def get_busan_youth_spaces():
         config_path = get_config_path()
         spaces_file = os.path.join(config_path, 'spaces_busan_youth.json')
 
-        print(f"🔍 JSON 파일 경로: {spaces_file}")
-        print(f"🔍 파일 존재 여부: {os.path.exists(spaces_file)}")
-
         if not os.path.exists(spaces_file):
             return jsonify({
                 'success': False,
@@ -596,7 +593,6 @@ def get_cache_data():
 
             with open(cache_file, 'w', encoding='utf-8') as f:
                 json.dump({"data": spaces_data}, f, ensure_ascii=False, indent=2)
-            print(f"✅ {cache_file} 자동 생성 완료")
         else:
             return {
                 'success': False,
@@ -613,11 +609,7 @@ def get_cache_data():
                 with open(overrides_file, 'r', encoding='utf-8') as f:
                     overrides_json = json.load(f)
                     override_data = overrides_json.get('data', [])
-                    print(f"✅ Override 데이터 로드: {len(override_data)}개 (config 폴더)")
-            else:
-                print(f"⚠️ Override 파일 없음: {overrides_file}")
         except Exception as e:
-            print(f"⚠️ Override 데이터 로드 실패: {e}")
             override_data = []
 
         merged_data = []
@@ -643,9 +635,6 @@ def get_cache_data():
             override_key = f"{override_space.get('name', '')}_{override_space.get('region', '')}"
             if override_key not in cache_keys:
                 merged_data.append(override_space)
-                print(f"➕ 새 센터 추가: {override_space.get('name', '')} [{override_space.get('region', '')}]")
-
-        print(f"✅ 최종 병합 완료: 캐시 {len(cache_data)}개 + Override {len(override_data)}개 = 병합 {len(merged_data)}개")
 
         return {
             'success': True,
@@ -664,7 +653,6 @@ def get_cache_data():
         }
 
     except Exception as e:
-        print(f"❌ 센터 데이터 처리 중 오류: {e}")
         return {
             'success': False,
             'error': str(e),

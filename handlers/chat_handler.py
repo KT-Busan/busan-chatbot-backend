@@ -653,7 +653,7 @@ class ChatHandler:
                 if link_url and link_url != '정보없음':
                     result += f"\u00A0\u00A0🔗 링크 : [자세히 보기]({link_url})\n"
 
-                result += "---"
+                result += "---\n"
 
             result += "[SHOW_CONDITIONAL_SEARCH_BUTTONS]"
 
