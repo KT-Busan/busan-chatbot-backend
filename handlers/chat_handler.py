@@ -173,7 +173,7 @@ class ChatHandler:
             if not center_info:
                 return f"'{center_name}' 센터 정보를 찾을 수 없습니다."
 
-            result = f"**{center_info.get('name', '')}[{center_info.get('region', '')}]**\n"
+            result = f"{center_info.get('name', '')}[{center_info.get('region', '')}]\n"
 
             if center_info.get('introduction'):
                 result += f"{center_info['introduction']}\n\n"
@@ -639,10 +639,10 @@ class ChatHandler:
         try:
             spaces.sort(key=lambda x: (-x.get('match_score', 0), x.get('parent_facility', '')))
 
-            result = f"**📌\u00A0총\u00A0{len(spaces)}개의 공간을 찾았어요!**\n\n"
+            result = f"📌\u00A0총\u00A0{len(spaces)}개의 공간을 찾았어요!\n\n"
 
             for i, space in enumerate(spaces, 1):
-                result += f"**{i}.\u00A0{space.get('parent_facility', '정보없음')} – {space.get('space_name', '정보없음')}**\n"
+                result += f"{i}.\u00A0{space.get('parent_facility', '정보없음')} – {space.get('space_name', '정보없음')}\n"
                 result += f"{space.get('introduction', '정보없음')}\n"
                 result += f"\u00A0\u00A0📍 위치 : {space.get('location', '정보없음')}\n"
                 result += f"\u00A0\u00A0👥 인원 : {self.format_capacity_info(space)}\n"

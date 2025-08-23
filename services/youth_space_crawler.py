@@ -300,9 +300,9 @@ def search_spaces_by_region(region):
     ]
 
     if not filtered_spaces:
-        return f"**{region}**에서 청년공간을 찾을 수 없습니다.\n\n다른 지역을 검색해보세요!"
+        return f"{region}에서 청년공간을 찾을 수 없습니다.\n\n다른 지역을 검색해보세요!"
 
-    result = f"**{region} 청년공간({len(filtered_spaces)}개)**\n\n"
+    result = f"{region} 청년공간({len(filtered_spaces)}개)\n\n"
 
     for i, space in enumerate(filtered_spaces[:5]):
         result += format_space_info(space)
@@ -327,9 +327,9 @@ def search_spaces_by_keyword(keyword):
     ]
 
     if not filtered_spaces:
-        return f"**{keyword}** 관련 청년공간을 찾을 수 없습니다.\n\n다른 키워드로 검색해보세요!"
+        return f"{keyword} 관련 청년공간을 찾을 수 없습니다.\n\n다른 키워드로 검색해보세요!"
 
-    result = f"🔍 **{keyword}** 검색 결과 ({len(filtered_spaces)}개)\n\n"
+    result = f"🔍 {keyword} 검색 결과 ({len(filtered_spaces)}개)\n\n"
 
     for i, space in enumerate(filtered_spaces[:5]):
         result += format_space_info(space)
@@ -342,7 +342,7 @@ def search_spaces_by_keyword(keyword):
 
 def format_space_info(space):
     """공간 정보 포맷팅"""
-    result = f"**{space['name']}[{space.get('region', '')}]**\n"
+    result = f"{space['name']}[{space.get('region', '')}]\n"
 
     info_fields = [
         ('address', '📍'),
@@ -383,7 +383,7 @@ def get_all_youth_spaces():
     if not spaces:
         return "현재 청년공간 정보를 가져올 수 없습니다."
 
-    result = f"**부산 청년공간 전체 목록** ({len(spaces)}개)\n\n"
+    result = f"부산 청년공간 전체 목록 ({len(spaces)}개)\n\n"
 
     regions = {}
     for space in spaces:
@@ -391,7 +391,7 @@ def get_all_youth_spaces():
         regions.setdefault(region, []).append(space['name'])
 
     for region, names in sorted(regions.items()):
-        result += f"**📍 {region}** ({len(names)}개)\n"
+        result += f"📍 {region} ({len(names)}개)\n"
         for name in names:
             result += f"  • {name}\n"
         result += "\n"

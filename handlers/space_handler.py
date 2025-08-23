@@ -171,7 +171,7 @@ class SpaceHandler:
                     'message': f'**{region}**에서 청년공간을 찾을 수 없습니다.\n\n다른 지역을 검색해보세요!'
                 }
 
-            result = f"**{region} 청년공간({len(filtered_spaces)}개)**\n\n"
+            result = f"{region} 청년공간({len(filtered_spaces)}개)\n\n"
 
             for space in filtered_spaces[:5]:
                 result += self._format_space_basic_info(space)
