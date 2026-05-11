@@ -27,7 +27,8 @@ db.init_app(app)
 ALLOWED_ORIGINS = [
     'http://localhost:5173', 'http://localhost:3000',
     'http://127.0.0.1:5173', 'http://127.0.0.1:3000',
-    'https://kt-busan.github.io'
+    'https://kt-busan.github.io',
+    'https://busan-chatbot-backend.onrender.com',
 ]
 
 
@@ -35,13 +36,25 @@ ALLOWED_ORIGINS = [
 def after_request(response):
     origin = request.headers.get('Origin')
     if origin in ALLOWED_ORIGINS:
-        response.headers.add('Access-Control-Allow-Origin', origin)
-
-    response.headers.update({
-        'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS'
-    })
+        response.headers['Access-Control-Allow-Origin'] = origin
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+        response.headers['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,OPTIONS'
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
     return response
+
+
+@app.before_request
+def handle_options():
+    if request.method == 'OPTIONS':
+        origin = request.headers.get('Origin')
+        if origin in ALLOWED_ORIGINS:
+            from flask import make_response
+            res = make_response('', 204)
+            res.headers['Access-Control-Allow-Origin'] = origin
+            res.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+            res.headers['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,OPTIONS'
+            res.headers['Access-Control-Allow-Credentials'] = 'true'
+            return res
 
 
 def handle_api_error(error_message, status_code=500):
