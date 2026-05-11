@@ -1,27 +1,23 @@
 from datetime import datetime
 from database.models import db, User, Chat, Message
+from handlers.base_handler import BaseHandler
 
 
-class UserHandler:
+class UserHandler(BaseHandler):
     def _handle_api_error(self, error, context="", fallback=None):
-        """API 에러 처리 공통 함수"""
-        error_response = {
-            'success': False,
-            'error': str(error),
-            'message': f'{context} 중 오류가 발생했습니다.' if context else '오류가 발생했습니다.'
-        }
-        return fallback if fallback is not None else error_response
+        result = self.handle_error(error, context)
+        return fallback if fallback is not None else result
 
     def get_user_history(self, anonymous_id):
         """사용자 채팅 히스토리 조회"""
         try:
             user = User.query.filter_by(anonymous_id=anonymous_id).first()
             if not user:
-                return {}
+                return {"success": True, "data": {}}
 
             chats = Chat.query.filter_by(user_id=user.id).order_by(Chat.created_at.desc()).all()
 
-            return {
+            history = {
                 chat.id: {
                     'id': chat.id,
                     'title': chat.title,
@@ -33,8 +29,10 @@ class UserHandler:
                 for chat in chats
             }
 
+            return {"success": True, "data": history}
+
         except Exception as e:
-            return self._handle_api_error(e, fallback={})
+            return self._handle_api_error(e, fallback={"success": False, "data": {}})
 
     def get_user_info(self, anonymous_id):
         """사용자 정보 조회"""

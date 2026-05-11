@@ -2,41 +2,24 @@ import json
 import os
 from datetime import datetime
 from services.youth_space_crawler import get_youth_spaces_data
+from handlers.base_handler import BaseHandler
 
 
-class SpaceHandler:
+class SpaceHandler(BaseHandler):
     def __init__(self):
         pass
 
-    def _get_instance_path(self):
-        """인스턴스 경로 반환"""
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        project_root = os.path.dirname(basedir)
-        instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
-        os.makedirs(instance_path, exist_ok=True)
-        return instance_path
-
-    def _handle_api_error(self, error, context=""):
-        """API 에러 처리 공통 함수"""
-        return {
-            'success': False,
-            'error': str(error),
-            'message': f'{context} 중 오류가 발생했습니다.' if context else '오류가 발생했습니다.'
-        }
-
     def load_overrides_data(self):
-        """youth_spaces_overrides.json 데이터 로드"""
-        try:
-            instance_path = self._get_instance_path()
-            overrides_file = os.path.join(instance_path, 'youth_spaces_overrides.json')
-
-            if os.path.exists(overrides_file):
-                with open(overrides_file, 'r', encoding='utf-8') as f:
-                    overrides_data = json.load(f)
-                return overrides_data.get('data', [])
-            return []
-        except Exception:
-            return []
+        """youth_spaces_overrides.json 데이터 로드 (config/ 우선, instance/ 폴백)"""
+        for base_path in [self.get_config_path(), self.get_instance_path()]:
+            overrides_file = os.path.join(base_path, 'youth_spaces_overrides.json')
+            try:
+                if os.path.exists(overrides_file):
+                    with open(overrides_file, 'r', encoding='utf-8') as f:
+                        return json.load(f).get('data', [])
+            except Exception:
+                continue
+        return []
 
     def merge_spaces_data(self, cache_spaces, override_spaces):
         """캐시 데이터와 Override 데이터 병합"""
@@ -80,7 +63,7 @@ class SpaceHandler:
                 'message': f'{len(spaces)}개의 청년공간을 찾았습니다.'
             }
         except Exception as e:
-            return self._handle_api_error(e, '청년공간 정보를 가져오는')
+            return self.handle_error(e, '청년공간 정보를 가져오는')
 
     def _format_space_links(self, space):
         """공간의 링크 정보 포맷팅"""
@@ -138,7 +121,7 @@ class SpaceHandler:
                 'message': result
             }
         except Exception as e:
-            return self._handle_api_error(e, '공간 상세 정보를 가져오는')
+            return self.handle_error(e, '공간 상세 정보를 가져오는')
 
     def _format_space_basic_info(self, space):
         """공간의 기본 정보 포맷팅"""
@@ -184,7 +167,7 @@ class SpaceHandler:
                 'region': region
             }
         except Exception as e:
-            return self._handle_api_error(e, f'{region} 지역의 청년공간 정보를 가져오는')
+            return self.handle_error(e, f'{region} 지역의 청년공간 정보를 가져오는')
 
     def search_spaces_by_keyword(self, keyword):
         """키워드별 청년공간 검색 (Override 적용)"""
@@ -235,7 +218,7 @@ class SpaceHandler:
                 'keyword': keyword
             }
         except Exception as e:
-            return self._handle_api_error(e, '청년공간 검색')
+            return self.handle_error(e, '청년공간 검색')
 
     def get_all_spaces_formatted(self):
         """전체 청년공간 목록 (포맷된, Override 적용)"""
@@ -268,7 +251,7 @@ class SpaceHandler:
                 'message': result
             }
         except Exception as e:
-            return self._handle_api_error(e, '청년공간 목록을 가져오는')
+            return self.handle_error(e, '청년공간 목록을 가져오는')
 
     def crawl_spaces_manually(self):
         """수동 청년공간 크롤링"""
@@ -283,7 +266,7 @@ class SpaceHandler:
                 'data': spaces
             }
 
-            cache_file = os.path.join(self._get_instance_path(), 'youth_spaces_cache.json')
+            cache_file = os.path.join(self.get_instance_path(), 'youth_spaces_cache.json')
             with open(cache_file, 'w', encoding='utf-8') as f:
                 json.dump(cache_data, f, ensure_ascii=False, indent=2)
 
@@ -295,7 +278,7 @@ class SpaceHandler:
                 'crawled_at': datetime.now().isoformat()
             }
         except Exception as e:
-            return self._handle_api_error(e, '크롤링')
+            return self.handle_error(e, '크롤링')
 
 
 space_handler = SpaceHandler()

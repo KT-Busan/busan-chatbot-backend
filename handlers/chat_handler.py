@@ -8,9 +8,10 @@ from database.models import db, User, Chat, Message
 from config.predefined_answers import PREDEFINED_ANSWERS
 from services.youth_space_crawler import search_spaces_by_region, search_spaces_by_keyword
 from services.youth_program_crawler import get_youth_programs_data, search_programs_by_region
+from handlers.base_handler import BaseHandler
 
 
-class ChatHandler:
+class ChatHandler(BaseHandler):
     def __init__(self):
         print("🚀 ChatHandler 초기화 시작...")
 
@@ -36,21 +37,6 @@ class ChatHandler:
         if self.spaces_data:
             sample_space = self.spaces_data[0]
 
-    def get_config_path(self):
-        """config 경로 반환"""
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        project_root = os.path.dirname(basedir)
-        config_path = os.path.join(project_root, 'config')
-        os.makedirs(config_path, exist_ok=True)
-        return config_path
-
-    def get_instance_path(self):
-        """인스턴스 경로 반환 - overrides 파일용"""
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        project_root = os.path.dirname(basedir)
-        instance_path = os.path.join(os.environ.get('RENDER_DISK_PATH', project_root), 'instance')
-        os.makedirs(instance_path, exist_ok=True)
-        return instance_path
 
     def load_centers_data(self):
         """youth_spaces_cache.json 데이터 로드 - config 폴더에서만"""
@@ -744,7 +730,7 @@ class ChatHandler:
             db.session.add(bot_message)
             db.session.commit()
 
-            return {"reply": bot_reply}, 200
+            return {"success": True, "reply": bot_reply}, 200
 
         except Exception as e:
             db.session.rollback()
@@ -770,7 +756,7 @@ class ChatHandler:
             "청년 공간 상세": "[SPACE_DETAIL_SEARCH]",
             "청년 공간 프로그램 확인하기": "[PROGRAM_REGIONS]",
             "✨ 랜덤 추천": self.handle_random_recommendation(),
-            "33개 센터 전체보기": self.get_all_centers_cards()
+            "34개 센터 전체보기": self.get_all_centers_cards()
         }
 
         if user_message_text in special_commands:

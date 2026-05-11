@@ -7,24 +7,10 @@ from services.youth_program_crawler import (
     search_programs_by_region,
     BusanYouthProgramCrawler
 )
+from handlers.base_handler import BaseHandler
 
 
-class ProgramHandler:
-    def _handle_api_error(self, error, context=""):
-        """API 에러 처리 공통 함수"""
-        return {
-            'success': False,
-            'error': str(error),
-            'message': f'{context} 중 오류가 발생했습니다.' if context else '오류가 발생했습니다.'
-        }
-
-    def _get_config_path(self):
-        """config 경로 반환"""
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        project_root = os.path.dirname(basedir)
-        config_path = os.path.join(project_root, 'config')
-        os.makedirs(config_path, exist_ok=True)
-        return config_path
+class ProgramHandler(BaseHandler):
 
     def get_all_programs(self):
         """전체 프로그램 목록"""
@@ -37,7 +23,7 @@ class ProgramHandler:
                 'message': f'{len(programs)}개의 모집중인 프로그램을 찾았습니다.'
             }
         except Exception as e:
-            return self._handle_api_error(e, '프로그램 정보를 가져오는')
+            return self.handle_error(e, '프로그램 정보를 가져오는')
 
     def get_programs_by_region(self, region):
         """지역별 프로그램 검색"""
@@ -56,7 +42,7 @@ class ProgramHandler:
                 'region': region
             }
         except Exception as e:
-            return self._handle_api_error(e, f'{region} 지역의 프로그램 정보를 가져오는')
+            return self.handle_error(e, f'{region} 지역의 프로그램 정보를 가져오는')
 
     def _filter_programs_by_region(self, programs, region_normalized):
         """지역별 프로그램 필터링"""
@@ -84,7 +70,7 @@ class ProgramHandler:
                 'data': programs
             }
 
-            config_path = self._get_config_path()
+            config_path = self.get_config_path()
             cache_file = os.path.join(config_path, 'youth_programs_cache.json')
 
             with open(cache_file, 'w', encoding='utf-8') as f:
@@ -99,7 +85,7 @@ class ProgramHandler:
                 'saved_to': cache_file
             }
         except Exception as e:
-            return self._handle_api_error(e, '크롤링')
+            return self.handle_error(e, '크롤링')
 
     def search_programs_by_keyword(self, keyword):
         """키워드별 프로그램 검색"""
@@ -126,7 +112,7 @@ class ProgramHandler:
                 'message': f'{keyword} 관련 {len(filtered_programs)}개 프로그램을 찾았습니다.'
             }
         except Exception as e:
-            return self._handle_api_error(e, '프로그램 검색')
+            return self.handle_error(e, '프로그램 검색')
 
 
 program_handler = ProgramHandler()

@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 
 class BusanYouthProgramCrawler:
     def __init__(self):
-        self.base_url = "https://young.busan.go.kr"
+        self.base_url = os.environ.get('CRAWLER_BASE_URL', 'https://young.busan.go.kr')
         self.session = requests.Session()
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
