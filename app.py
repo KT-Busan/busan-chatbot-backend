@@ -41,11 +41,22 @@ _CORS_HEADERS = {
 }
 
 
+def _is_allowed_origin(origin):
+    if not origin:
+        return False
+    if origin in ALLOWED_ORIGINS:
+        return True
+    # 로컬 개발: localhost / 127.0.0.1 은 포트 무관 허용
+    if origin.startswith('http://localhost:') or origin.startswith('http://127.0.0.1:'):
+        return True
+    return False
+
+
 @app.before_request
 def handle_options():
     if request.method == 'OPTIONS':
         origin = request.headers.get('Origin')
-        if origin in ALLOWED_ORIGINS:
+        if _is_allowed_origin(origin):
             res = make_response('', 204)
             res.headers['Access-Control-Allow-Origin'] = origin
             res.headers.update(_CORS_HEADERS)
@@ -55,7 +66,7 @@ def handle_options():
 @app.after_request
 def after_request(response):
     origin = request.headers.get('Origin')
-    if origin in ALLOWED_ORIGINS:
+    if _is_allowed_origin(origin):
         response.headers['Access-Control-Allow-Origin'] = origin
         response.headers.update(_CORS_HEADERS)
     return response
