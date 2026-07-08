@@ -7,6 +7,9 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from datetime import datetime, timedelta
 
+# 데이터 출처: 부산청년플랫폼(young.busan.go.kr) 공개 페이지를 크롤링하여 수집.
+# 저작권/출처는 부산광역시 및 부산청년플랫폼에 있으며, 본 서비스는 정보 안내 목적으로만 사용한다.
+
 
 class BusanYouthProgramCrawler:
     def __init__(self):
@@ -234,8 +237,7 @@ def get_cache_file_path():
 def get_youth_programs_data():
     """청년 프로그램 데이터 가져오기 (config 파일 우선)"""
     cache_file = get_cache_file_path()
-    # cache_duration = timedelta(hours=3)
-    cache_duration = timedelta(minutes=1)
+    cache_duration = timedelta(hours=3)
 
     if os.path.exists(cache_file):
         try:

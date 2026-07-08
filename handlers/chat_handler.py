@@ -827,7 +827,8 @@ class ChatHandler(BaseHandler):
 
         if any(keyword in user_message_text for keyword in ['스터디', '창업', '회의', '카페', '라운지', '센터']):
             result = search_spaces_by_keyword(user_message_text)
-            return result
+            if '찾을 수 없습니다' not in result:
+                return result
 
         try:
             all_previous_messages = Message.query.filter_by(chat_id=chat_id).order_by(

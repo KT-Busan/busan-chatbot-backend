@@ -1,27 +1,27 @@
 # === 핵심 프레임워크 ===
-Flask==3.1.1
+Flask==3.1.3
 Flask-SQLAlchemy==3.1.1
 gunicorn==23.0.0
 
 # === AI 및 외부 API ===
 openai==1.97.0
-requests==2.32.4
+requests==2.33.0
 
 # === 웹 크롤링 ===
 beautifulsoup4==4.12.2
-lxml==5.3.0
+lxml==6.1.0
 
 # === 환경 설정 ===
-python-dotenv==1.1.1
+python-dotenv==1.2.2
 
 # === HTTP 및 네트워킹 (openai 의존성) ===
 httpx==0.28.1
 httpcore==1.0.9
 h11==0.16.0
-urllib3==2.5.0
+urllib3==2.7.0
 certifi==2025.7.14
 charset-normalizer==3.4.2
-idna==3.10
+idna==3.15
 anyio==4.9.0
 sniffio==1.3.1
 
@@ -35,7 +35,7 @@ typing-inspection==0.4.1
 # === Flask 의존성 ===
 Jinja2==3.1.6
 MarkupSafe==3.0.2
-Werkzeug==3.1.3
+Werkzeug==3.1.6
 click==8.2.1
 blinker==1.9.0
 itsdangerous==2.2.0
