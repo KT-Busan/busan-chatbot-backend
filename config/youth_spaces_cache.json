@@ -1,5 +1,5 @@
 {
-  "cached_at": "2025-09-08T00:58:54.164555",
+  "cached_at": "2026-07-10T11:04:49.734865",
   "data": [
     {
       "region": "수영구",
@@ -115,7 +115,7 @@
       "contact": "051-805-6342",
       "description": "핫플 전포역에 위치한 신상 청년시설",
       "address": "부산광역시 부산진구 전포대로 지하 181(전포역)",
-      "hours": "(월~금) 11:00~20:00, (토) 11:00~19:00 (2025.5월부터)",
+      "hours": "(월~금)11:00~20:00, (토)11:00~15:00 / 2026년: (월~금) 11:00~18:00",
       "homepage": "https://blog.naver.com/youngwithjingu",
       "sns": "https://www.instagram.com/youngwithjingu",
       "rental_link": "https://www.instagram.com/youngwithjingu",
@@ -278,6 +278,18 @@
       "program_link": ""
     },
     {
+      "region": "기장군",
+      "name": "기장청년센터 청:류장",
+      "contact": "051-709-4392",
+      "description": "청년(靑)이 머무르고(留) 서로 교류하며 새로운 출발을 준비하는 공간(場)",
+      "address": "부산광역시 기장군 정관읍 모전로 11, 정관에듀파크 1층",
+      "hours": "(월~금) 09:00~20:00 / (토) 10:00~18:00 ※ 일요일 및 공휴일 휴관",
+      "homepage": "https://www.gijang.go.kr/index.gijang?menuCd=DOM_000000103010006001",
+      "sns": "",
+      "rental_link": "",
+      "program_link": ""
+    },
+    {
       "region": "사상구",
       "name": "부산청년잡(JOB) 성장카페[3호점]",
       "contact": "051-316-7411",
@@ -319,8 +331,8 @@
       "contact": "051-310-5252",
       "description": "청년프로그램 운영, 공간 대여",
       "address": "부산 사상구 광장로 19",
-      "hours": "(월,화) 09:00~18:00, (수~금) 09:00~22:00, (토) 13:00~17:00",
-      "homepage": "https://www.spacecloud.kr/space/70707",
+      "hours": "(월,금) 09:00~18:00, (화~목) 09:00~22:00, (토) 10:00~14:00",
+      "homepage": "https://www.sasang.go.kr/yeyak/board/list.sasang?boardId=BBS_0000333&menuCd=DOM_000001001013000000&contentsSid=3343&cpath=%2Fyeyak",
       "sns": "",
       "rental_link": "",
       "program_link": ""
@@ -343,7 +355,7 @@
       "contact": "051-752-4001",
       "description": "청년의 꿈을 펼쳐라! 청년활동 거점 공간",
       "address": "부산광역시 수영구 수영로 607번길 17(광안동)",
-      "hours": "(월~금)10:00~22:00, (토)10:00 ~ 19:00, ※ 일,공휴일 휴관",
+      "hours": "(월~금)09:00~21:00, (토)09:00 ~ 18:00, ※ 일,공휴일 휴관",
       "homepage": "https://www.suyeong.go.kr/youth/index.suyeong",
       "sns": "https://www.instagram.com/gwangan_xtoz?igsh=MXBoaTh5bzE2Y3Bj",
       "rental_link": "",

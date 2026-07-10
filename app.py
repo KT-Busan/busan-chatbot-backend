@@ -1,4 +1,5 @@
 import os
+import time
 from flask import Flask, request, jsonify, make_response
 from dotenv import load_dotenv
 from datetime import datetime
@@ -151,6 +152,39 @@ def reload_spaces_data():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
+# 사용자 요청과 분리된 크롤링 갱신용 관리자 토큰.
+# TODO: 지금은 단순 토큰 비교만 하고 있음 - 정식 인증(예: 서명된 JWT, IP 제한)으로 교체할 것.
+ADMIN_REFRESH_TOKEN = os.environ.get('ADMIN_REFRESH_TOKEN')
+
+
+@app.route('/api/admin/refresh-crawl', methods=['POST'])
+def admin_refresh_crawl():
+    token = request.headers.get('X-Admin-Token', '')
+    if not ADMIN_REFRESH_TOKEN or token != ADMIN_REFRESH_TOKEN:
+        return jsonify({'success': False, 'error': '인증되지 않은 요청입니다.'}), 401
+
+    from services.youth_space_crawler import crawl_new_data
+    from services.youth_program_crawler import refresh_programs_cache
+
+    start = time.time()
+    try:
+        spaces = crawl_new_data()
+        programs = refresh_programs_cache()
+        elapsed = round(time.time() - start, 2)
+
+        return jsonify({
+            'success': True,
+            'message': f'크롤링 갱신 완료 ({elapsed}초 소요)',
+            'elapsed_seconds': elapsed,
+            'spaces_count': len(spaces),
+            'programs_count': len(programs),
+            'refreshed_at': datetime.utcnow().isoformat()
+        })
+    except Exception as e:
+        elapsed = round(time.time() - start, 2)
+        return jsonify({'success': False, 'error': str(e), 'elapsed_seconds': elapsed}), 500
+
+
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({'success': False, 'error': '요청한 리소스를 찾을 수 없습니다.', 'status': 404}), 404
@@ -166,9 +200,22 @@ def bad_request(error):
     return jsonify({'success': False, 'error': '잘못된 요청입니다.', 'status': 400}), 400
 
 
+def warm_up_youth_data():
+    """서버 부팅 시 1회 실행: 청년공간/프로그램 캐시가 없거나 오래됐으면 미리 크롤링해둔다.
+    요청 처리 경로에서는 크롤링을 절대 실행하지 않고 이 캐시만 읽는다."""
+    try:
+        from services.youth_space_crawler import ensure_spaces_cache_fresh
+        from services.youth_program_crawler import ensure_programs_cache_fresh
+        ensure_spaces_cache_fresh()
+        ensure_programs_cache_fresh()
+    except Exception as e:
+        print(f"⚠️ 부팅 시 데이터 준비 실패, 기존 캐시 파일로 계속 진행합니다: {e}")
+
+
 def init_app():
     try:
         initialize_database(app)
+        warm_up_youth_data()
         return True
     except Exception:
         return False
@@ -179,4 +226,4 @@ if __name__ == "__main__":
         port = int(os.environ.get('PORT', 5001))
         app.run(host='0.0.0.0', port=port, debug=os.environ.get('FLASK_ENV') == 'development')
 else:
-    initialize_database(app)
+    init_app()

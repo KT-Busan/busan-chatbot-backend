@@ -186,9 +186,12 @@ def get_cache_file_path():
 
 
 def get_overrides_file_path():
-    """Override 파일 경로 반환"""
-    overrides_file = os.path.join(get_instance_path(), 'youth_spaces_overrides.json')
-    return overrides_file
+    """Override 파일 경로 반환 (config/ 우선, instance/ 폴백)"""
+    for base_path in [get_config_path(), get_instance_path()]:
+        candidate = os.path.join(base_path, 'youth_spaces_overrides.json')
+        if os.path.exists(candidate):
+            return candidate
+    return os.path.join(get_config_path(), 'youth_spaces_overrides.json')
 
 
 def save_to_config_file(spaces_data):
@@ -225,7 +228,7 @@ def load_overrides_data():
 
 
 def merge_spaces_data(cache_spaces, override_spaces):
-    """캐시 데이터와 Override 데이터 병합"""
+    """캐시 데이터와 Override 데이터 병합 (override에 removed:true가 있으면 제외)"""
     merged_spaces = []
 
     override_dict = {space.get('name', ''): space for space in override_spaces}
@@ -233,52 +236,74 @@ def merge_spaces_data(cache_spaces, override_spaces):
     for cache_space in cache_spaces:
         space_name = cache_space.get('name', '')
         if space_name in override_dict:
-            merged_spaces.append(override_dict[space_name])
+            override_space = override_dict[space_name]
+            if not override_space.get('removed'):
+                merged_spaces.append(override_space)
         else:
             merged_spaces.append(cache_space)
 
     cache_names = {space.get('name', '') for space in cache_spaces}
     for override_space in override_spaces:
-        if override_space.get('name', '') not in cache_names:
+        if override_space.get('name', '') not in cache_names and not override_space.get('removed'):
             merged_spaces.append(override_space)
 
     return merged_spaces
 
 
 def crawl_new_data():
-    """새로운 데이터 크롤링 및 config에 저장"""
+    """새로운 데이터 크롤링 및 config에 저장 (서버 부팅 시 / 관리자 강제 갱신 시에만 호출)
+    크롤링이 비어있는 결과를 반환하면(사이트 구조 변경, 일시적 네트워크 장애 등)
+    기존 캐시를 덮어쓰지 않고 그대로 유지한다 - 빈 데이터로 서비스가 깨지는 것을 방지."""
     try:
         crawler = BusanYouthSpaceCrawler()
         spaces = crawler.crawl_all_spaces()
 
-        # config 폴더에 저장
-        save_to_config_file(spaces)
+        if not spaces:
+            print("⚠️ 청년공간 크롤링 결과가 비어있어 기존 캐시를 유지합니다.")
+            return get_cache_data_only()
 
+        save_to_config_file(spaces)
         return spaces
+    except Exception as e:
+        print(f"⚠️ 청년공간 크롤링 실패, 기존 캐시를 유지합니다: {e}")
+        return get_cache_data_only()
+
+
+def is_spaces_cache_stale(hours=24):
+    """센터 캐시가 없거나 오래됐는지 확인"""
+    cache_file = get_cache_file_path()
+    if not os.path.exists(cache_file):
+        return True
+    try:
+        with open(cache_file, 'r', encoding='utf-8') as f:
+            cached_data = json.load(f)
+        cache_time = datetime.fromisoformat(cached_data['cached_at'])
+        return datetime.now() - cache_time >= timedelta(hours=hours)
     except Exception:
-        return []
+        return True
+
+
+def ensure_spaces_cache_fresh():
+    """서버 부팅 시 1회 호출 - 캐시가 없거나 오래됐을 때만 크롤링을 실행해 채워둔다"""
+    if is_spaces_cache_stale():
+        print("🔄 청년공간 캐시가 오래되어 부팅 시점에 크롤링을 실행합니다...")
+        crawl_new_data()
+    else:
+        print("✅ 청년공간 캐시가 최신 상태입니다. 부팅 시 크롤링을 건너뜁니다.")
 
 
 def get_cache_data_only():
-    """캐시 데이터만 가져오기 - config 파일 우선"""
+    """캐시 파일 데이터만 반환 (요청 시점 크롤링 없음, config 파일 우선)"""
     cache_file = get_cache_file_path()
-    cache_duration = timedelta(hours=24)
 
     if os.path.exists(cache_file):
         try:
             with open(cache_file, 'r', encoding='utf-8') as f:
                 cached_data = json.load(f)
-
-            cache_time = datetime.fromisoformat(cached_data['cached_at'])
-            if datetime.now() - cache_time < cache_duration:
-                print(f"✅ config 파일에서 센터 데이터 로드: {len(cached_data.get('data', []))}개")
-                return cached_data['data']
-            else:
-                return crawl_new_data()
+            return cached_data.get('data', [])
         except Exception:
-            return crawl_new_data()
-    else:
-        return crawl_new_data()
+            return []
+    return []
 
 
 def get_youth_spaces_data():

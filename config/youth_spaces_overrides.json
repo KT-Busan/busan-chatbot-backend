@@ -1,5 +1,5 @@
 {
-  "cached_at": "2025-08-14T12:00:00",
+  "cached_at": "2026-07-10T00:00:00",
   "data": [
     {
       "region": "사상구",
@@ -33,7 +33,7 @@
       "address": "부산광역시 북구 금곡대로616번길 139(금곡동)",
       "hours": "(월~금) 09:00~23:00",
       "homepage": "",
-      "sns": "",
+      "sns": "https://www.instagram.com/space119_bukgu/",
       "rental_link": "",
       "program_link": ""
     },
@@ -72,6 +72,188 @@
       "sns": "https://www.instagram.com/youngwithjingu",
       "rental_link": "https://www.instagram.com/youngwithjingu",
       "program_link": "https://www.instagram.com/youngwithjingu"
+    },
+    {
+      "region": "부산진구",
+      "name": "부산청년잡(JOB) 성장카페[1호점]",
+      "contact": "051-783-5617",
+      "description": "초기상담과 맞춤형 프로그램, 기업발굴과 매칭을 통한 기업-청년 일자리 미스매치 해소",
+      "address": "부산광역시 부산진구 가야대로 772(부전동), 1층",
+      "hours": "(월~금) 09:00~18:00(주말, 공휴일 휴관)",
+      "homepage": "https://www.busanjobcafe.kr/",
+      "sns": "https://www.instagram.com/jobcafe.busan",
+      "rental_link": "",
+      "program_link": "https://www.busanjobcafe.kr/edu"
+    },
+    {
+      "region": "수영구",
+      "name": "수영구플러스행복센터",
+      "contact": "051-754-0380",
+      "description": "청년, 1인 가구 지역주민의 소통과 돌봄 공간",
+      "address": "부산광역시 수영구 광일로 25(광안동)",
+      "hours": "(월~금)09:00~20:00, (토)10:00~17:00  ※ 평일 18시~, 토 : 대관 시 사용 가능",
+      "homepage": "http://syplus.or.kr/",
+      "sns": "https://www.instagram.com/sycommunity2022",
+      "rental_link": "https://www.syplus.or.kr/happy/sub01.php",
+      "program_link": ""
+    },
+    {
+      "region": "사하구",
+      "name": "사하청년창업지원센터",
+      "contact": "051-201-0191",
+      "description": "청년의 창업과 취업을 위한 정보 교류 및 소통 공간",
+      "address": "부산광역시 사하구 하신중앙로 324(하단동), 보해이브빌 2차 2층",
+      "hours": "(월~금) 09:00~21:00 (주말, 공휴일 휴관)",
+      "homepage": "https://www.saha.go.kr/startup/main.do",
+      "sns": "https://www.instagram.com/sahayouth_1839/",
+      "rental_link": "https://www.saha.go.kr/startup/facility/list.do?mId=0103000000",
+      "program_link": ""
+    },
+    {
+      "region": "동구",
+      "name": "이바구컴퍼니",
+      "contact": "051-440-4504",
+      "description": "청년간 네트워크 구축 및 문화체험 가능한 오프라인 공간",
+      "address": "부산광역시 동구 초량중로 29(초량동), 603호",
+      "hours": "(월~금) 09:00~18:00",
+      "homepage": "",
+      "sns": "",
+      "rental_link": "",
+      "program_link": "",
+      "removed": true
+    },
+    {
+      "region": "동구",
+      "name": "이바구 플랫폼",
+      "contact": "051-441-1680",
+      "description": "도시재생을 통해 다시 태어난 동구 청년창업 및 활동공간",
+      "address": "부산광역시 동구 영초길191번길 일대",
+      "hours": "주중 (화~목) 11:00~20:00, 주말 (금~일) 11:00~21:00, 월요일 휴무",
+      "homepage": "https://ebagu.imweb.me/",
+      "sns": "",
+      "rental_link": "https://ebagu.imweb.me/24",
+      "program_link": "https://ebagu.imweb.me/Reservation"
+    },
+    {
+      "region": "중구",
+      "name": "중구 청년센터 청년마루",
+      "contact": "051-256-1839",
+      "description": "중구청에서 운영하는 중구 청년센터 “청년마루”입니다",
+      "address": "부산광역시 중구 법수길 61(보수동1가)",
+      "hours": "(화~일) 10:00~21:00 (월요일, 공휴일 휴관)",
+      "homepage": "https://www.bsjunggu.go.kr/yeyak/index.junggu?menuCd=DOM_000001002006000000",
+      "sns": "https://www.instagram.com/junggu_y0uth",
+      "rental_link": "https://www.eshare.go.kr/UserPortal/adv/resources/AdvEsSearchResourcesMainView.do?rsrcClsCd=010000&sido=26&sigungu=110&searchRsrcNm=청년",
+      "program_link": ""
+    },
+    {
+      "region": "중구",
+      "name": "오름라운지",
+      "contact": "051-600-1817",
+      "description": "청년 누구나 이용 가능한 열린 공간",
+      "address": "부산광역시 중구 중앙대로 지하17(중앙동6가), 광복지하도상가",
+      "hours": "(월~금) 09:00~18:00 (주말, 공휴일 휴관)",
+      "homepage": "https://blog.naver.com/ylab2021",
+      "sns": "",
+      "rental_link": "https://young.busan.go.kr/spPlace/list.nm?menuCd=3",
+      "program_link": ""
+    },
+    {
+      "region": "중구",
+      "name": "부산청년센터",
+      "contact": "051-241-7860",
+      "description": "지역거점청년지원센터로 다양한 청년 활동 지원",
+      "address": "부산광역시 중구 자갈치해안로 52(남포도5가), 3~4층",
+      "hours": "(월~금) 10:00 ~ 22:00 / (토) 10:00 ~ 19:00",
+      "homepage": "https://young.busan.go.kr/bycenter/index.nm",
+      "sns": "https://www.instagram.com/youthcenterbusan",
+      "rental_link": "https://young.busan.go.kr/bycenter/centerPlace/list.nm?menuCd=132",
+      "program_link": "https://young.busan.go.kr/bycenter/cenbus/list.nm?menuCd=237"
+    },
+    {
+      "region": "부산진구",
+      "name": "청년두드림센터",
+      "contact": "051-816-4600",
+      "description": "청년일자리 심층상담 및 취업역량강화 프로그램 운영, 소통공간 지원",
+      "address": "부산광역시 부산진구 가야대로 772(부전동), 롯데백화점 별관 2층",
+      "hours": "(월~금) 10:00 ~ 21:00 / (토) 10:00 ~ 19:00",
+      "homepage": "https://busanjob.net/yjob/view.do?no=1215",
+      "sns": "ttps://www.instagram.com/busan_dodream",
+      "rental_link": "https://busanjob.net/yjob/view.do?no=1216",
+      "program_link": "https://busanjob.net/yjob/view.do?pageIndex=1&pgMode=index&nowUrl=%2Fyjob%2Fview.do%3Fno%3D952&no=952&jpType=A&idx=&qsrchSw=&sw2=%EC%B2%AD%EB%85%84%EB%91%90%EB%93%9C%EB%A6%BC%EC%84%BC%ED%84%B0&openDateStart=&openDateEnd=&startDateStart=&startDateEnd="
+    },
+    {
+      "region": "부산진구",
+      "name": "청년창조발전소 디자인스프링",
+      "contact": "051-893-0944",
+      "description": "년 이내 청년창업자 공유오피스 지원, 창업 프로그램 운영 등",
+      "address": "부산광역시 부산진구 대학로36번길 10(가야동)",
+      "hours": "(월~금) 09:00~18:00",
+      "homepage": "https://blog.naver.com/design_spring",
+      "sns": "https://www.instagram.com/design_spring_bsj",
+      "rental_link": "https://booking.naver.com/booking/10/bizes/1635582",
+      "program_link": "https://blog.naver.com/design_spring"
+    },
+    {
+      "region": "사상구",
+      "name": "사상인디스테이션",
+      "contact": "051-316-7631~5",
+      "description": "청년인디공연과 시민참여 문화예술교육 프로그램이 있는 복합문화시설",
+      "address": "부산광역시 사상구 사상로 190(괘법동)",
+      "hours": "(월~금) 09:00~18:00, (토, 일) 공연 및 행사 진행 시 탄력적 운영",
+      "homepage": "https://www.facebook.com/catssasang/",
+      "sns": "https://www.instagram.com/cats_sasang_",
+      "rental_link": "",
+      "program_link": ""
+    },
+    {
+      "region": "수영구",
+      "name": "민락인디트레이닝센터",
+      "contact": "051-754-7661~2",
+      "description": "청년인디문화 관련 입주단체 트레이닝 공간 및 역량강화 프로그램 운영 등",
+      "address": "부산광역시 수영구 769 부산지하철2호선 민락역사 내(민락동)",
+      "hours": "(월~금) 10:00~19:00",
+      "homepage": "https://www.facebook.com/minrakindie/",
+      "sns": "https://www.instagram.com/millakindie",
+      "rental_link": "",
+      "program_link": ""
+    },
+    {
+      "region": "기장군",
+      "name": "기장청년센터 청:류장",
+      "contact": "051-709-4392",
+      "description": "",
+      "address": "부산광역시 기장군 정관읍 모전로 11, 정관에듀파크 1층 기장청년센터 '청류장'",
+      "hours": "월~금 09:00~20:00(프로그램 운영시 21:00) / 토요일 10:00~18:00 / 일요일 및 공휴일 휴무",
+      "homepage": "https://www.gijang.go.kr/index.gijang?menuCd=DOM_000000103010006001",
+      "sns": "",
+      "rental_link": "https://www.gijang.go.kr/index.gijang?menuCd=DOM_000000103010006003",
+      "program_link": "https://www.gijang.go.kr/index.gijang?menuCd=DOM_000000103010006002",
+      "is_override": true
+    },
+    {
+      "region": "사상구",
+      "name": "부산청년잡(JOB) 성장카페[3호점]",
+      "contact": "051-316-7411",
+      "description": "초기상담과 맞춤형 프로그램, 기업발굴과 매칭을 통한 기업-청년 일자리 미스매치 해소",
+      "address": "부산광역시 사상구 학감대로 252, 수성빌딩 6층",
+      "hours": "(월~금) 09:00~18:00(주말, 공휴일 휴관)",
+      "homepage": "https://www.busanjobcafe.kr/",
+      "sns": "",
+      "rental_link": "",
+      "program_link": "https://www.busanjobcafe.kr/program/edu"
+    },
+    {
+      "region": "사하구",
+      "name": "사하청년공간 청신호",
+      "contact": "051-271-0191",
+      "description": "청년들의 더 나은 미래의 청신호를 밝혀주는 문화 놀이터",
+      "address": "부산광역시 사하구 낙동대로 413(하단동), 롯데캐슬 2층",
+      "hours": "(월~금) 12:00~21:00, (토) 09:00~17:00  (공휴일 휴관)",
+      "homepage": "https://www.saha.go.kr/startup/main.do",
+      "sns": "https://www.instagram.com/saha_youth_startup/",
+      "rental_link": "https://www.saha.go.kr/startup/facility/list.do?mId=0103000000",
+      "program_link": ""
     }
   ]
 }

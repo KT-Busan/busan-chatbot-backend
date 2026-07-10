@@ -1,0 +1,45 @@
+name: Daily Crawl Refresh
+
+# 매일 한국시간(KST) 새벽 6시에 백엔드의 크롤링 캐시를 강제로 갱신한다.
+# Render 무료 티어는 유휴 상태면 슬립하는데, 이 호출 자체가 서버를 깨우고
+# 깨어난 뒤 /api/admin/refresh-crawl 안에서 크롤링이 실행되도록 되어 있다.
+# (서버 부팅 시 자동 워밍업과 별개로, 슬립 없이 하루 종일 떠 있는 경우에도
+#  최소 하루 1회는 강제로 최신화되도록 보장하기 위한 안전장치)
+on:
+  schedule:
+    - cron: '0 21 * * *' # UTC 21:00 = KST 06:00
+  workflow_dispatch: {}
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call refresh-crawl endpoint (with 1 retry)
+        env:
+          ADMIN_REFRESH_TOKEN: ${{ secrets.ADMIN_REFRESH_TOKEN }}
+          BACKEND_URL: ${{ secrets.BACKEND_URL || 'https://busan-chatbot-backend.onrender.com' }}
+        run: |
+          call_refresh() {
+            curl --fail --silent --show-error \
+              --max-time 180 \
+              -X POST "$BACKEND_URL/api/admin/refresh-crawl" \
+              -H "X-Admin-Token: $ADMIN_REFRESH_TOKEN"
+          }
+
+          echo "1차 시도..."
+          if call_refresh; then
+            echo "갱신 성공"
+            exit 0
+          fi
+
+          echo "1차 실패, 30초 후 재시도합니다..."
+          sleep 30
+
+          echo "2차 시도..."
+          if call_refresh; then
+            echo "갱신 성공(재시도)"
+            exit 0
+          fi
+
+          echo "갱신 실패: 서버 응답 없음 또는 오류"
+          exit 1

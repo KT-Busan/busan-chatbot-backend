@@ -22,7 +22,7 @@ class SpaceHandler(BaseHandler):
         return []
 
     def merge_spaces_data(self, cache_spaces, override_spaces):
-        """캐시 데이터와 Override 데이터 병합"""
+        """캐시 데이터와 Override 데이터 병합 (override에 removed:true가 있으면 제외)"""
         merged_spaces = []
 
         override_dict = {space.get('name', ''): space for space in override_spaces}
@@ -30,13 +30,15 @@ class SpaceHandler(BaseHandler):
         for cache_space in cache_spaces:
             space_name = cache_space.get('name', '')
             if space_name in override_dict:
-                merged_spaces.append(override_dict[space_name])
+                override_space = override_dict[space_name]
+                if not override_space.get('removed'):
+                    merged_spaces.append(override_space)
             else:
                 merged_spaces.append(cache_space)
 
         cache_names = {space.get('name', '') for space in cache_spaces}
         for override_space in override_spaces:
-            if override_space.get('name', '') not in cache_names:
+            if override_space.get('name', '') not in cache_names and not override_space.get('removed'):
                 merged_spaces.append(override_space)
 
         return merged_spaces

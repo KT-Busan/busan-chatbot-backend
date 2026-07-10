@@ -234,22 +234,8 @@ def get_cache_file_path():
     return config_file
 
 
-def get_youth_programs_data():
-    """청년 프로그램 데이터 가져오기 (config 파일 우선)"""
-    cache_file = get_cache_file_path()
-    cache_duration = timedelta(hours=3)
-
-    if os.path.exists(cache_file):
-        try:
-            with open(cache_file, 'r', encoding='utf-8') as f:
-                cached_data = json.load(f)
-
-            cache_time = datetime.fromisoformat(cached_data['cached_at'])
-            if datetime.now() - cache_time < cache_duration:
-                return cached_data['data']
-        except Exception:
-            pass
-
+def refresh_programs_cache():
+    """크롤링을 실행하고 config에 저장 (서버 부팅 시 / 관리자 강제 갱신 시에만 호출)"""
     crawler = BusanYouthProgramCrawler()
     programs = crawler.crawl_all_programs()
 
@@ -259,12 +245,49 @@ def get_youth_programs_data():
     }
 
     try:
-        with open(cache_file, 'w', encoding='utf-8') as f:
+        with open(get_cache_file_path(), 'w', encoding='utf-8') as f:
             json.dump(cache_data, f, ensure_ascii=False, indent=2)
     except Exception:
         pass
 
     return programs
+
+
+def is_programs_cache_stale(hours=3):
+    """프로그램 캐시가 없거나 오래됐는지 확인"""
+    cache_file = get_cache_file_path()
+    if not os.path.exists(cache_file):
+        return True
+    try:
+        with open(cache_file, 'r', encoding='utf-8') as f:
+            cached_data = json.load(f)
+        cache_time = datetime.fromisoformat(cached_data['cached_at'])
+        return datetime.now() - cache_time >= timedelta(hours=hours)
+    except Exception:
+        return True
+
+
+def ensure_programs_cache_fresh():
+    """서버 부팅 시 1회 호출 - 캐시가 없거나 오래됐을 때만 크롤링을 실행해 채워둔다"""
+    if is_programs_cache_stale():
+        print("🔄 청년 프로그램 캐시가 오래되어 부팅 시점에 크롤링을 실행합니다...")
+        refresh_programs_cache()
+    else:
+        print("✅ 청년 프로그램 캐시가 최신 상태입니다. 부팅 시 크롤링을 건너뜁니다.")
+
+
+def get_youth_programs_data():
+    """청년 프로그램 데이터 가져오기 (요청 시점 크롤링 없음, 캐시 파일만 사용)"""
+    cache_file = get_cache_file_path()
+
+    if os.path.exists(cache_file):
+        try:
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                cached_data = json.load(f)
+            return cached_data.get('data', [])
+        except Exception:
+            return []
+    return []
 
 
 def normalize_region(region):
