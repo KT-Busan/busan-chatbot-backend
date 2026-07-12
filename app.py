@@ -13,6 +13,7 @@ from routes.chat_routes import chat_bp
 from routes.user_routes import user_bp
 from routes.space_routes import space_bp
 from routes.program_routes import program_bp
+from routes.report_routes import report_bp
 
 load_dotenv()
 
@@ -77,6 +78,7 @@ app.register_blueprint(chat_bp)
 app.register_blueprint(user_bp)
 app.register_blueprint(space_bp)
 app.register_blueprint(program_bp)
+app.register_blueprint(report_bp)
 
 
 @app.route('/health', methods=['GET'])

@@ -190,15 +190,9 @@ class ChatHandler(BaseHandler):
                 keywords_str = ', '.join(center_info['keywords'])
                 result += f"🏷️ 사용 가능한 키워드: {keywords_str}\n\n"
 
-            rental_spaces = []
-            for space in self.spaces_data:
-                if space.get('parent_facility') == center_name:
-                    rental_spaces.append(space)
-
-            if rental_spaces:
-                result += f"[CENTER_RENTAL_SPACES:{center_name}]"
-            else:
-                result += "현재 이 센터에는 대여 가능한 공간 정보가 없습니다."
+            # CenterDetailView가 대여 공간 유무와 상관없이 항상 렌더링되도록
+            # 마커를 항상 붙인다(정보 오류 신고 버튼도 이 컴포넌트 안에 있음).
+            result += f"[CENTER_RENTAL_SPACES:{center_name}]"
 
             return result
 

@@ -26,9 +26,9 @@
       ]
     },
     {
-      "parent_facility": "청년창업지원센터",
+      "parent_facility": "사하청년창업지원센터",
       "location": "사하구",
-      "introduction": "청년이 행복한 도시, 사하! 청년의 취·창업을 지원하고 청년들이 자유롭게 소통·교류할 수 있는 사하구 청년창업지원센터입니다.\uD83D\uDE42",
+      "introduction": "청년 취·창업 지원·메이커 프로그램 운영",
       "keywords": [
         "🌿휴식/놀이"
       ]
@@ -112,9 +112,9 @@
       ]
     },
     {
-      "parent_facility": "청년희망플랫폼 다:이룸",
+      "parent_facility": "영도구 청년희망플랫폼 다:이룸",
       "location": "영도구",
-      "introduction": "영도구에서 다 이뤄봐",
+      "introduction": "지역청년 네트워킹 활동 및 역량강화 지원 청년활동공간",
       "keywords": [
         "📝스터디/회의",
         "👥모임/커뮤니티",
@@ -204,7 +204,7 @@
       ]
     },
     {
-      "parent_facility": "청년창조발전소 고고씽 Job",
+      "parent_facility": "청년창조발전소  고고씽 Job",
       "location": "남구",
       "introduction": "청년의 학습, 회의, 문화활동까지 지원하는 디지털 기반 복합 공간",
       "keywords": [
@@ -218,9 +218,9 @@
       ]
     },
     {
-      "parent_facility": "청년창조발전소 꿈터+",
+      "parent_facility": "청년창조발전소   꿈터+",
       "location": "금정구",
-      "introduction": "청년의 회의, 강연, 영상편집 등 다양한 활동을 지원하는 창작·협업 공간",
+      "introduction": "회의, 강연, 영상편집이 가능한 창작·협업 공간",
       "keywords": [
         "📝 스터디/회의",
         "🏫 교육/강연",
@@ -255,13 +255,19 @@
     {
       "parent_facility": "민락인디트레이닝센터",
       "location": "수영구",
-      "introduction": null,
+      "introduction": "인디문화 창작·공연·교류 지원 공간",
       "keywords": null
     },
     {
       "parent_facility": "이바구 플랫폼",
       "location": "동구",
-      "introduction": null,
+      "introduction": "청년 창업 및 로컬브랜드 지원 복합문화공간",
+      "keywords": null
+    },
+    {
+      "parent_facility": "기장청년센터 청:류장",
+      "location": "기장군",
+      "introduction": "청년 성장·교류·취·창업 지원 공간",
       "keywords": null
     },
     {

@@ -26,6 +26,15 @@ class Message(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
+class ErrorReport(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    center_name = db.Column(db.String(200), nullable=False)
+    category = db.Column(db.String(50), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    anonymous_id = db.Column(db.String(120), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
 def initialize_database(app):
     """데이터베이스 초기화"""
     with app.app_context():
